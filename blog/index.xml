@@ -1,21 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>About on Hugo Tanka Theme Demo</title>
-    <link>https://example.com/</link>
-    <description>Recent content in About on Hugo Tanka Theme Demo</description>
+    <title>Blog on Hugo Tanka Theme Demo</title>
+    <link>https://example.com/blog/</link>
+    <description>Recent content in Blog on Hugo Tanka Theme Demo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 13 Jun 2021 16:53:39 +0700</lastBuildDate><atom:link href="https://example.com/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Yolo Versions Comparison</title>
-      <link>https://example.com/post/yolo-versions-comparison/</link>
-      <pubDate>Sun, 13 Jun 2021 16:53:39 +0700</pubDate>
-      
-      <guid>https://example.com/post/yolo-versions-comparison/</guid>
-      <description></description>
-    </item>
-    
+    <lastBuildDate>Sat, 21 Nov 2020 12:00:00 +0000</lastBuildDate><atom:link href="https://example.com/blog/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Tanka Theme Demo</title>
       <link>https://example.com/blog/hugo-tanka-theme-demo/</link>
@@ -48,16 +39,6 @@ Alerts This is a primary alert—check it out!  This is a secondary alert—chec
     </item>
     
     <item>
-      <title>About Hugo Tanka</title>
-      <link>https://example.com/about/</link>
-      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://example.com/about/</guid>
-      <description>Lorem ipsum dolor sit amet, ex has sale ullum corrumpit, sea dicam nostrum sensibus ad. Porro tritani persecuti te sed. Omittam dissentias pro ex. Atqui luptatum duo id. Eros minim eam ex, novum elitr accusam quo in. Nec ne audire euripidis, mea qualisque consetetur cu. Suspendisse volutpat sem a risus euismod convallis.
-In modus congue feugait eos. In nec nonumy volutpat corrumpit, sea assentior quaerendum no, cum affert scripta ea. No nihil voluptaria pro.</description>
-    </item>
-    
-    <item>
       <title>Detour Sign and the Man in the Neon Coat, Got the Flashlight, Got the Moonlight, Swimming in the Blue Light</title>
       <link>https://example.com/blog/long-title/</link>
       <pubDate>Fri, 22 Jan 2016 09:00:00 +0000</pubDate>
@@ -65,18 +46,6 @@ In modus congue feugait eos. In nec nonumy volutpat corrumpit, sea assentior qua
       <guid>https://example.com/blog/long-title/</guid>
       <description>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 In modus congue feugait eos.</description>
-    </item>
-    
-    <item>
-      <title>Contact</title>
-      <link>https://example.com/contact/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://example.com/contact/</guid>
-      <description> Email: foo@xyz.com Phone: +91-123123   Mailing Address  221B, Baker Street
-London
-United Kingdom
-  Social  Facebook Twitter Google+  </description>
     </item>
     
   </channel>

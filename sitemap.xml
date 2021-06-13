@@ -11,8 +11,25 @@
     <loc>https://example.com/post/yolo-versions-comparison/</loc>
     <lastmod>2021-06-13T16:53:39+07:00</lastmod>
   </url><url>
+    <loc>https://example.com/blog/</loc>
+    <lastmod>2020-11-21T12:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://example.com/blog/hugo-tanka-theme-demo/</loc>
+    <lastmod>2020-11-21T12:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://example.com/blog/bootstrap/</loc>
+    <lastmod>2020-11-20T09:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://example.com/about/</loc>
+    <lastmod>2020-01-01T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://example.com/blog/long-title/</loc>
+    <lastmod>2016-01-22T09:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://example.com/categories/</loc>
   </url><url>
     <loc>https://example.com/contact/</loc>
+  </url><url>
+    <loc>https://example.com/tags/</loc>
   </url>
 </urlset>
