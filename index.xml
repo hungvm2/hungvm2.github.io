@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>My New Hugo Site</title>
-    <link>http://example.org/</link>
-    <description>Recent content on My New Hugo Site</description>
+    <title>HungVM2&#39;s Notes</title>
+    <link>https://hungvm2.github.io/</link>
+    <description>Recent content on HungVM2&#39;s Notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 13 Jun 2021 10:37:22 +0700</lastBuildDate><atom:link href="http://example.org/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 13 Jun 2021 10:37:22 +0700</lastBuildDate><atom:link href="https://hungvm2.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>The First Post</title>
-      <link>http://example.org/post/the-first-post/</link>
+      <link>https://hungvm2.github.io/post/the-first-post/</link>
       <pubDate>Sun, 13 Jun 2021 10:37:22 +0700</pubDate>
       
-      <guid>http://example.org/post/the-first-post/</guid>
+      <guid>https://hungvm2.github.io/post/the-first-post/</guid>
       <description>print(&amp;#34;Hello World!&amp;#34;) This note is spent to introduce briefly about myself: My name&amp;rsquo;s Hưng, currently live and work in Hanoi. I graduated from Hanoi University of Transport and Communications with Road &amp;amp; Bridge Engineering Degree. After few years working as a Civil Engineer, I decided to change the career path to become a Software Engineer. I love engineering in general, especially software &amp;amp; machine learning then it will be the main topic of this blog.</description>
     </item>
     
