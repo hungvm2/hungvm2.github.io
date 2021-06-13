@@ -2,16 +2,10 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://example.com/</loc>
-    <lastmod>2021-06-13T16:53:39+07:00</lastmod>
-  </url><url>
-    <loc>https://example.com/post/</loc>
-    <lastmod>2021-06-13T16:53:39+07:00</lastmod>
-  </url><url>
-    <loc>https://example.com/post/yolo-versions-comparison/</loc>
-    <lastmod>2021-06-13T16:53:39+07:00</lastmod>
-  </url><url>
     <loc>https://example.com/blog/</loc>
+    <lastmod>2020-11-21T12:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://example.com/</loc>
     <lastmod>2020-11-21T12:00:00+00:00</lastmod>
   </url><url>
     <loc>https://example.com/blog/hugo-tanka-theme-demo/</loc>
@@ -27,8 +21,6 @@
     <lastmod>2016-01-22T09:00:00+00:00</lastmod>
   </url><url>
     <loc>https://example.com/categories/</loc>
-  </url><url>
-    <loc>https://example.com/contact/</loc>
   </url><url>
     <loc>https://example.com/tags/</loc>
   </url>
