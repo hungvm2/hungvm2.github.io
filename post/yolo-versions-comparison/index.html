@@ -97,7 +97,120 @@
                     <h1 class="mx-0 mx-md-4">Yolo Versions Comparison</h1>
                     <div class="markdown">
                         
-    
+    <p>Yolov4 Scaled:</p>
+<ul>
+<li>Input: 512x512x3</li>
+<li>Scaling Cross-Stage-Partial (CSP) Network approach</li>
+</ul>
+<p>Yolov4:</p>
+<ul>
+<li>Backbone: CSPDarknet53
+<ul>
+<li>Data Augmentation: CutMix and Mosaic</li>
+<li>Mish Activation</li>
+<li>Cross-stage partial connections (CSP)</li>
+<li>Multiinput weighted residual connections (MiWRC)</li>
+<li>DropBlock regularization</li>
+<li>Class label smoothing</li>
+</ul>
+</li>
+<li>Detector:
+<ul>
+<li>Neck: PANet path-aggregation</li>
+<li>Head: same as YOLOv3</li>
+<li>CIoU-loss</li>
+<li>CmBN</li>
+<li>DropBlock regularization</li>
+<li>Mosaic data augmentation</li>
+<li>Self-Adversarial Training</li>
+<li>Eliminate grid sensitivity</li>
+<li>Using multiple anchors for a single ground truth</li>
+<li>Cosine annealing scheduler</li>
+<li>Optimal hyperparameters</li>
+<li>Random training shapes</li>
+<li>Mish activation,</li>
+<li>SPP-block</li>
+<li>SAM-block</li>
+<li>DIoU-NMS</li>
+</ul>
+</li>
+</ul>
+<p>Yolov3:</p>
+<ul>
+<li>Backbone: Darknet53</li>
+<li>Multi-scale methods for data enhancement during training</li>
+<li>Remove pooling layers from backbone</li>
+</ul>
+<p>Yolov2:</p>
+<ul>
+<li>Training:
+<ul>
+<li>Input for training backbone: 448x448, with ImageNet</li>
+<li>Training for detection: 416x416, but using multi-scale training. Then can be ran on different sizes. Using this resolution to get output 13x13 after few down-sampling Conv layers =&gt; have odd number =&gt; single center of cell</li>
+</ul>
+</li>
+<li>Batch Normalization</li>
+<li>Conv with Anchor Boxes:
+<ul>
+<li>Remove FC layers from YOLOv1 (dont use regression to predict Bounding boxes)</li>
+<li>Using Anchor boxes to predict Bounding boxes</li>
+</ul>
+</li>
+<li>Dimension clusters: <strong>k-means</strong> clustering to pick bounding boxes' dimensions</li>
+<li>Direct location prediction: predict coordinates relative to the location of the grid cell</li>
+<li>Fine-Grained Features: adding a pass-through layer that brings features from an earlier layer at 26x26 resolution. Pass-through layer concatenates higher resolution features with low resolution features, similar to identity mappings in ResNet</li>
+<li>Multi-Scale Training: Since only use Conv and pooling layers in network, then randomly chooses new input size after 10 iterations</li>
+<li>Network: Darknet-19, no FC layers, just Conv, Pooling</li>
+<li>Output: 20 classes</li>
+</ul>
+<p>YoloV1:</p>
+<ul>
+<li>Year released: 2016</li>
+<li>Training:
+<ul>
+<li>Input for training backbone: 224x224</li>
+<li>Train first 20 Conv Layers with ImageNet dataset</li>
+<li>Input for training detection: 448x448</li>
+<li>Add 4 more Conv Layers, 2 FC Layers, training with Pascal VOC 2007, 2012</li>
+</ul>
+</li>
+<li>Using SxS grid instead of Sliding Window or Region Proposal Method</li>
+<li>Using unified model: treats detection as regression problem, a single Conv Network to predict Bounding Box coordinates, class probabilities</li>
+<li>Used 2 FC layers at the end</li>
+<li>Pooling layer after Conv layer</li>
+<li>Every grid cell predicts B bounding boxes [x,y,w,h,confidence], C class probabilities =&gt;
+<ul>
+<li>Output tensor = S x S x (B * 5 + C)</li>
+<li>In this paper: S = 7 , B = 2, C = 20</li>
+</ul>
+</li>
+<li>Network has:
+<ul>
+<li>24 Conv Layers: Inspired by Inception, Conv Layers, Max Pooling Layers, 1x1 Conv Layers</li>
+<li>Leaky ReLU activation function</li>
+<li>2 FC Layers</li>
+</ul>
+</li>
+<li>Loss function: using Sum Squared Error (Spend more time to understand it later)</li>
+<li>NMS: using in Inference to remove duplicated boxes</li>
+<li>Some conclusions:
+<ul>
+<li>Faster than Faster-RCNN, lower mAP than Faster-RCNN</li>
+<li>Real time detection</li>
+<li>Struggle to localize object</li>
+<li>Struggle to prediction object with unusual aspect ratios</li>
+<li>Struggle to predict small objects appeared in groups, flocks</li>
+</ul>
+</li>
+<li>Output: 20 classes
+References:</li>
+<li>V3 =&gt; V4: Scaled <a href="https://www.programmersought.com/article/42866399874/">https://www.programmersought.com/article/42866399874/</a></li>
+<li>V1 =&gt; V3: <a href="https://www.programmersought.com/article/52764629062/">https://www.programmersought.com/article/52764629062/</a></li>
+<li>V1: <a href="https://towardsdatascience.com/yolov1-you-only-look-once-object-detection-e1f3ffec8a89">https://towardsdatascience.com/yolov1-you-only-look-once-object-detection-e1f3ffec8a89</a></li>
+<li>V2: <a href="https://towardsdatascience.com/review-yolov2-yolo9000-you-only-look-once-object-detection-7883d2b02a65">https://towardsdatascience.com/review-yolov2-yolo9000-you-only-look-once-object-detection-7883d2b02a65</a></li>
+<li>V3:</li>
+</ul>
+
 
 
                     </div>
