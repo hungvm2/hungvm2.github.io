@@ -190,7 +190,7 @@ Cuối mỗi Conv layer có 1 hàm kích hoạt Leaky ReLU (activation function)
 </ul>
 <p>Còn một vấn đề: box lớn thì sai số về kích thước (w, h) giữa predicted value và ground truth value cũng sẽ lớn hơn là box nhỏ. Để xử lý vấn đề này, tác giả sử dụng sai số giữa căn bậc hai của kích thước predict và ground truth thay vì giá trị w,h gốc. Ví dụ: Box To có predicted W = 9 và ground truth W = 8 =&gt; độ lệch = 1, Box Nhỏ có predicted W = 3 và ground truth W = 2 =&gt; độ lệch = 1. Rõ ràng Box nhỏ có sai số lớn hơn xét theo tỉ lệ, nhưng số tuyệt đối độ lệch thì như nhau</p>
 <p>Khi training, mỗi grid cell cần predict B bounding boxes, tuy nhiên sẽ chỉ Bounding box có IOU lớn nhất so với ground truth box mới được chọn lựa để tính toán hàm loss (chọn làm &ldquo;predictor&rdquo;). Điều này sẽ giúp mỗi predicted Bounding box sẽ chỉ chuyên môn hoá vào việc detect object có kích thước, tỉ lệ nhất định, giúp tăng Recall của model</p>
-<p>$1_{i}^{obj}$ nhận giá trị 1 nếu object xuất hiện ở cell thứ i và \(1_{ij}^{obj}\) nhận giá trị 1 nếu bounding box thứ j là &ldquo;predictor&rdquo;</p>
+<p>$1_{i}^{obj}$ nhận giá trị 1 nếu object xuất hiện ở cell thứ $i$ và \(1_{ij}^{obj}\) nhận giá trị 1 nếu bounding box thứ $j$ là &ldquo;predictor&rdquo;</p>
 <p>When (a \ne 0), there are two solutions to (ax^2 + bx + c = 0) and they are
 $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$</p>
 
