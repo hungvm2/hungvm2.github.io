@@ -13,8 +13,8 @@
       <pubDate>Mon, 21 Jun 2021 22:44:24 +0700</pubDate>
       
       <guid>https://hungvm2.github.io/post/grasping-yolov1-content/</guid>
-      <description>Trong bài viết này, chúng ta hãy cùng đọc và phân tích nội dung của paper &amp;ldquo;You Only Look One: Unified, Real-Time Object Detection&amp;rdquo; pulished năm 2016 nhé!
-Abstract </description>
+      <description>Trong bài viết này, chúng ta hãy cùng đọc và phân tích nội dung của paper &amp;ldquo;You Only Look One: Unified, Real-Time Object Detection&amp;rdquo; pulished năm 2016 nhé! Bài viết sẽ chỉ tập trung vào phân tích những ý tưởng chính của YOLO, có lược bỏ một số phần không quá quan trọng
+Phần Abstract Các nghiên cứu trước đây xử lý bài toán Object Detection theo hướng Classification (phân loại), còn tác giả YOLO lại tiếp cận theo hướng Regression (hồi quy).</description>
     </item>
     
     <item>
