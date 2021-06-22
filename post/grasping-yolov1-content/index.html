@@ -146,7 +146,7 @@ Bài viết sẽ chỉ tập trung vào phân tích những ý tưởng chính c
 Cuối mỗi Conv layer có 1 hàm kích hoạt Leaky ReLU (activation function). Hàm cuối cùng của mạng là hàm linear, predict ra trực tiếp output, không sử dụng activation function
 Pipe line của prediction: 
 <blockquote>
-<p>Ảnh (448,448,3) =&gt; Network Architecture =&gt; Output (7,7,30) =&gt; Non-max supression =&gt; Final prediction</p>
+<p>Image (448,448,3) =&gt; Network Architecture =&gt; Output (7,7,30) =&gt; Non-max supression =&gt; Final prediction</p>
 </blockquote>
 <h5 id="phần-22-training">Phần 2.2. Training</h5>
 <ol>
@@ -164,9 +164,14 @@ Pipe line của prediction:
 <p>Tại sao phải có bước xử lý này? Đây là bước Scaling Features: đưa khoảng giá trị của các feature về cùng một scale trước khi vào hàm loss để giúp mô hình hội tụ nhanh và ổn định hơn khi training</p>
 </blockquote>
 <ol start="4">
-<li>Bước 4:</li>
+<li>Bước 4: Xây dựng hàm Loss</li>
 </ol>
-
+<div class="text-center">
+<figure class="figure">
+  <img src="https://hungvm2.github.io/images/yolov1/loss_function.png" alt="Loss Function" class="figure-img">
+  <figcaption class="figure-caption">Ảnh 2: Hàm loss</figcaption>
+</figure>
+</div>
 
 
                     </div>
