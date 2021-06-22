@@ -122,14 +122,14 @@ Bài viết sẽ chỉ tập trung vào phân tích những ý tưởng chính c
 <p>Phần này bắt đầu đi vào chi tiết kiến trúc của YOLO, sau khi mô tả xong các thành phần trong kiến trúc thì mình sẽ phân tích chi tiết lí do tại sao tác giả lại sử dụng các thành phần đó nhé!</p>
 </blockquote>
 <p>Hệ thống YOLO chia ảnh đầu vào thành một lưới SxS các ô vuông (grid cell). Nếu trung tâm (center) của vật thể rơi vào ô vuông nào, thì ô vuông đó sẽ chịu trách nhiệm phát hiện vật thể đó. Tác giả lấy S = 7</p>
-<p>Mỗi grid cell cần dự đoán: B bounding boxes, confidence scores của B bounding boxes và C scores của các lớp object, trong đó:</p>
+<p>Mỗi grid cell cần dự đoán: B bounding boxes, confidence scores của B bounding boxes và C scores của các lớp object (các class/label trong dataset), trong đó:</p>
 <ul>
 <li>B: Số lượng Bounding boxes cần dự đoán trên 1 cell. Tác giả chọn B = 2</li>
 <li>Mỗi bounding box gồm 4 gía trị toạ độ (coordinates): x, y, w, h. Trong đó (x,y) là toạ độ tâm của box được dự đoán, (w,h) là chiều dài và rộng của box</li>
 <li>Confidence score (CS): mỗi bounding box có 1 confidence score tương ứng, vậy là sẽ có B confidence scores, tính theo công thức</li>
 </ul>
 <div class="text-center"><img src="https://hungvm2.github.io/images/yolov1/C_formular.png" alt="Confidence Score"></div>
-    Nếu grid cell không có object nào Pr(Object) = 0. Nếu grid cell có object thì Pr(Object) = 1 => CS = IOU của ground truth box và predicted box
+    Nếu grid cell không có object nào Pr(Object) = 0. Nếu grid cell có object thì Pr(Object) = 1 => CS = IOU của ground truth box và predicted box.
 + C: giá trị xác suất nhân diện của C lớp đối tượng trong model. . Tác giả lấy C = 20 (số lớp đối tượng trong tập dữ liệu PASCAL VOC)
 <div class="text-center">C<sub>i</sub> = Pr(Class<sub>i</sub>)|Object)</div>
 <p>=&gt; Kích thước (shape) của final output sẽ là:</p>
@@ -143,11 +143,28 @@ Bài viết sẽ chỉ tập trung vào phân tích những ý tưởng chính c
   <figcaption class="figure-caption">Ảnh 1: Kiến trúc mạng detection của YOLO</figcaption>
 </figure>
 </div>
+Cuối mỗi Conv layer có 1 hàm kích hoạt Leaky ReLU (activation function). Hàm cuối cùng của mạng là hàm linear, predict ra trực tiếp output, không sử dụng activation function
+Pipe line của prediction: 
+<blockquote>
+<p>Ảnh (448,448,3) =&gt; Network Architecture =&gt; Output (7,7,30) =&gt; Non-max supression =&gt; Final prediction</p>
+</blockquote>
 <h5 id="phần-22-training">Phần 2.2. Training</h5>
 <ol>
 <li>Bước 1: đặt 20 lớp Conv Layers đầu tiên của mạng detection (Ảnh 1) trong 1 kiến trúc mạng Classification (Input 224x224 =&gt; 24 Conv layers =&gt; 1 Average Pooling layer =&gt; 1 Fully Connected Layer), train trên tập ImageNet 1000 classes. Bước này giúp 24 lớp Conv Layers có bộ weights tốt trong việc trích xuất đặc trưng từ ảnh.</li>
-<li>Bước 2: Sử dụng transfer learning, đặt weights của 20 lớp Conv Layers đã được train ở bước 1 vào mạng detection (Ảnh 1). Do Weights của Conv Layers không phụ thuộc vào Input size nên tăng Input size lên 448x448 để mạng học được những đặc trưng chi tiết hơn của ảnh.</li>
+<li>Bước 2: Sử dụng Transfer Learning, đặt weights của 20 lớp Conv Layers đã được train ở bước 1 vào mạng detection (Ảnh 1). Do Weights của Conv Layers không phụ thuộc vào Input size nên tăng Input size lên 448x448 để mạng học được những đặc trưng chi tiết hơn của ảnh.</li>
 <li>Bước 3: Lấy kết quả output của mạng detection, đem xử lý lại trước khi đặt vào hàm loss</li>
+</ol>
+<ul>
+<li>Normalize (w,h) của bounding box để w,h trong đoạn [0,1]: (w = w/W , h = h/H | W,H: size của input)</li>
+<li>Biến đổi toạ độ (x,y) thành toạ độ offset từ top-left của grid cell mà nó nằm trong để x, y nằm trong đoạn [0,1]. VD: x,y nằm chính giữa cell thì x = 0.5, y = 0.5</li>
+<li>Confidence score của bounding box = IOU nên cũng nằm trong đoạn [0,1]</li>
+<li>Ci là xác suất detect ra vật thể class i nên cũng nằm trong đoạn [0,1]</li>
+</ul>
+<blockquote>
+<p>Tại sao phải có bước xử lý này? Đây là bước Scaling Features: đưa khoảng giá trị của các feature về cùng một scale trước khi vào hàm loss để giúp mô hình hội tụ nhanh và ổn định hơn khi training</p>
+</blockquote>
+<ol start="4">
+<li>Bước 4:</li>
 </ol>
 
 
