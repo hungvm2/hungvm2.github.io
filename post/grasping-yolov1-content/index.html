@@ -131,20 +131,20 @@ Bài viết sẽ chỉ tập trung vào phân tích những ý tưởng chính c
 <div class="text-center"><img src="https://hungvm2.github.io/images/yolov1/C_formular.png" alt="Confidence Score"></div>
     Nếu grid cell không có object nào Pr(Object) = 0. Nếu grid cell có object thì Pr(Object) = 1 => CS = IOU của ground truth box và predicted box.
 + C: giá trị xác suất nhân diện của C lớp đối tượng trong model. . Tác giả lấy C = 20 (số lớp đối tượng trong tập dữ liệu PASCAL VOC)
-<div class="text-center my-2">C<sub>i</sub> = Pr(Class<sub>i</sub>)|Object)</div>
+<div class="text-center my-3">C<sub>i</sub> = Pr(Class<sub>i</sub>)|Object)</div>
 <p>=&gt; Kích thước (shape) của final output sẽ là:</p>
-<div class="text-center my-2">(S , S , B * 4 + B + C) = (7 , 7 , 2 * 4 + 2 + 20) = (7 , 7 , 30)</div>
+<div class="text-center my-3">(S , S , B * 4 + B + C) = (7 , 7 , 2 * 4 + 2 + 20) = (7 , 7 , 30)</div>
 <h5 id="phần-21-network-design">Phần 2.1. Network Design</h5>
 <p>Kiến trúc mạng được truyền cảm hứng bởi mạng GoogLeNet (Inception) (Sử dụng 1x1 Conv layer)</p>
 <p>Mạng gồm 24 Convolutional Layers để trích xuất đặc trưng (extract features) và 2 Fully Connected Layers để dự đoán final output. Kiến trúc như bên dưới</p>
-<div class="text-center my-2">
+<div class="text-center my-3">
 <figure class="figure">
   <img src="https://hungvm2.github.io/images/yolov1/network_architecture.png" alt="Network Architecture" class="figure-img">
   <figcaption class="figure-caption">Ảnh 1: Kiến trúc mạng detection của YOLO</figcaption>
 </figure>
 </div>
-Cuối mỗi Conv layer có 1 hàm kích hoạt Leaky ReLU (activation function). Hàm kích hoạt cuối cùng của mạng là hàm linear, predict ra trực tiếp output, không sử dụng activation function
-Pipe line của prediction: 
+Cuối mỗi Conv layer có 1 hàm kích hoạt Leaky ReLU (activation function). Hàm kích hoạt cuối cùng của mạng là hàm linear, predict ra trực tiếp output, không sử dụng non-linear activation function
+<p>Pipe line của prediction:</p>
 <blockquote>
 <p>Image (448,448,3) =&gt; Network Architecture =&gt; Output (7,7,30) =&gt; Non-max supression =&gt; Final prediction</p>
 </blockquote>
@@ -166,7 +166,7 @@ Pipe line của prediction:
 <ol start="4">
 <li>Bước 4: Xây dựng hàm Loss</li>
 </ol>
-<div class="text-center my-2">
+<div class="text-center my-3">
 <figure class="figure">
   <img src="https://hungvm2.github.io/images/yolov1/loss_function.png" alt="Loss Function" class="figure-img">
   <figcaption class="figure-caption">Ảnh 2: Hàm loss</figcaption>
@@ -179,7 +179,9 @@ Pipe line của prediction:
 <li>Những grid cell không chứa object thì các giá trị Confidence scores sẽ bằng 0, việc này làm tăng sức mạnh của gradient (overpowering the gradient) ở những cell có chứa objects, khiến model bị mất ổn định. Để giải quyết, tác giả thêm các hệ số &ldquo;λ coord = 5&rdquo; và &ldquo;λ noobj = 0.5&rdquo; để tăng loss từ toạ độ bounding box và giảm loss từ Confidence score.</li>
 </ul>
 <p>Còn một vấn đề: box lớn thì sai số về kích thước (w, h) giữa predicted value và ground truth value cũng sẽ lớn hơn là box nhỏ. Để xử lý vấn đề này, tác giả sử dụng sai số giữa căn bậc hai của kích thước predict và ground truth thay vì giá trị w,h gốc. Ví dụ: Box To có predicted W = 9 và ground truth W = 8 =&gt; độ lệch = 1, Box Nhỏ có predicted W = 3 và ground truth W = 2 =&gt; độ lệch = 1. Rõ ràng Box nhỏ có sai số lớn hơn xét theo tỉ lệ, nhưng số tuyệt đối độ lệch thì như nhau</p>
-<p>Khi training, mỗi grid cell cần predict B bounding boxes, tuy nhiên sẽ chỉ Bounding box có IOU lớn nhất so với ground truth box mới được chọn lựa để tính toán hàm loss. Điều này sẽ giúp mỗi predicted Bounding box sẽ chỉ chuyên môn hoá vào việc detect các object có kích thước, tỉ lệ nhất định, giúp tăng Recall của model</p>
+<p>Khi training, mỗi grid cell cần predict B bounding boxes, tuy nhiên sẽ chỉ Bounding box có IOU lớn nhất so với ground truth box mới được chọn lựa để tính toán hàm loss. Điều này sẽ giúp mỗi predicted Bounding box sẽ chỉ chuyên môn hoá vào việc detect object có kích thước, tỉ lệ nhất định, giúp tăng Recall của model</p>
+<p>When (a \ne 0), there are two solutions to (ax^2 + bx + c = 0) and they are
+$$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$</p>
 
 
 
@@ -230,8 +232,13 @@ Pipe line của prediction:
     
     
         
+<script src="https://hungvm2.github.io/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
 
     
 </body>
-
+<script type="text/javascript"
+  src="https://hungvm2.github.io/js/mathjax.js">
+</script>
 </html>
