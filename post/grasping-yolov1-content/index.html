@@ -44,7 +44,8 @@
   <script>
   MathJax = {
     tex: {
-      tags: 'all'
+      tags: 'all',
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
     }
   };
   </script>
@@ -192,20 +193,6 @@ Cuối mỗi Conv layer có 1 hàm kích hoạt Leaky ReLU (activation function)
 a \begin{equation*}
 1_{i}^{obj}
 \end{equation*} b</p>
-<p>Here&rsquo;s one using the equation environment:
-\begin{equation}
-x+1\over\sqrt{1-x^2}
-\end{equation}
-and one with equation* environment:
-\begin{equation*}
-x+1\over\sqrt{1-x^2}
-\end{equation*}</p>
-<p>This is a forward reference [\ref{ref2}] and another \eqref{ref2} for the
-following equation:
-$$x+1\over\sqrt{1-x^2}\label{ref2}$$
-More math:
-$$x+1\over\sqrt{1-x^2}$$
-Here is a ref inside math: (\ref{ref2}+1) and text after it.</p>
 <p>When (a \ne 0), there are two solutions to (ax^2 + bx + c = 0) and they are
 $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$</p>
 
