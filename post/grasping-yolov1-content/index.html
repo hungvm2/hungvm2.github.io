@@ -100,36 +100,43 @@
     <p>Trong bài viết này, chúng ta hãy cùng đọc và phân tích nội dung của paper <a href="https://paperswithcode.com/paper/you-only-look-once-unified-real-time-object">&ldquo;You Only Look One: Unified, Real-Time Object Detection&rdquo;</a> pulished năm 2016 nhé!
 Bài viết sẽ chỉ tập trung vào phân tích những ý tưởng chính của YOLO, có lược bỏ một số phần không quá quan trọng</p>
 <h4 id="phần-abstract">Phần Abstract</h4>
-<p>Các nghiên cứu trước đây xử lý bài toán Object Detection theo hướng Classification (phân loại), còn tác giả YOLO lại tiếp cận theo hướng Regression (hồi quy).
-YOLO là một Neural Network đơn nhất dự đoán đồng thời cả Bounding boxes và Class probabilities từ ảnh đầu vào qua một evaluation duy nhất.
-Kiến trúc hợp nhất này giúp cho YOLO có thể xử lý ảnh ở tốc độ real-time 45fps. So sánh với các mô hình detect khác, YOLO sai nhiều hơn ở các lỗi về localization errors (sai vị trí của vật thể) nhưng lại ít sai hơn các lỗi false positive (nhận diện nhầm background là vật thể).
-YOLO học được các đặc tính của objects một cách tổng quát hơn hẳn các phương pháp khác (như là DPM, R-CNN).</p>
+<p>Các nghiên cứu trước đây xử lý bài toán Object Detection theo hướng Classification (phân loại), còn tác giả YOLO lại tiếp cận theo hướng Regression (hồi quy).</p>
+<p>YOLO là một Neural Network đơn nhất dự đoán đồng thời cả Bounding boxes và Class probabilities từ ảnh đầu vào qua một evaluation duy nhất.</p>
+<p>Kiến trúc hợp nhất này giúp cho YOLO có thể xử lý ảnh ở tốc độ real-time 45fps. So sánh với các mô hình detect khác, YOLO sai nhiều hơn ở các lỗi về localization errors (sai vị trí của vật thể) nhưng lại ít sai hơn các lỗi false positive (nhận diện nhầm background là vật thể).</p>
+<p>YOLO học được các đặc tính của objects một cách tổng quát hơn hẳn các phương pháp khác (như là DPM, R-CNN).</p>
 <h4 id="phần-1-introduction">Phần 1: Introduction</h4>
-<p>Các phương pháp trước đây detect object bằng cách phân loại object ở các vị trí và kích thước khác nhau trên ảnh đầu vào:
-..* Deformable Parts Models (DPM) sử dụng &ldquo;Sliding Window&rdquo; để Classify từng &ldquo;window&rdquo; trên toàn khung hình.
-..+ R-CNN sử dụng &ldquo;Region Proposal&rdquo; để đề xuất ra các Bounding boxes tiềm năng trong bức ảnh sau đó phân loại (Classify) trên những boxes này. Phân loại xong, một bước hậu xử lý được sử dụng để định vị lại chính xác các Bounding boxes, bỏ đi các boxes bị trùng lặp&hellip; Hướng tiếp cận này là một Pipeline phức tạp (gồm nhiều step/model nối tiếp nhau) nên rất chậm và khó để tối ưu.
-Thay vào đó, YOLO là một mạng đơn nhất chỉ cần nhìn ảnh đầu vào một lần duy nhất (You Only Look Once) để dự đoán đồng thời cả Bounding boxes và Class probabilities. Mạng YOLO này có các lợi ích sau:
-+ Cực kỳ nhanh, base model đạt tốc độ 45fps trên Titan X GPU nên có thể xử lý luồng video real-time
-+ Dự đoán vật thể dựa trên ngữ cảnh toàn cục (global context) của bức ảnh, điều này giúp giảm các lỗi nhận diện nhầm backgound là vật thể (false positive)
-+ Học tổng quát hơn về các vật thể. Khi train trên dữ liệu tự nhiên và test trên dữ liệu artwork, YOLO đạt độ chính xác cao hơn các phương pháp khác như DPM, R-CNN
-Tuy nhiên YOLO vẫn có nhược điểm: Độ chính xác thấp hơn các phương pháp state-of-the-art khác, khó khăn khi xác định chính xác vị trí của các vật thể, đặc biệt các vật thể cỡ nhõ.</p>
+<p>Các phương pháp trước đây detect object bằng cách phân loại object ở các vị trí và kích thước khác nhau trên ảnh đầu vào:</p>
+<ul>
+<li>Deformable Parts Models (DPM) sử dụng &ldquo;Sliding Window&rdquo; để Classify từng &ldquo;window&rdquo; trên toàn khung hình.</li>
+<li>R-CNN sử dụng &ldquo;Region Proposal&rdquo; để đề xuất ra các Bounding boxes tiềm năng trong bức ảnh sau đó phân loại (Classify) trên những boxes này. Phân loại xong, một bước hậu xử lý được sử dụng để định vị lại chính xác các Bounding boxes, bỏ đi các boxes bị trùng lặp&hellip; Hướng tiếp cận này là một Pipeline phức tạp (gồm nhiều step/model nối tiếp nhau) nên rất chậm và khó để tối ưu.</li>
+</ul>
+<p>Thay vào đó, YOLO là một mạng đơn nhất chỉ cần nhìn ảnh đầu vào một lần duy nhất (You Only Look Once) để dự đoán đồng thời cả Bounding boxes và Class probabilities. Mạng YOLO này có các lợi ích sau:</p>
+<ul>
+<li>Cực kỳ nhanh, base model đạt tốc độ 45fps trên Titan X GPU nên có thể xử lý luồng video real-time</li>
+<li>Dự đoán vật thể dựa trên ngữ cảnh toàn cục (global context) của bức ảnh, điều này giúp giảm các lỗi nhận diện nhầm backgound là vật thể (false positive)</li>
+<li>Khả năng tổng quát hoá cao hơn. Khi train trên dữ liệu tự nhiên và test trên dữ liệu artwork, YOLO đạt độ chính xác cao hơn các phương pháp khác như DPM, R-CNN</li>
+</ul>
+<p>Tuy nhiên YOLO vẫn có nhược điểm: Độ chính xác thấp hơn các phương pháp state-of-the-art khác, khó khăn khi xác định chính xác vị trí của các vật thể, đặc biệt các vật thể cỡ nhõ.</p>
 <h4 id="phần-2-unified-detection-mô-hình-phát-hiện-hợp-nhất">Phần 2: Unified Detection (Mô hình Phát hiện hợp nhất)</h4>
 <blockquote>
 <p>Phần này bắt đầu đi vào chi tiết kiến trúc của YOLO, sau khi mô tả xong các thành phần trong kiến trúc thì mình sẽ phân tích chi tiết lí do tại sao tác giả lại sử dụng các thành phần đó nhé!</p>
 </blockquote>
-<p>Hệ thống YOLO chia ảnh đầu vào thành một lưới SxS các ô vuông (grid cell). Nếu trung tâm (center) của vật thể rơi vào ô vuông nào, thì ô vuông đó sẽ chịu trách nhiệm phát hiện vật thể đó. Tác giả lấy S = 7
-Mỗi grid cell cần dự đoán: B bounding boxes, confidence scores của B bounding boxes và C scores của các lớp object, trong đó:
-+ B: Số lượng Bounding boxes cần dự đoán trên 1 cell. Tác giả chọn B = 2
-+ Mỗi bounding box gồm 4 gía trị: x, y, w, h. Trong đó (x,y) là toạ độ tâm của box được dự đoán, (w,h) là chiều dài và rộng của box
-+ Confidence score (CS): mỗi bounding box có 1 confidence score tương ứng, vậy là sẽ có B confidence scores, tính theo công thức
+<p>Hệ thống YOLO chia ảnh đầu vào thành một lưới SxS các ô vuông (grid cell). Nếu trung tâm (center) của vật thể rơi vào ô vuông nào, thì ô vuông đó sẽ chịu trách nhiệm phát hiện vật thể đó. Tác giả lấy S = 7</p>
+<p>Mỗi grid cell cần dự đoán: B bounding boxes, confidence scores của B bounding boxes và C scores của các lớp object, trong đó:</p>
+<ul>
+<li>B: Số lượng Bounding boxes cần dự đoán trên 1 cell. Tác giả chọn B = 2</li>
+<li>Mỗi bounding box gồm 4 gía trị: x, y, w, h. Trong đó (x,y) là toạ độ tâm của box được dự đoán, (w,h) là chiều dài và rộng của box</li>
+<li>Confidence score (CS): mỗi bounding box có 1 confidence score tương ứng, vậy là sẽ có B confidence scores, tính theo công thức</li>
+</ul>
 <div class="text-center"><img src="https://hungvm2.github.io/images/C_formular.png" alt="Confidence Score"></div>
-Nếu grid cell không có object nào Pr(Object) = 0. Nếu grid cell có object thì Pr(Object) = 1 =&gt; CS = IOU của ground truth box và predicted box
+    Nếu grid cell không có object nào Pr(Object) = 0. Nếu grid cell có object thì Pr(Object) = 1 => CS = IOU của ground truth box và predicted box
 + C: giá trị xác suất nhân diện của C lớp đối tượng trong model. . Tác giả lấy C = 20 (số lớp đối tượng trong tập dữ liệu PASCAL VOC)
 <div class="text-center">C<sub>i</sub> = Pr(Class<sub>i</sub>)|Object)</div>
-=&gt; Kích thước (shape) của output sẽ là:
-<div class="text-center">(S , S , B * 4 + B + C) = (7 , 7 , 2 * 4 + 2 + 20) = (7 , 7 , 30)</div></p>
+<p>=&gt; Kích thước (shape) của final output sẽ là:</p>
+<div class="text-center">(S , S , B * 4 + B + C) = (7 , 7 , 2 * 4 + 2 + 20) = (7 , 7 , 30)</div>
 <h5 id="phần-21-network-design">Phần 2.1. Network Design</h5>
 <p>Kiến trúc mạng được truyền cảm hứng bởi mạng GoogLeNet (Inception)</p>
+<p>Mạng gồm 24 Convolutional Layers để trích xuất đặc trưng (extract features) và 2 Fully Connected Layers để dự đoán final output.</p>
 
 
 
