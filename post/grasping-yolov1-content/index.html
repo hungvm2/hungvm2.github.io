@@ -190,6 +190,22 @@ Cuối mỗi Conv layer có 1 hàm kích hoạt Leaky ReLU (activation function)
 <p>Khi training, mỗi grid cell cần predict B bounding boxes, tuy nhiên sẽ chỉ Bounding box có IOU lớn nhất so với ground truth box mới được chọn lựa để tính toán hàm loss. Điều này sẽ giúp mỗi predicted Bounding box sẽ chỉ chuyên môn hoá vào việc detect object có kích thước, tỉ lệ nhất định, giúp tăng Recall của model</p>
 <p>When (a \ne 0), there are two solutions to (ax^2 + bx + c = 0) and they are
 $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$</p>
+<p>
+Here's one using the equation environment:
+\begin{equation}
+x+1\over\sqrt{1-x^2}
+\end{equation}
+and one with equation* environment:
+\begin{equation*}
+x+1\over\sqrt{1-x^2}
+\end{equation*}
+<p>
+<p>$$x+1\over\sqrt{1-x^2}\label{ref1}$$
+with a reference to ref1: \ref{ref1},
+and another numbered one with no label:
+$$x+1\over\sqrt{1-x^2}$$
+This one uses \nonumber:
+$$x+1\over\sqrt{1-x^2}\nonumber$$</p>
 
 
 
