@@ -125,18 +125,30 @@ Bài viết sẽ chỉ tập trung vào phân tích những ý tưởng chính c
 <p>Mỗi grid cell cần dự đoán: B bounding boxes, confidence scores của B bounding boxes và C scores của các lớp object, trong đó:</p>
 <ul>
 <li>B: Số lượng Bounding boxes cần dự đoán trên 1 cell. Tác giả chọn B = 2</li>
-<li>Mỗi bounding box gồm 4 gía trị: x, y, w, h. Trong đó (x,y) là toạ độ tâm của box được dự đoán, (w,h) là chiều dài và rộng của box</li>
+<li>Mỗi bounding box gồm 4 gía trị toạ độ (coordinates): x, y, w, h. Trong đó (x,y) là toạ độ tâm của box được dự đoán, (w,h) là chiều dài và rộng của box</li>
 <li>Confidence score (CS): mỗi bounding box có 1 confidence score tương ứng, vậy là sẽ có B confidence scores, tính theo công thức</li>
 </ul>
-<div class="text-center"><img src="https://hungvm2.github.io/images/C_formular.png" alt="Confidence Score"></div>
+<div class="text-center"><img src="https://hungvm2.github.io/images/yolov1/C_formular.png" alt="Confidence Score"></div>
     Nếu grid cell không có object nào Pr(Object) = 0. Nếu grid cell có object thì Pr(Object) = 1 => CS = IOU của ground truth box và predicted box
 + C: giá trị xác suất nhân diện của C lớp đối tượng trong model. . Tác giả lấy C = 20 (số lớp đối tượng trong tập dữ liệu PASCAL VOC)
 <div class="text-center">C<sub>i</sub> = Pr(Class<sub>i</sub>)|Object)</div>
 <p>=&gt; Kích thước (shape) của final output sẽ là:</p>
 <div class="text-center">(S , S , B * 4 + B + C) = (7 , 7 , 2 * 4 + 2 + 20) = (7 , 7 , 30)</div>
 <h5 id="phần-21-network-design">Phần 2.1. Network Design</h5>
-<p>Kiến trúc mạng được truyền cảm hứng bởi mạng GoogLeNet (Inception)</p>
-<p>Mạng gồm 24 Convolutional Layers để trích xuất đặc trưng (extract features) và 2 Fully Connected Layers để dự đoán final output.</p>
+<p>Kiến trúc mạng được truyền cảm hứng bởi mạng GoogLeNet (Inception) (Sử dụng 1x1 Conv layer)</p>
+<p>Mạng gồm 24 Convolutional Layers để trích xuất đặc trưng (extract features) và 2 Fully Connected Layers để dự đoán final output. Kiến trúc như bên dưới</p>
+<div class="text-center">
+<figure class="figure">
+  <img src="https://hungvm2.github.io/images/yolov1/network_architecture.png" alt="Network Architecture" class="figure-img">
+  <figcaption class="figure-caption">Ảnh 1: Kiến trúc mạng detection của YOLO</figcaption>
+</figure>
+</div>
+<h5 id="phần-22-training">Phần 2.2. Training</h5>
+<ol>
+<li>Bước 1: đặt 20 lớp Conv Layers đầu tiên của mạng detection (Ảnh 1) trong 1 kiến trúc mạng Classification (Input 224x224 =&gt; 24 Conv layers =&gt; 1 Average Pooling layer =&gt; 1 Fully Connected Layer), train trên tập ImageNet 1000 classes. Bước này giúp 24 lớp Conv Layers có bộ weights tốt trong việc trích xuất đặc trưng từ ảnh.</li>
+<li>Bước 2: Sử dụng transfer learning, đặt weights của 20 lớp Conv Layers đã được train ở bước 1 vào mạng detection (Ảnh 1). Do Weights của Conv Layers không phụ thuộc vào Input size nên tăng Input size lên 448x448 để mạng học được những đặc trưng chi tiết hơn của ảnh.</li>
+<li>Bước 3: Lấy kết quả output của mạng detection, đem xử lý lại trước khi đặt vào hàm loss</li>
+</ol>
 
 
 
