@@ -131,19 +131,19 @@ Bài viết sẽ chỉ tập trung vào phân tích những ý tưởng chính c
 <div class="text-center"><img src="https://hungvm2.github.io/images/yolov1/C_formular.png" alt="Confidence Score"></div>
     Nếu grid cell không có object nào Pr(Object) = 0. Nếu grid cell có object thì Pr(Object) = 1 => CS = IOU của ground truth box và predicted box.
 + C: giá trị xác suất nhân diện của C lớp đối tượng trong model. . Tác giả lấy C = 20 (số lớp đối tượng trong tập dữ liệu PASCAL VOC)
-<div class="text-center">C<sub>i</sub> = Pr(Class<sub>i</sub>)|Object)</div>
+<div class="text-center my-2">C<sub>i</sub> = Pr(Class<sub>i</sub>)|Object)</div>
 <p>=&gt; Kích thước (shape) của final output sẽ là:</p>
-<div class="text-center">(S , S , B * 4 + B + C) = (7 , 7 , 2 * 4 + 2 + 20) = (7 , 7 , 30)</div>
+<div class="text-center my-2">(S , S , B * 4 + B + C) = (7 , 7 , 2 * 4 + 2 + 20) = (7 , 7 , 30)</div>
 <h5 id="phần-21-network-design">Phần 2.1. Network Design</h5>
 <p>Kiến trúc mạng được truyền cảm hứng bởi mạng GoogLeNet (Inception) (Sử dụng 1x1 Conv layer)</p>
 <p>Mạng gồm 24 Convolutional Layers để trích xuất đặc trưng (extract features) và 2 Fully Connected Layers để dự đoán final output. Kiến trúc như bên dưới</p>
-<div class="text-center">
+<div class="text-center my-2">
 <figure class="figure">
   <img src="https://hungvm2.github.io/images/yolov1/network_architecture.png" alt="Network Architecture" class="figure-img">
   <figcaption class="figure-caption">Ảnh 1: Kiến trúc mạng detection của YOLO</figcaption>
 </figure>
 </div>
-Cuối mỗi Conv layer có 1 hàm kích hoạt Leaky ReLU (activation function). Hàm cuối cùng của mạng là hàm linear, predict ra trực tiếp output, không sử dụng activation function
+Cuối mỗi Conv layer có 1 hàm kích hoạt Leaky ReLU (activation function). Hàm kích hoạt cuối cùng của mạng là hàm linear, predict ra trực tiếp output, không sử dụng activation function
 Pipe line của prediction: 
 <blockquote>
 <p>Image (448,448,3) =&gt; Network Architecture =&gt; Output (7,7,30) =&gt; Non-max supression =&gt; Final prediction</p>
@@ -166,12 +166,20 @@ Pipe line của prediction:
 <ol start="4">
 <li>Bước 4: Xây dựng hàm Loss</li>
 </ol>
-<div class="text-center">
+<div class="text-center my-2">
 <figure class="figure">
   <img src="https://hungvm2.github.io/images/yolov1/loss_function.png" alt="Loss Function" class="figure-img">
   <figcaption class="figure-caption">Ảnh 2: Hàm loss</figcaption>
 </figure>
 </div>
+<p>Hàm loss sử dụng là hàm Sum Squared Error. Tác giả giải thích lí do sử dụng hàm này vì nó dễ để tối ưu.</p>
+<p>Tuy nhiên hàm này không đạt được độ chính xác AP (Average Precision) như mong đợi vì:</p>
+<ul>
+<li>Hàm này coi các giá trị về lỗi toạ độ (localization error) và lỗi phân loại (classification error) là tương đương với nhau (có thể thấy rõ trên công thức ở Ảnh 2)</li>
+<li>Những grid cell không chứa object thì các giá trị Confidence scores sẽ bằng 0, việc này làm tăng sức mạnh của gradient (overpowering the gradient) ở những cell có chứa objects, khiến model bị mất ổn định. Để giải quyết, tác giả thêm các hệ số &ldquo;λ coord = 5&rdquo; và &ldquo;λ noobj = 0.5&rdquo;. (Đoạn này mình vẫn chưa thực sự thông suốt ý tưởng của tác giả :-(, có thể đây là kết luận dựa trên thực nghiệm)</li>
+</ul>
+<p>Còn một vấn đề: box lớn thì sai số về kích thước (w, h) giữa predicted value và ground truth value cũng sẽ lớn hơn là box nhỏ. Để xử lý vấn đề này, tác giả sử dụng sai số giữa căn bậc hai của kích thước predict và ground truth thay vì giá trị w,h gốc. Ví dụ: Box To có predicted W = 9 và ground truth W = 8 =&gt; Loss1 = 1, Box Nhỏ có predicted W = 3 và ground truth W = 2 =&gt; Loss2 = 1. Rõ ràng Box nhỏ có sai số lớn hơn xét theo tỉ lệ, nhưng Loss1 vẫn bằng Loss2</p>
+
 
 
                     </div>
