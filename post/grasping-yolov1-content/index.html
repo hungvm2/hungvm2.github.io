@@ -131,9 +131,6 @@
 </ul>
 <p>Tuy nhiên YOLO vẫn có nhược điểm: Độ chính xác thấp hơn các phương pháp state-of-the-art khác, khó khăn khi xác định chính xác vị trí của các vật thể, đặc biệt các vật thể cỡ nhõ.</p>
 <h4 id="phần-2-unified-detection-mô-hình-phát-hiện-hợp-nhất">Phần 2: Unified Detection (Mô hình Phát hiện hợp nhất)</h4>
-<blockquote>
-<p>Phần này bắt đầu đi vào chi tiết kiến trúc của YOLO, sau khi mô tả xong các thành phần trong kiến trúc thì mình sẽ phân tích chi tiết lí do tại sao tác giả lại sử dụng các thành phần đó nhé!</p>
-</blockquote>
 <p>Hệ thống YOLO chia ảnh đầu vào thành một lưới SxS các ô vuông (grid cell). Nếu trung tâm (center) của vật thể rơi vào ô vuông nào, thì ô vuông đó sẽ chịu trách nhiệm phát hiện vật thể đó. Tác giả lấy S = 7</p>
 <p>Mỗi grid cell cần dự đoán: B bounding boxes, confidence scores của B bounding boxes và C scores của các lớp object (các class/label trong dataset), trong đó:</p>
 <ul>
@@ -226,15 +223,17 @@ Các mô hình được so sánh gồm có: R-CNN, Fast R-CNN, Faster R-CNN ; DP
   <figcaption class="figure-caption">Ảnh 4: So sánh lỗi của YOLO và Fast R-CNN</figcaption>
 </figure>
 </div>
-+ Kết hợp kết quả của YOLO với Fast R-CNN
-+ Đo kết quả trên tập VOC 2012
-+ Đo kết quả khi detect người trong các tác phẩm nghệ thuật (artwork)
+<ul>
+<li>Kết hợp kết quả của YOLO với Fast R-CNN</li>
+<li>Đo kết quả trên tập VOC 2012</li>
+<li>Đo kết quả khi detect người trong các tác phẩm nghệ thuật (artwork)</li>
+</ul>
 <h4 id="phần-5-real-time-detection-in-the-wild">Phần 5. Real-Time Detection in the Wild</h4>
 <p>Phần này tác giả cho model xử lý luồng từ camera để chứng minh tốc độ đạt real-time</p>
 <h4 id="phần-6-conclusion">Phần 6. Conclusion</h4>
 <p>Tác giả kết luận lại những ưu điểm của YOLO: kiến trúc đơn giản dễ xây dựng, một mô hình end-to-end, tốc độ xử lý nhanh, mức độ tổng quát hoá cao.</p>
 <h3 id="ii-hiểu-paper">II. Hiểu Paper</h3>
-<h3 id="iii-nguồn-tham-khảo">III&gt; Nguồn tham khảo:</h3>
+<h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
 
 
 
