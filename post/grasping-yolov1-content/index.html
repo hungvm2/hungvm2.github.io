@@ -201,18 +201,18 @@ Cuối mỗi Conv layer có 1 hàm kích hoạt Leaky ReLU (activation function)
 Thiết kế kiểu grid giúp đa dạng hoá việc predict các bounding box
 Thường tâm của object sẽ chỉ nằm trong 1 gird cell, tuy nhiên có những trường hợp như object lớn hoặc object nằm gần viền của nhiều cell nên dễ bị detect ra nhiều box cho cùng một object.
 Thêm bước Non-max suppression (NMS) giúp triệt tiêu những box bị trùng khi detect cùng một object. Cải thiện thêm 2-3% mAP cho model.</p>
-<p>Pipe line của prediction[\ref{ref1}]:</p>
+<p>Pipe line của prediction:</p>
 <blockquote>
 <p>Image (448,448,3) =&gt; Network Prediction =&gt; Output (7,7,30) =&gt; Tính lại class probabilities =&gt; Bỏ qua các box có low probabilities =&gt; Non-max suppression =&gt; Final prediction</p>
 </blockquote>
-<p>[$\label{ref1}$]: Xác suất nhận diện của các class trong ảnh sẽ được tính theo công thức sau:</p>
+<p>Xác suất nhận diện của các class trong ảnh sẽ được tính theo công thức sau:</p>
 <div class="text-center my-3">
   <img src="https://hungvm2.github.io/images/yolov1/final_class_probs.png" alt="Class Probabilities" class="figure-img">
 </div>
 <h4 id="phần-3-comparison-to-other-detection-systems">Phần 3. Comparison to Other Detection Systems</h4>
 <p>Phần này tác giả so sánh YOLO với các mô hình detect object khác trước đó về FPS, mAP, tương đồng về kiến trúc một số thành phần, những cải tiến của YOLO so với các hệ thống này&hellip;
-Các mô hình được so sánh gồm có: R-CNN, Fast R-CNN, Faster R-CNN ; DPM ; Deep MultiBox ; OverFeat ; MultiGrasp
-Take me to <a href="#pookie">1</a></p>
+Các mô hình được so sánh gồm có: R-CNN, Fast R-CNN, Faster R-CNN ; DPM ; Deep MultiBox ; OverFeat ; MultiGrasp</p>
+<p>Take me to [<a href="#pookie">1</a>]</p>
 <h4 id="phần-4-experiments">Phần 4. Experiments</h4>
 <p>Tác giả làm một số thí nghiệm:</p>
 <ul>
