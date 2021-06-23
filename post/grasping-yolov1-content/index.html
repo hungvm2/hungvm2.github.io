@@ -113,7 +113,7 @@
 <p>Trong phần &ldquo;Đọc Paper&rdquo; này, mình sẽ đi thứ tự theo các section của paper và tóm lược lại những ý chính của tác giả, có bỏ qua một số phần không quá quan trọng. Khi đọc sẽ có các reference (có dạng [number]) cuối một câu, hoặc cụm từ. Bạn có thể click vào các link đó để dẫn xuống phần &ldquo;Hiểu Paper&rdquo; bên dưới để đọc sâu hơn về vấn đề được dề cập.</p>
 </blockquote>
 <h4 id="1-giới-thiệu-chung-về-mô-hình-model">1: Giới thiệu chung về mô hình (model)</h4>
-<p>Các nghiên cứu trước đây xử lý bài toán Object Detection theo hướng Classification (phân loại) [<a href="#previous_model" style="color:red;">1</a>][<a name="previous_model_b" style="color:red;"></a>], còn tác giả YOLO lại <strong>tiếp cận theo hướng Regression</strong> (hồi quy).</p>
+<p>Các nghiên cứu trước đây xử lý bài toán Object Detection theo hướng Classification (phân loại) [<a href="#previous_model" style="color:red;">1</a>]<a name="previous_model_b" style="color:red;"></a>, còn tác giả YOLO lại <strong>tiếp cận theo hướng Regression</strong> (hồi quy).</p>
 <p>YOLO là <strong>một Neural Network đơn nhất</strong> dự đoán đồng thời cả Bounding boxes và Class probabilities từ ảnh đầu vào qua một evaluation duy nhất.</p>
 <p>Kiến trúc hợp nhất này giúp cho YOLO có các ưu điểm:</p>
 <ul>
@@ -222,7 +222,7 @@ Các mô hình được so sánh gồm có: R-CNN, Fast R-CNN, Faster R-CNN ; DP
 <blockquote>
 <p>Trong phần &ldquo;Hiểu Paper&rdquo; này, mình sẽ đi vào phân tích các lý do tại sao tác giả chọn hướng tiếp cận đó, cũng như giải thích và làm rõ thêm các thuật ngữ, công thức&hellip;</p>
 </blockquote>
-<p>[<a name="previous_model" style="color:red;"></a>][<a href="#previous_model_b" style="color:red;">1</a>]: Kỹ thuật sử dụng ở một số phương pháp trước đây:</p>
+<p><a name="previous_model" style="color:red;"></a>[<a href="#previous_model_b" style="color:red;">1</a>]: Kỹ thuật sử dụng ở một số phương pháp trước đây:</p>
 <ul>
 <li>Deformable Parts Models (DPM) sử dụng &ldquo;Sliding Window&rdquo; sau đó phân loại trên các &ldquo;Window&rdquo; này</li>
 <li>R-CNN sử dụng &ldquo;Region Proposal&rdquo; để đề xuất ra các Bounding boxes tiềm năng, sau đó phân loại (Classify) trên những boxes này và một bước hậu xử lý được sử dụng để định vị lại chính xác các Bounding boxes, bỏ đi các boxes bị trùng lặp&hellip; Hướng tiếp cận này là một Pipeline phức tạp (gồm nhiều step/model nối tiếp nhau) nên rất chậm và khó để tối ưu.</li>
