@@ -181,9 +181,8 @@
 <li>Learning rate (LR) schedule: tăng dần LR từ $10^{-3}$ tới $10^{-2}$ thay vì để LR cao từ đầu để tránh model bị phân kỳ (diverge) giai đoạn đầu, sau đó giữ nguyên LR $10^{-2}$ trong 75 epochs, giảm xuống $10^{-3}$ cho 30 epochs tiếp theo, giảm xuống $10^{-4}$ cho 30 epochs cuối.</li>
 <li>Data augmentation (làm giàu bộ dữ liệu): Random scaling (phóng to, thu nhỏ ngẫu nhiên), random translation (xê dịch vị trí pixel ngẫu nhiên) tới 20% kích thước ảnh. Ngẫu nhiên điều chỉnh độ phơi sáng (exposure) và bão hoà (saturation) của ảnh tới 1.5 lần trong không gian màu HSV.</li>
 </ul>
-<h5 id="phần-23-inference">Phần 2.3. Inference</h5>
-<p>Giống như khi training, predict cũng chỉ cần một lần evaluate qua network.
-Thường tâm của object sẽ chỉ nằm trong 1 gird cell, tuy nhiên có những trường hợp như object lớn hoặc object nằm gần viền của nhiều cell nên dễ bị detect ra nhiều box cho cùng một object.
+<h5 id="23-inference">2.3. Inference</h5>
+<p>Thường tâm của object sẽ chỉ nằm trong 1 gird cell, tuy nhiên có những trường hợp như object lớn hoặc object nằm gần viền của nhiều cell nên dễ bị detect ra nhiều box cho cùng một object.
 Thêm bước Non-max suppression (NMS) giúp triệt tiêu những box bị trùng khi detect cùng một object. Cải thiện thêm 2-3% mAP cho model.</p>
 <p>Pipe line của prediction:</p>
 <blockquote>
@@ -193,11 +192,7 @@ Thêm bước Non-max suppression (NMS) giúp triệt tiêu những box bị tr�
 <div class="text-center my-3">
   <img src="https://hungvm2.github.io/images/yolov1/final_class_probs.png" alt="Class Probabilities" class="figure-img">
 </div>
-<h4 id="phần-3-comparison-to-other-detection-systems">Phần 3. Comparison to Other Detection Systems</h4>
-<p>Phần này tác giả so sánh YOLO với các mô hình detect object khác trước đó về FPS, mAP, tương đồng về kiến trúc một số thành phần, những cải tiến của YOLO so với các hệ thống này&hellip;
-Các mô hình được so sánh gồm có: R-CNN, Fast R-CNN, Faster R-CNN ; DPM ; Deep MultiBox ; OverFeat ; MultiGrasp</p>
-<h4 id="phần-4-experiments">Phần 4. Experiments</h4>
-<p>Tác giả làm một số thí nghiệm:</p>
+<h4 id="3-so-sánh-độ-chính-xác-và-hiệu-năng-với-các-mô-hình-khác">3. So sánh độ chính xác và hiệu năng với các mô hình khác</h4>
 <ul>
 <li>So sánh tốc độ/mAP của YOLO, biến thể Fast YOLO với các mô hình khác</li>
 </ul>
