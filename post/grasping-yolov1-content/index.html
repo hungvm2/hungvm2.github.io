@@ -136,11 +136,15 @@
 <ul>
 <li>B: Số lượng Bounding boxes cần dự đoán trên 1 cell. Tác giả chọn B = 2</li>
 <li>Mỗi bounding box gồm 4 gía trị toạ độ (coordinates): x, y, w, h. Trong đó (x,y) là toạ độ tâm của box được dự đoán, (w,h) là chiều dài và rộng của box</li>
-<li>Confidence score (CS): mỗi bounding box có 1 confidence score tương ứng, vậy là sẽ có B confidence scores, tính theo công thức</li>
+<li>Confidence score (CS): mỗi bounding box có 1 confidence score tương ứng, vậy là sẽ có B confidence scores, tính theo công thức
+\begin{equation}Pr(Object) * IOU_{pred}^{truth}\end{equation}</li>
 </ul>
 <div class="text-center"><img src="https://hungvm2.github.io/images/yolov1/C_formular.png" alt="Confidence Score"></div>
-    Nếu grid cell không có object nào Pr(Object) = 0. Nếu grid cell có object thì Pr(Object) = 1 => CS = IOU của ground truth box và predicted box.
-+ C: giá trị xác suất nhân diện của C lớp đối tượng trong model. . Tác giả lấy C = 20 (số lớp đối tượng trong tập dữ liệu PASCAL VOC)
+<p>Nếu grid cell không có object nào $Pr(Object) = 0$. Nếu grid cell có object thì $Pr(Object) = 1$ =&gt; CS = IOU của ground truth box và predicted box.</p>
+<ul>
+<li>C: giá trị xác suất nhân diện của C lớp đối tượng trong model. . Tác giả lấy C = 20 (số lớp đối tượng trong tập dữ liệu PASCAL VOC)
+\begin{equation}p_{i}(c) = Pr(Class_{i}|Object)\end{equation}</li>
+</ul>
 <div class="text-center my-3">C<sub>i</sub> = Pr(Class<sub>i</sub>)|Object)</div>
 <p>=&gt; Kích thước (shape) của final output sẽ là:</p>
 <div class="text-center my-3">(S , S , B * 4 + B + C) = (7 , 7 , 2 * 4 + 2 + 20) = (7 , 7 , 30)</div>
@@ -153,7 +157,7 @@
   <figcaption class="figure-caption">Ảnh 1: Kiến trúc mạng detection của YOLO</figcaption>
 </figure>
 </div>
-Cuối mỗi Conv layer có 1 hàm kích hoạt Leaky ReLU (activation function). Hàm kích hoạt cuối cùng của mạng là hàm linear, predict ra trực tiếp output, không sử dụng non-linear activation function
+<p>Cuối mỗi Conv layer có 1 hàm kích hoạt Leaky ReLU (activation function). Hàm kích hoạt cuối cùng của mạng là hàm linear, predict ra trực tiếp output, không sử dụng non-linear activation function</p>
 <h5 id="phần-22-training">Phần 2.2. Training</h5>
 <ol>
 <li>Bước 1: đặt 20 lớp Conv Layers đầu tiên của mạng detection (Ảnh 1) trong 1 kiến trúc mạng Classification (Input 224x224 =&gt; 24 Conv layers =&gt; 1 Average Pooling layer =&gt; 1 Fully Connected Layer), train trên tập ImageNet 1000 classes. Bước này giúp 24 lớp Conv Layers có bộ weights tốt trong việc trích xuất đặc trưng từ ảnh.</li>
@@ -209,7 +213,6 @@ Thêm bước Non-max suppression (NMS) giúp triệt tiêu những box bị tr�
 <div class="text-center my-3">
   <img src="https://hungvm2.github.io/images/yolov1/final_class_probs.png" alt="Class Probabilities" class="figure-img">
 </div>
-Take me to [<a href="#pookie" style="color:red;">1</a>]
 <h4 id="phần-3-comparison-to-other-detection-systems">Phần 3. Comparison to Other Detection Systems</h4>
 <p>Phần này tác giả so sánh YOLO với các mô hình detect object khác trước đó về FPS, mAP, tương đồng về kiến trúc một số thành phần, những cải tiến của YOLO so với các hệ thống này&hellip;
 Các mô hình được so sánh gồm có: R-CNN, Fast R-CNN, Faster R-CNN ; DPM ; Deep MultiBox ; OverFeat ; MultiGrasp</p>
@@ -242,6 +245,7 @@ Các mô hình được so sánh gồm có: R-CNN, Fast R-CNN, Faster R-CNN ; DP
 <p>Tác giả kết luận lại những ưu điểm của YOLO: kiến trúc đơn giản dễ xây dựng, một mô hình end-to-end, tốc độ xử lý nhanh, mức độ tổng quát hoá cao.</p>
 <h3 id="ii-hiểu-paper">II. Hiểu Paper</h3>
 <h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
+<p>Take me to [<a href="#pookie" style="color:#ff0000;">1</a>]</p>
 <p>[<a name="pookie" style="color:red;">1</a>]: bacdaf asdf asdf asdf asfasdf asfa</p>
 
 
