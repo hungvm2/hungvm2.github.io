@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title> Đọc hiểu Paper &#34;You Only Look One: Unified, Real-Time Object Detection&#34;(YOLOv1) - HungVM2&#39;s Notes </title>
+    <title> Đọc và phân tích Paper &#34;You Only Look One: Unified, Real-Time Object Detection&#34;(YOLOv1) - HungVM2&#39;s Notes </title>
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
     <meta name="referrer" content="no-referrer">
@@ -13,13 +13,13 @@
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="article" />
     <meta property="og:url" content="https://hungvm2.github.io/post/grasping-yolov1-content/" />
-    <meta property="og:title" content="Đọc hiểu Paper &#34;You Only Look One: Unified, Real-Time Object Detection&#34;(YOLOv1)" />
+    <meta property="og:title" content="Đọc và phân tích Paper &#34;You Only Look One: Unified, Real-Time Object Detection&#34;(YOLOv1)" />
     <meta property="og:image" content="https://hungvm2.github.io" />
     <meta property="og:description" content="" />
 
     <meta name="twitter:card" content="summary_large_image" />
     
-    <meta name="twitter:title" content="Đọc hiểu Paper &#34;You Only Look One: Unified, Real-Time Object Detection&#34;(YOLOv1)" />
+    <meta name="twitter:title" content="Đọc và phân tích Paper &#34;You Only Look One: Unified, Real-Time Object Detection&#34;(YOLOv1)" />
     <meta name="twitter:description" content="" />
     <meta name="twitter:image" content="https://hungvm2.github.io" />
 
@@ -40,7 +40,7 @@
     
     <link href="https://hungvm2.github.io/index.xml" rel="alternate" type="application/rss+xml" title="HungVM2&#39;s Notes" />
     
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
   <script>
   MathJax = {
     tex: {
@@ -104,11 +104,14 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-sm-12 col-lg-8">
-                    <h1 class="mx-0 mx-md-4">Đọc hiểu Paper &#34;You Only Look One: Unified, Real-Time Object Detection&#34;(YOLOv1)</h1>
+                    <h1 class="mx-0 mx-md-4">Đọc và phân tích Paper &#34;You Only Look One: Unified, Real-Time Object Detection&#34;(YOLOv1)</h1>
                     <div class="markdown">
                         
-    <p>Trong bài viết này, chúng ta hãy cùng đọc và phân tích nội dung của paper <a href="https://paperswithcode.com/paper/you-only-look-once-unified-real-time-object">&ldquo;You Only Look One: Unified, Real-Time Object Detection&rdquo;</a> pulished năm 2016 nhé!
-Bài viết sẽ chỉ tập trung vào phân tích những ý tưởng chính của YOLO, có lược bỏ một số phần không quá quan trọng</p>
+    <p>Trong bài viết này, chúng ta hãy cùng đọc và phân tích nội dung của paper <a href="https://paperswithcode.com/paper/you-only-look-once-unified-real-time-object">&ldquo;You Only Look One: Unified, Real-Time Object Detection&rdquo;</a> pulished năm 2016 nhé!</p>
+<blockquote>
+<p>Bài viết sẽ chỉ tập trung vào phân tích những ý tưởng chính của YOLO, có bỏ qua một số phần không quá quan trọng</p>
+</blockquote>
+<h3 id="i-đọc-paper">I. Đọc Paper</h3>
 <h4 id="phần-abstract">Phần Abstract</h4>
 <p>Các nghiên cứu trước đây xử lý bài toán Object Detection theo hướng Classification (phân loại), còn tác giả YOLO lại tiếp cận theo hướng Regression (hồi quy).</p>
 <p>YOLO là một Neural Network đơn nhất dự đoán đồng thời cả Bounding boxes và Class probabilities từ ảnh đầu vào qua một evaluation duy nhất.</p>
@@ -154,10 +157,6 @@ Bài viết sẽ chỉ tập trung vào phân tích những ý tưởng chính c
 </figure>
 </div>
 Cuối mỗi Conv layer có 1 hàm kích hoạt Leaky ReLU (activation function). Hàm kích hoạt cuối cùng của mạng là hàm linear, predict ra trực tiếp output, không sử dụng non-linear activation function
-<p>Pipe line của prediction:</p>
-<blockquote>
-<p>Image (448,448,3) =&gt; Network Architecture =&gt; Output (7,7,30) =&gt; Non-max supression =&gt; Final prediction</p>
-</blockquote>
 <h5 id="phần-22-training">Phần 2.2. Training</h5>
 <ol>
 <li>Bước 1: đặt 20 lớp Conv Layers đầu tiên của mạng detection (Ảnh 1) trong 1 kiến trúc mạng Classification (Input 224x224 =&gt; 24 Conv layers =&gt; 1 Average Pooling layer =&gt; 1 Fully Connected Layer), train trên tập ImageNet 1000 classes. Bước này giúp 24 lớp Conv Layers có bộ weights tốt trong việc trích xuất đặc trưng từ ảnh.</li>
@@ -173,9 +172,7 @@ Cuối mỗi Conv layer có 1 hàm kích hoạt Leaky ReLU (activation function)
 <blockquote>
 <p>Tại sao phải có bước xử lý này? Đây là bước Scaling Features: đưa khoảng giá trị của các feature về cùng một scale trước khi vào hàm loss để giúp mô hình hội tụ nhanh và ổn định hơn khi training</p>
 </blockquote>
-<ol start="4">
-<li>Bước 4: Xây dựng hàm Loss</li>
-</ol>
+<p>Bước 4: Xây dựng hàm Loss</p>
 <div class="text-center my-3">
 <figure class="figure">
   <img src="https://hungvm2.github.io/images/yolov1/loss_function.png" alt="Loss Function" class="figure-img">
@@ -190,7 +187,54 @@ Cuối mỗi Conv layer có 1 hàm kích hoạt Leaky ReLU (activation function)
 </ul>
 <p>Còn một vấn đề: box lớn thì sai số về kích thước (w, h) giữa predicted value và ground truth value cũng sẽ lớn hơn là box nhỏ. Để xử lý vấn đề này, tác giả sử dụng sai số giữa căn bậc hai của kích thước predict và ground truth thay vì giá trị w,h gốc. Ví dụ: Box To có predicted W = 9 và ground truth W = 8 =&gt; độ lệch = 1, Box Nhỏ có predicted W = 3 và ground truth W = 2 =&gt; độ lệch = 1. Rõ ràng Box nhỏ có sai số lớn hơn xét theo tỉ lệ, nhưng số tuyệt đối độ lệch thì như nhau</p>
 <p>Khi training, mỗi grid cell cần predict B bounding boxes, tuy nhiên sẽ chỉ Bounding box có IOU lớn nhất so với ground truth box mới được chọn lựa để tính toán hàm loss (chọn làm &ldquo;predictor&rdquo;). Điều này sẽ giúp mỗi predicted Bounding box sẽ chỉ chuyên môn hoá vào việc detect object có kích thước, tỉ lệ nhất định, giúp tăng Recall của model</p>
-<p>$\mathbb{1}_{i}^{obj}$ nhận giá trị 1 nếu object xuất hiện ở cell thứ $i$ và $\mathbb{1}_{ij}^{obj}$ nhận giá trị 1 nếu bounding box thứ $j$ là "predictor"</p>
+<p>$\mathbb{1}_{i}^{obj}$ nhận giá trị 1 nếu object xuất hiện ở cell thứ $i$, 0 nếu ngược lại và $\mathbb{1}_{ij}^{obj}$ nhận giá trị 1 nếu bounding box thứ $j$ là "predictor", 0 nếu ngược lại</p>
+<p>Bước 5: Training model detection</p>
+<ul>
+<li>Số Epochs: 135</li>
+<li>Dataset: PASCAL VOC 2017 và 2012</li>
+<li>Batch size: 64 (nếu có $m$ data points trong tập train thì mỗi epoch sẽ có $m/64$ iterations)</li>
+<li>Momentum: 0.9 (Gradient Descent có sử dụng kỹ thuật momentum để hội tụ nhanh hơn)</li>
+<li>Decay: 0.0005 (ý của tác giả ở đây có lẽ là Weight decay, một kỹ thuật regularization giúp giảm High Variance (Overfitting) (hơi giống L2 Regularization))</li>
+<li>Learning rate (LR) schedule: tăng dần LR từ $10^{-3}$ tới $10^{-2}$ thay vì để LR cao từ đầu để tránh model bị phân kỳ (diverge) giai đoạn đầu, sau đó giữ nguyên LR $10^{-2}$ trong 75 epochs, giảm xuống $10^{-3}$ cho 30 epochs tiếp theo, giảm xuống $10^{-4}$ cho 30 epochs cuối.</li>
+<li>Sử dụng dropout, rate = 0.5 sau layer FC đầu tiên, để giảm Overfitting</li>
+<li>Data augmentation (làm giàu bộ dữ liệu): Random scaling (phóng to, thu nhỏ ngẫu nhiên), random translation (xê dịch vị trí pixel ngẫu nhiên) tới 20% kích thước ảnh. Ngẫu nhiên điều chỉnh độ phơi sáng (exposure) và bão hoà (saturation) của ảnh tới 1.5 lần trong không gian màu HSV.</li>
+</ul>
+<h5 id="phần-23-inference">Phần 2.3. Inference</h5>
+<p>Pipe line của prediction:</p>
+<blockquote>
+<p>Image (448,448,3) =&gt; Network Architecture =&gt; Output (7,7,30) =&gt; Non-max supression =&gt; Final prediction</p>
+</blockquote>
+<p>Bước NMS giúp triệt tiêu những box bị trùng khi detect cùng một object. Cải thiện thêm 2-3% mAP cho model</p>
+<h4 id="phần-3-comparison-to-other-detection-systems">Phần 3. Comparison to Other Detection Systems</h4>
+<p>Phần này tác giả so sánh YOLO với các mô hình detect object khác trước đó về FPS, mAP, tương đồng về kiến trúc một số thành phần, những cải tiến của YOLO so với các hệ thống này&hellip;
+Các mô hình được so sánh gồm có: R-CNN, Fast R-CNN, Faster R-CNN ; DPM ; Deep MultiBox ; OverFeat ; MultiGrasp</p>
+<h4 id="phần-4-experiments">Phần 4. Experiments</h4>
+<p>Tác giả làm một số thí nghiệm:</p>
+<ul>
+<li>So sánh tốc độ/mAP của YOLO, biến thể Fast YOLO với các mô hình khác</li>
+</ul>
+<div class="text-center my-3">
+<figure class="figure">
+  <img src="https://hungvm2.github.io/images/yolov1/fps_map_comparison.png" alt="FPS/mAP Comparison" class="figure-img">
+  <figcaption class="figure-caption">Ảnh 3: So sánh trên tập PASCAL VOC 2007</figcaption>
+</figure>
+</div>
++ Phân tích các lỗi của YOLO so với Fast R-CNN trên tập VOC 2007
+<div class="text-center my-3">
+<figure class="figure">
+  <img src="https://hungvm2.github.io/images/yolov1/error_analysis.png" alt="Error Analysis" class="figure-img">
+  <figcaption class="figure-caption">Ảnh 4: So sánh lỗi của YOLO và Fast R-CNN</figcaption>
+</figure>
+</div>
++ Kết hợp kết quả của YOLO với Fast R-CNN
++ Đo kết quả trên tập VOC 2012
++ Đo kết quả khi detect người trong các tác phẩm nghệ thuật (artwork)
+<h4 id="phần-5-real-time-detection-in-the-wild">Phần 5. Real-Time Detection in the Wild</h4>
+<p>Phần này tác giả cho model xử lý luồng từ camera để chứng minh tốc độ đạt real-time</p>
+<h4 id="phần-6-conclusion">Phần 6. Conclusion</h4>
+<p>Tác giả kết luận lại những ưu điểm của YOLO: kiến trúc đơn giản dễ xây dựng, một mô hình end-to-end, tốc độ xử lý nhanh, mức độ tổng quát hoá cao.</p>
+<h3 id="ii-hiểu-paper">II. Hiểu Paper</h3>
+<h3 id="iii-nguồn-tham-khảo">III&gt; Nguồn tham khảo:</h3>
 
 
 
