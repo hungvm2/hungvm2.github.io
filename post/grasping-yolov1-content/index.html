@@ -154,20 +154,16 @@
 <p>Công thức tổng quát:</p>
 <p>
 \begin{equation}
-λ_{coord}\displaystyle\sum_{i=0}^{S^{2}}\displaystyle\sum_{j=0}^{B}\mathbb{1}_{ij}^{obj}[(x_{i} - \hat{x}_{i})^{2} + (y_{i} - \hat{y}_{i})^{2}]
-end{equation}
-</p>
-<p>
-\begin{equation}
-λ_{coord}\displaystyle\sum_{i=0}^{S^{2}}\displaystyle\sum_{j=0}^{B}\mathbb{1}_{ij}^{obj}[(\sqrt{w_{i}} - \sqrt{\hat{w}_{i}})^{2} + (\sqrt{h_{i}} - \sqrt{\hat{h}_{i}})^{2}]
-end{equation}
-</p>
-<p>
-\begin{equation}
+\begin{split}
+\lambda_{coord} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} [(x_{i} - \hat{x}_{i})^{2} + (y_{i} - \hat{y}_{i})^{2}] \\
+\end{split}
+\begin{split}
++ \lambda_{coord}\displaystyle\sum_{i=0}^{S^{2}}\displaystyle\sum_{j=0}^{B}\mathbb{1}_{ij}^{obj}[(\sqrt{w_{i}} - \sqrt{\hat{w}_{i}})^{2} + (\sqrt{h_{i}} - \sqrt{\hat{h}_{i}})^{2}] \\
+\end{split}
 \begin{split} 
-+ \displaystyle\sum_{i=0)^{S^{2}} \mathbb{1}_{i}^{obj} \displaystyle\sum_{c \in classes}(p_{i}(c) - \hat{p_{i}}(c))^{2} \\
++ \displaystyle\sum_{i=0)^{S^{2}} \mathbb{1}_{i}^{obj} \displaystyle\sum_{c \in classes}(p_{i}(c) - \hat{p_{i}}(c))^{2}
 \end{split} 
-end{equation}
+\end{equation}
 </p>
 <div class="text-center my-3">
 <figure class="figure">
