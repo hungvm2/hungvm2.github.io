@@ -41,15 +41,6 @@
     <link href="https://hungvm2.github.io/index.xml" rel="alternate" type="application/rss+xml" title="HungVM2&#39;s Notes" />
     
 
-  <script>
-  MathJax = {
-    tex: {
-      tags: 'all',
-    inlineMath: [['$', '$'], ['\\(', '\\)']]
-    }
-  };
-  </script>
-  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 </head>
 
 <body>
@@ -123,14 +114,14 @@
 <p>Tuy nhiên YOLO vẫn có nhược điểm:</p>
 <ul>
 <li>Độ chính xác thấp hơn các phương pháp state-of-the-art khác</li>
-<li>Khó khăn khi xác định chính xác vị trí của các vật thể, đặc biệt các vật thể cỡ nhỏ.</li>
+<li>Khó khăn khi xác định chính xác vị trí của các vật thể (Localization), đặc biệt các vật thể cỡ nhỏ.</li>
 </ul>
 <h4 id="2-kiến-trúc-của-yolo">2: Kiến trúc của YOLO</h4>
 <p>Hệ thống YOLO chia ảnh đầu vào thành một lưới SxS các ô vuông (grid cell). Nếu trung tâm (center) của vật thể rơi vào ô vuông nào, thì ô vuông đó sẽ chịu trách nhiệm phát hiện vật thể đó [<a href="#r1" style="color:red;">1</a>].</p>
 <p>Mỗi grid cell cần dự đoán: B bounding boxes, B confidence scores của B bounding boxes và C giá trị xác suất của các lớp đối tượng (các class trong dataset), trong đó:</p>
 <ul>
-<li>Mỗi bounding box gồm 4 gía trị toạ độ (coordinates): x, y, w, h. Trong đó (x,y) là toạ độ tâm của box được dự đoán, (w,h) là chiều dài và rộng của box</li>
-<li>Mỗi bounding box có 1 confidence score tương ứng, tính theo công thức:</li>
+<li>Mỗi bounding box gồm 4 giá trị toạ độ (coordinates): $(x, y, w, h)$. Trong đó $(x,y)$ là toạ độ tâm của box được dự đoán, $(w,h)$ là chiều dài và rộng của box</li>
+<li>Mỗi bounding box có 1 confidence score $C_{z}$ tương ứng, tính theo công thức:</li>
 </ul>
 <p>\begin{equation}C_{z} = Pr(Object) * IOU_{pred_{z}}^{truth}, \quad z = (1,&hellip;,B)\end{equation}</p>
 <p>Nếu grid cell không có object nào $Pr(Object) = 0$. Nếu grid cell có object thì $Pr(Object) = 1$</p>
@@ -292,6 +283,15 @@ Thêm bước Non-max suppression (NMS) giúp triệt tiêu những box bị tr�
 
 
     
-
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script>
+  MathJax = {
+    tex: {
+      tags: 'all',
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 </body>
 </html>
