@@ -118,21 +118,21 @@
 </ul>
 <h4 id="2-kiến-trúc-của-yolo">2: Kiến trúc của YOLO</h4>
 <p>Hệ thống YOLO chia ảnh đầu vào thành một lưới SxS các ô vuông (grid cell). Nếu trung tâm (center) của vật thể rơi vào ô vuông nào, thì ô vuông đó sẽ chịu trách nhiệm phát hiện vật thể đó [<a href="#r1" style="color:red;">1</a>].</p>
-<p>Mỗi grid cell cần dự đoán: B bounding boxes, B confidence scores của B bounding boxes và C giá trị xác suất của các lớp đối tượng (các class trong dataset), trong đó:</p>
+<p>Mỗi grid cell cần dự đoán: $B$ bounding boxes, $B$ confidence scores của B bounding boxes và $C$ giá trị xác suất của các lớp đối tượng (các class trong dataset), trong đó:</p>
 <ul>
 <li>Mỗi bounding box gồm 4 giá trị toạ độ (coordinates): $(x, y, w, h)$. Trong đó $(x,y)$ là toạ độ tâm của box được dự đoán, $(w,h)$ là chiều dài và rộng của box</li>
-<li>Mỗi bounding box có 1 confidence score $C_{z}$ tương ứng, tính theo công thức:</li>
+<li>Mỗi bounding box có 1 confidence score $S_{z}$ tương ứng, tính theo công thức:</li>
 </ul>
-<p>\begin{equation}C_{z} = Pr(Object) * IOU_{pred_{z}}^{truth}, \quad z = (1,&hellip;,B)\end{equation}</p>
+<p>\begin{equation}S_{z} = Pr(Object) * IOU_{pred_{z}}^{truth}, \quad z = (1,&hellip;,B)\end{equation}</p>
 <p>Nếu grid cell không có object nào $Pr(Object) = 0$. Nếu grid cell có object thì $Pr(Object) = 1$</p>
 <ul>
 <li>Giá trị xác suất từng class trong một grid cell được tính theo công thức:</li>
 </ul>
 <p>\begin{equation}Pr(C_{k}) = Pr(Class_{k}|Object), \quad  k = (1,2&hellip;,C)\end{equation}</p>
 <p>Kích thước của Output Layer:</p>
-<p>\begin{equation}Ouput \quad Shape = (S , S , B * 4 + B + C) = (S, S , 5 * B + C)\end{equation}</p>
+<p>\begin{equation}Ouput\quadShape = (S , S , B * 4 + B + C) = (S, S , 5 * B + C)\end{equation}</p>
 <h5 id="21-kiến-trúc-mạng">2.1. Kiến trúc mạng</h5>
-<p>Kiến trúc mạng được truyền cảm hứng bởi mạng GoogLeNet (Inception) [<a href="#1by1_conv" style="color:red;">1</a>]</p>
+<p>Kiến trúc mạng được truyền cảm hứng bởi mạng GoogLeNet (Inception) [<a href="#1by1_conv" style="color:red;">1</a>]<a name="1by1_conv_b" style="color:red;"></a></p>
 <p>Mạng gồm 24 Convolutional Layers để trích xuất đặc trưng (extract features) và 2 Fully Connected Layers để dự đoán final output [<a href="#network_detail" style="color:red;">1</a>]. Kiến trúc như bên dưới:</p>
 <div class="text-center my-3">
 <figure class="figure">
@@ -152,6 +152,14 @@
 </ul>
 <p><strong>Bước 4</strong>: Xây dựng hàm Loss [<a href="#sse" style="color:red;">1</a>]</p>
 <p>Công thức tổng quát:</p>
+<p>
+\begin{equation}
+λ_{coord} \displaystyle\sum_{i=0}^{S^{2}} \displaystyle\sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} [(x_{i} - \hat{x}_{i})^2 + (y_{i} - \hat{y}_{i})^2] \\
++ λ_{coord} \displaystyle\sum_{i=0}^{S^{2}} \displaystyle\sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} [(\sqrt{w_{i}} - \sqrt{\hat{w}_{i}})^2 + (\sqrt{h_{i}} - \sqrt{\hat{h}_{i}})^2] \\
++ \displaystyle\sum_{i=0}^{S^{2}} \displaystyle\sum_{j=0}^{B} \mathbb{1}_{ij}^{obj}(S_{i} - \hat{S_{i}})^2
++ \displaystyle\sum_{i=0)^{S^{2}} \mathbb{1}_{i}^{obj} \displaystyle\sum_{c \in classes}(p_{i}(c) - \hat{p}_{i}(c))^2
+end{equation}
+</p>
 <div class="text-center my-3">
 <figure class="figure">
   <img src="https://hungvm2.github.io/images/yolov1/loss_function.png" alt="Loss Function" class="figure-img">
@@ -215,7 +223,7 @@ Thêm bước Non-max suppression (NMS) giúp triệt tiêu những box bị tr�
 </ul>
 <p>[<a name="network_detail" style="color:red;">1</a>]: Chi tiết về kiến trúc của network, bạn có thể xem trong file config của YOLO, thứ tự các layer trong file config chính là thứ tự các layer của YOLO Network <a href="https://github.com/pjreddie/darknet/blob/master/cfg/yolov1.cfg">https://github.com/pjreddie/darknet/blob/master/cfg/yolov1.cfg</a></p>
 <p>[<a name="r1" style="color:red;">1</a>]: Grid cell được chia ở bước nào?</p>
-<p>[<a name="1by1" style="color:red;">1</a>]:  (Sử dụng 1x1 Conv layer)</p>
+<p>[<a href="#1by1_conv_b" style="color:red;">1</a>]<a name="1by1_conv" style="color:red;"></a>: (Sử dụng 1x1 Conv layer)</p>
 <p>[<a name="feature_scaling" style="color:red;">1</a>]: Tại sao phải có bước xử lý này? Đây là bước Scaling Features: đưa khoảng giá trị của các feature về cùng một scale trước khi vào hàm loss để giúp mô hình hội tụ nhanh và ổn định hơn khi training</p>
 <p>[<a name="sse" style="color:red;">1</a>]: Hàm loss sử dụng là hàm Sum Squared Error. Tác giả giải thích lí do sử dụng hàm này vì nó dễ để tối ưu.</p>
 <p>Tuy nhiên hàm này không đạt được độ chính xác AP (Average Precision) như mong đợi vì:</p>
