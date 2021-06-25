@@ -130,7 +130,7 @@
 </ul>
 <p>\begin{equation}Pr(C_{k}) = Pr(Class_{k}|Object), \quad  k = (1,2&hellip;,C)\end{equation}</p>
 <p>Kích thước của Output Layer:</p>
-<p>\begin{equation}Ouput\quadShape = (S , S , B * 4 + B + C) = (S, S , 5 * B + C)\end{equation}</p>
+<p>\begin{equation}Ouput \quadShape = (S , S , B * 4 + B + C) = (S, S , 5 * B + C)\end{equation}</p>
 <h5 id="21-kiến-trúc-mạng">2.1. Kiến trúc mạng</h5>
 <p>Kiến trúc mạng được truyền cảm hứng bởi mạng GoogLeNet (Inception) [<a href="#1by1_conv" style="color:red;">1</a>]<a name="1by1_conv_b" style="color:red;"></a></p>
 <p>Mạng gồm 24 Convolutional Layers để trích xuất đặc trưng (extract features) và 2 Fully Connected Layers để dự đoán final output [<a href="#network_detail" style="color:red;">1</a>]. Kiến trúc như bên dưới:</p>
@@ -167,7 +167,7 @@ end{equation}
 </figure>
 </div>
 <p>Để đánh giá YOLO trên tập PASCAL POC, tác giả lấy S = 7, B = 2 [<a href="#r2" style="color:red;">2</a>], C = 20 (số lớp đối tượng trong tập dữ liệu PASCAL VOC), nên shape của output tensor sẽ là:</p>
-<p>\begin{equation}Ouput Shape = (S , S , B * 4 + B + C) = (7 , 7 , 2 * 4 + 2 + 20) = (7 , 7 , 30)\end{equation}</p>
+<p>\begin{equation}Ouput \quadShape = (S , S , B * 4 + B + C) = (7 , 7 , 2 * 4 + 2 + 20) = (7 , 7 , 30)\end{equation}</p>
 <p>Công thức trở về dạng:</p>
 <p>Trong đó:</p>
 <div>
