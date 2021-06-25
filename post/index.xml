@@ -13,7 +13,8 @@
       <pubDate>Mon, 21 Jun 2021 22:44:24 +0700</pubDate>
       
       <guid>https://hungvm2.github.io/post/grasping-yolov1-content/</guid>
-      <description>\begin{multiline} \lambda_{coord} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} [(x_{i} - \hat{x}_{i})^{2} + (y_{i} - \hat{y}_{i})^{2}] \\ + \lambda_{coord}\displaystyle\sum_{i=0}^{S^{2}}\displaystyle\sum_{j=0}^{B}\mathbb{1}_{ij}^{obj}[(\sqrt{w_{i}} - \sqrt{\hat{w}_{i}})^{2} + (\sqrt{h_{i}} - \sqrt{\hat{h}_{i}})^{2}] \\ + \displaystyle \sum_{i=0}^{S^{2}} \mathbb{1}_{i}^{obj} \displaystyle \sum_{c \in classes}(p_{i}(c) - \hat{p_{i}}(c))^{2} \end{multiline}  Trong bài viết này, chúng ta hãy cùng đọc và phân tích nội dung của paper [&#34;You Only Look One: Unified, Real-Time Object Detection&#34;](https://paperswithcode.com/paper/you-only-look-once-unified-real-time-object) pulished năm 2016 nhé! I. Đọc Paper  Trong phần &amp;ldquo;Đọc Paper&amp;rdquo; này, mình sẽ đi thứ tự theo các section của paper và tóm lược lại những ý chính của tác giả, có bỏ qua một số phần không quá quan trọng.</description>
+      <description>Trong bài viết này, chúng ta hãy cùng đọc và phân tích nội dung của paper &amp;ldquo;You Only Look One: Unified, Real-Time Object Detection&amp;rdquo; pulished năm 2016 nhé!
+I. Đọc Paper  Trong phần &amp;ldquo;Đọc Paper&amp;rdquo; này, mình sẽ đi thứ tự theo các section của paper và tóm lược lại những ý chính của tác giả, có bỏ qua một số phần không quá quan trọng. Khi đọc sẽ có các reference (có dạng [number]) cuối một câu, hoặc cụm từ.</description>
     </item>
     
     <item>

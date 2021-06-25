@@ -98,14 +98,7 @@
                     <h1 class="mx-0 mx-md-4">Đọc và phân tích Paper &#34;You Only Look One: Unified, Real-Time Object Detection&#34;(YOLOv1)</h1>
                     <div class="markdown">
                         
-    <div>
-\begin{multiline}
-\lambda_{coord} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} [(x_{i} - \hat{x}_{i})^{2} + (y_{i} - \hat{y}_{i})^{2}] \\ 
-+ \lambda_{coord}\displaystyle\sum_{i=0}^{S^{2}}\displaystyle\sum_{j=0}^{B}\mathbb{1}_{ij}^{obj}[(\sqrt{w_{i}} - \sqrt{\hat{w}_{i}})^{2} + (\sqrt{h_{i}} - \sqrt{\hat{h}_{i}})^{2}] \\
-+ \displaystyle \sum_{i=0}^{S^{2}} \mathbb{1}_{i}^{obj} \displaystyle \sum_{c \in classes}(p_{i}(c) - \hat{p_{i}}(c))^{2}
-\end{multiline}
-</div>
-Trong bài viết này, chúng ta hãy cùng đọc và phân tích nội dung của paper ["You Only Look One: Unified, Real-Time Object Detection"](https://paperswithcode.com/paper/you-only-look-once-unified-real-time-object) pulished năm 2016 nhé!
+    <p>Trong bài viết này, chúng ta hãy cùng đọc và phân tích nội dung của paper <a href="https://paperswithcode.com/paper/you-only-look-once-unified-real-time-object">&ldquo;You Only Look One: Unified, Real-Time Object Detection&rdquo;</a> pulished năm 2016 nhé!</p>
 <h3 id="i-đọc-paper">I. Đọc Paper</h3>
 <blockquote>
 <p>Trong phần &ldquo;Đọc Paper&rdquo; này, mình sẽ đi thứ tự theo các section của paper và tóm lược lại những ý chính của tác giả, có bỏ qua một số phần không quá quan trọng. Khi đọc sẽ có các reference (có dạng [number]) cuối một câu, hoặc cụm từ. Bạn có thể click vào các link đó để dẫn xuống phần &ldquo;Hiểu Paper&rdquo; bên dưới để đọc sâu hơn về vấn đề được đề cập.</p>
@@ -123,6 +116,13 @@ Trong bài viết này, chúng ta hãy cùng đọc và phân tích nội dung c
 <li>Độ chính xác thấp hơn các phương pháp state-of-the-art khác</li>
 <li>Khó khăn khi xác định chính xác vị trí của các vật thể (Localization), đặc biệt các vật thể cỡ nhỏ.</li>
 </ul>
+<div>
+\begin{multline}
+\lambda_{coord} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} [(x_{i} - \hat{x}_{i})^{2} + (y_{i} - \hat{y}_{i})^{2}] \\ 
++ \lambda_{coord}\displaystyle\sum_{i=0}^{S^{2}}\displaystyle\sum_{j=0}^{B}\mathbb{1}_{ij}^{obj}[(\sqrt{w_{i}} - \sqrt{\hat{w}_{i}})^{2} + (\sqrt{h_{i}} - \sqrt{\hat{h}_{i}})^{2}] \\
++ \displaystyle \sum_{i=0}^{S^{2}} \mathbb{1}_{i}^{obj} \displaystyle \sum_{c \in classes}(p_{i}(c) - \hat{p_{i}}(c))^{2}
+\end{multline}
+</div>
 <h4 id="2-kiến-trúc-của-yolo">2: Kiến trúc của YOLO</h4>
 <p>Hệ thống YOLO chia ảnh đầu vào thành một lưới SxS các ô vuông (grid cell). Nếu trung tâm (center) của vật thể rơi vào ô vuông nào, thì ô vuông đó sẽ chịu trách nhiệm phát hiện vật thể đó [<a href="#r1" style="color:red;">1</a>].</p>
 <p>Mỗi grid cell cần dự đoán: $B$ bounding boxes, $B$ confidence scores của B bounding boxes và $C$ giá trị xác suất của các lớp đối tượng (các class trong dataset), trong đó:</p>
