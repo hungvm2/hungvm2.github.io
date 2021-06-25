@@ -132,15 +132,15 @@
 <li>Mỗi bounding box gồm 4 gía trị toạ độ (coordinates): x, y, w, h. Trong đó (x,y) là toạ độ tâm của box được dự đoán, (w,h) là chiều dài và rộng của box</li>
 <li>Mỗi bounding box có 1 confidence score tương ứng, tính theo công thức:</li>
 </ul>
-<p>\begin{equation}C_{z} = Pr(Object) * IOU_{pred}^{truth}, \quad z = (1,&hellip;,B)\end{equation}</p>
+<p>\begin{equation}C_{z} = Pr(Object) * IOU_{pred_{z}}^{truth}, \quad z = (1,&hellip;,B)\end{equation}</p>
 <p>Nếu grid cell không có object nào $Pr(Object) = 0$. Nếu grid cell có object thì $Pr(Object) = 1$</p>
 <ul>
 <li>Giá trị xác suất từng class trong một grid cell được tính theo công thức:</li>
 </ul>
 <p>\begin{equation}Pr(C_{k}) = Pr(Class_{k}|Object), \quad  k = (1,2&hellip;,C)\end{equation}</p>
-<p>Để đánh giá YOLO trên tập PASCAL POC, tác giả lấy S = 7, B = 2 [<a href="#r2" style="color:red;">2</a>], C = 20 (số lớp đối tượng trong tập dữ liệu PASCAL VOC), nên shape của output tensor sẽ là:</p>
-<p>\begin{equation}Ouput Shape = (S , S , B * 4 + B + C) = (7 , 7 , 2 * 4 + 2 + 20) = (7 , 7 , 30)\end{equation}</p>
-<h5 id="21-kiến-trúc-mạng">2.1. Kiến trúc mạng</h5>
+<p>Kích thước của Output Layer:</p>
+<pre><code>\begin{equation}Ouput \quad Shape = (S , S , B * 4 + B + C) = (S, S , 5 * B + C)\end{equation}
+</code></pre><h5 id="21-kiến-trúc-mạng">2.1. Kiến trúc mạng</h5>
 <p>Kiến trúc mạng được truyền cảm hứng bởi mạng GoogLeNet (Inception) [<a href="#1by1_conv" style="color:red;">1</a>]</p>
 <p>Mạng gồm 24 Convolutional Layers để trích xuất đặc trưng (extract features) và 2 Fully Connected Layers để dự đoán final output [<a href="#network_detail" style="color:red;">1</a>]. Kiến trúc như bên dưới:</p>
 <div class="text-center my-3">
@@ -160,12 +160,16 @@
 <li>Ci là xác suất detect ra vật thể class i nên cũng nằm trong đoạn [0,1]</li>
 </ul>
 <p><strong>Bước 4</strong>: Xây dựng hàm Loss [<a href="#sse" style="color:red;">1</a>]</p>
+<p>Công thức tổng quát:</p>
 <div class="text-center my-3">
 <figure class="figure">
   <img src="https://hungvm2.github.io/images/yolov1/loss_function.png" alt="Loss Function" class="figure-img">
   <figcaption class="figure-caption">Ảnh 2: Hàm loss</figcaption>
 </figure>
 </div>
+<p>Để đánh giá YOLO trên tập PASCAL POC, tác giả lấy S = 7, B = 2 [<a href="#r2" style="color:red;">2</a>], C = 20 (số lớp đối tượng trong tập dữ liệu PASCAL VOC), nên shape của output tensor sẽ là:</p>
+<p>\begin{equation}Ouput Shape = (S , S , B * 4 + B + C) = (7 , 7 , 2 * 4 + 2 + 20) = (7 , 7 , 30)\end{equation}</p>
+<p>Công thức trở về dạng:</p>
 <p>Trong đó:</p>
 <div>
 - $λ_{coord} = 5$ , $λ_{noobj} = 0.5$ <br> 
