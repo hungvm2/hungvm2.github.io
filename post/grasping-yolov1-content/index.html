@@ -198,11 +198,7 @@
 <ul>
 <li>Dataset: PASCAL VOC 2017 và 2012</li>
 <li>Batch size: 64 (nếu có $m$ data points trong tập train thì mỗi epoch sẽ có $m/64$ iterations)</li>
-<li>Các kỹ thuật tuning được sử dụng: Momentum, Decay, Learning rate schedule, Data augmentation</li>
-<li>Momentum: 0.9 (Gradient Descent có sử dụng kỹ thuật momentum để hội tụ nhanh hơn)</li>
-<li>Decay: 0.0005 (ý của tác giả ở đây có lẽ là Weight decay, một kỹ thuật regularization giúp giảm High Variance (Overfitting) (hơi giống L2 Regularization))</li>
-<li>Learning rate (LR) schedule: tăng dần LR từ $10^{-3}$ tới $10^{-2}$ thay vì để LR cao từ đầu để tránh model bị phân kỳ (diverge) giai đoạn đầu, sau đó giữ nguyên LR $10^{-2}$ trong 75 epochs, giảm xuống $10^{-3}$ cho 30 epochs tiếp theo, giảm xuống $10^{-4}$ cho 30 epochs cuối.</li>
-<li>Data augmentation (làm giàu bộ dữ liệu): Random scaling (phóng to, thu nhỏ ngẫu nhiên), random translation (xê dịch vị trí pixel ngẫu nhiên) tới 20% kích thước ảnh. Ngẫu nhiên điều chỉnh độ phơi sáng (exposure) và bão hoà (saturation) của ảnh tới 1.5 lần trong không gian màu HSV.</li>
+<li>Các kỹ thuật tuning được sử dụng: Momentum, Decay, Learning rate schedule, Data augmentation [<a href="#tuning_technique" style="color:red;">1</a>]<a name="tuning_technique_b" style="color:red;"></a></li>
 </ul>
 <h5 id="23-inference">2.3. Inference</h5>
 <p>Thường tâm của object sẽ chỉ nằm trong 1 gird cell, tuy nhiên có những trường hợp như object lớn hoặc object nằm gần viền của nhiều cell nên dễ bị detect ra nhiều box cho cùng một object.
@@ -277,6 +273,13 @@ Pr(c) = \hat{p}(c) * \hat{C}\\
 <p>[<a name="r2" style="color:red;">2</a>]: Tại sao lại chọn $B=2$?</p>
 <p>[<a href="#classification_network_b" style="color:red;">1</a>]<a name="classification_network" style="color:red;"></a>: Bước này giúp 24 lớp Conv Layers có bộ weights tốt trong việc trích xuất đặc trưng từ ảnh.
 Network có dạng: Input 224x224 =&gt; 24 Conv layers =&gt; 1 Average Pooling layer =&gt; 1 Fully Connected Layer =&gt; Output class</p>
+<p>[<a href="#tuning_technique_b" style="color:red;">1</a>]<a name="tuning_technique" style="color:red;"></a>: Chi tiết các kỹ thuật tuning được sử dụng trong Paper</p>
+<ul>
+<li>Momentum: Lấy bằng 0.9. Kỹ thuật này là một biến thể của Gradient Descent giúp model hội tụ nhanh hơn</li>
+<li>Decay: 0.0005. Ý của tác giả ở đây có lẽ là Weight decay, một kỹ thuật regularization giúp giảm High Variance (Overfitting)</li>
+<li>Learning rate (LR) schedule: tăng dần LR từ $10^{-3}$ tới $10^{-2}$ thay vì để LR cao từ đầu để tránh model bị phân kỳ (diverge) giai đoạn đầu, sau đó giữ nguyên LR $10^{-2}$ trong 75 epochs, giảm xuống $10^{-3}$ cho 30 epochs tiếp theo, giảm xuống $10^{-4}$ cho 30 epochs cuối.</li>
+<li>Data augmentation (làm giàu bộ dữ liệu): Random scaling (phóng to, thu nhỏ ngẫu nhiên), random translation (xê dịch vị trí pixel ngẫu nhiên) tới 20% kích thước ảnh. Ngẫu nhiên điều chỉnh độ phơi sáng (exposure) và bão hoà (saturation) của ảnh tới 1.5 lần trong không gian màu HSV. Data augmentation được sử dụng để giúp giảm overfit cho model</li>
+</ul>
 <h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
 
 
