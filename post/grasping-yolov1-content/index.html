@@ -161,9 +161,9 @@
 <p><em>Kích thước của Output Layer:</em></p>
 <p>\begin{equation}Ouput\quad Shape = (S , S , B * 4 + B + C) = (S, S , B * 5+ C)\end{equation}</p>
 <h5 id="22-các-bước-khi-huấn-luyện-mô-hình-training">2.2. Các bước khi huấn luyện mô hình (training):</h5>
-<p><strong>Bước 1</strong>: đặt 20 lớp Conv Layers đầu tiên của mạng detection (Ảnh 1) trong 1 kiến trúc mạng Classification (Input 224x224 =&gt; 24 Conv layers =&gt; 1 Average Pooling layer =&gt; 1 Fully Connected Layer), train trên tập ImageNet 1000 classes. Bước này giúp 24 lớp Conv Layers có bộ weights tốt trong việc trích xuất đặc trưng từ ảnh.
-<strong>Bước 2</strong>: Sử dụng Transfer Learning, đặt weights của 20 lớp Conv Layers đã được train ở bước 1 vào mạng detection (Ảnh 1). Do Weights của Conv Layers không phụ thuộc vào Input size nên tăng Input size lên 448x448 để mạng học được những đặc trưng chi tiết hơn của ảnh.
-<strong>Bước 3</strong>: Lấy kết quả output của mạng detection, biến đổi lại các giá trị nằm trong khoảng $[0,1]$ trước khi đặt vào hàm loss [<a href="#feature_scaling" style="color:red;">1</a>]</p>
+<p><strong>Bước 1</strong>: đặt 20 lớp Conv Layers đầu tiên của mạng detection (Ảnh 1) trong 1 kiến trúc mạng Classification [<a href="#classification_network" style="color:red;">1</a>]<a name="classification_network_b" style="color:red;"></a> , và train trên tập ImageNet 1000 classes.</p>
+<p><strong>Bước 2</strong>: Sử dụng Transfer Learning, đặt weights của 20 lớp Conv Layers đã được train ở bước 1 vào mạng detection (Ảnh 1). Do Weights của Conv Layers không phụ thuộc vào Input size nên tăng Input size lên 448x448 để mạng học được những đặc trưng chi tiết hơn của ảnh.</p>
+<p><strong>Bước 3</strong>: Lấy kết quả output của mạng detection, biến đổi lại các giá trị nằm trong khoảng $[0,1]$ [<a href="#feature_scaling" style="color:red;">1</a>]<a name="feature_scaling_b" style="color:red;"></a> trước khi đặt vào hàm loss</p>
 <ul>
 <li>Normalize (w,h) của bounding box để w,h trong đoạn [0,1]: (w = w/W , h = h/H | W,H: size của input)</li>
 <li>Biến đổi toạ độ (x,y) thành toạ độ offset từ top-left của grid cell mà nó nằm trong để x, y nằm trong đoạn [0,1]. VD: x,y nằm chính giữa cell thì x = 0.5, y = 0.5</li>
@@ -265,7 +265,7 @@ Pr_{i}(class_{c}) = \hat{p}_{i}(Class_{c}) * \hat{C}_{i}\\
 </ul>
 <p>Shape của output tensor sẽ là:</p>
 <p>\begin{equation}Ouput\quad Shape = (S , S , B * 5 + C) = (7 , 7 , 2 * 5 + 20) = (7 , 7 , 30)\end{equation}</p>
-<p>[<a name="feature_scaling" style="color:red;">1</a>]: Tại sao phải có bước xử lý này? Đây là bước Scaling Features: đưa khoảng giá trị của các feature về cùng một scale trước khi vào hàm loss để giúp mô hình hội tụ nhanh và ổn định hơn khi training</p>
+<p>[<a href="#feature_scaling_b" style="color:red;">1</a>]<a name="feature_scaling" style="color:red;"></a>: Tại sao phải có bước xử lý này? Đây là bước Scaling Features: đưa khoảng giá trị của các feature về cùng một scale trước khi vào hàm loss để giúp mô hình hội tụ nhanh và ổn định hơn khi training</p>
 <p>[<a name="sse" style="color:red;">1</a>]: Hàm loss sử dụng là hàm Sum Squared Error. Tác giả giải thích lí do sử dụng hàm này vì nó dễ để tối ưu.</p>
 <p>Tuy nhiên hàm này không đạt được độ chính xác AP (Average Precision) như mong đợi vì:</p>
 <ul>
@@ -276,6 +276,8 @@ Pr_{i}(class_{c}) = \hat{p}_{i}(Class_{c}) * \hat{C}_{i}\\
 <p>Khi training, mỗi grid cell cần predict B bounding boxes, tuy nhiên sẽ chỉ Bounding box có IOU lớn nhất so với ground truth box mới được chọn lựa để tính toán hàm loss (chọn làm &ldquo;predictor&rdquo;). Điều này sẽ giúp mỗi predicted Bounding box sẽ chỉ chuyên môn hoá vào việc detect object có kích thước, tỉ lệ nhất định, giúp tăng Recall của model</p>
 <p>[<a name="square_root_wh" style="color:red;">1</a>]: Ví dụ: Box To có predicted W = 9 và ground truth W = 8 =&gt; độ lệch = 1, Box Nhỏ có predicted W = 3 và ground truth W = 2 =&gt; độ lệch = 1. Rõ ràng Box nhỏ có sai số lớn hơn xét theo tỉ lệ, nhưng số tuyệt đối độ lệch thì như nhau</p>
 <p>[<a name="r2" style="color:red;">2</a>]: Tại sao lại chọn $B=2$?</p>
+<p>[<a href="#classification_network_b" style="color:red;">1</a>]<a name="classification_network" style="color:red;"></a>: Bước này giúp 24 lớp Conv Layers có bộ weights tốt trong việc trích xuất đặc trưng từ ảnh.
+Network có dạng: Input 224x224 =&gt; 24 Conv layers =&gt; 1 Average Pooling layer =&gt; 1 Fully Connected Layer =&gt; Output class</p>
 <h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
 
 
