@@ -116,6 +116,15 @@
 <li>Độ chính xác thấp hơn các phương pháp state-of-the-art khác</li>
 <li>Khó khăn khi xác định chính xác vị trí của các vật thể (Localization), đặc biệt các vật thể cỡ nhỏ.</li>
 </ul>
+<div>
+\begin{multline}
+\lambda_{coord} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} [(x_{i} - \hat{x}_{i})^{2} + (y_{i} - \hat{y}_{i})^{2}]\\ 
++ \lambda_{coord}\displaystyle\sum_{i=0}^{S^{2}}\displaystyle\sum_{j=0}^{B}\mathbb{1}_{ij}^{obj}[(\sqrt{w_{i}} - \sqrt{\hat{w}_{i}})^{2} + (\sqrt{h_{i}} - \sqrt{\hat{h}_{i}})^{2}]\\
++ \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} (C_{i} - \hat{C}_{i}^)^{2} \\
++ \lambda_{noobj} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{noobj} (C_{i} - \hat{C}_{i})^2 \\ 
++ \displaystyle \sum_{i=0}^{S^{2}} \mathbb{1}_{i}^{obj} \displaystyle \sum_{c \in classes}(p_{i}(c) - \hat{p_{i}}(c))^{2}
+\end{multline}
+</div>
 <h4 id="2-kiến-trúc-của-yolo">2: Kiến trúc của YOLO</h4>
 <p>Hệ thống YOLO chia ảnh đầu vào thành một lưới SxS các ô vuông (grid cell). Nếu trung tâm (center) của vật thể rơi vào ô vuông nào, thì ô vuông đó sẽ chịu trách nhiệm phát hiện vật thể đó [<a href="#r1" style="color:red;">1</a>].</p>
 <p>Mỗi grid cell cần dự đoán: $B$ bounding boxes, $B$ confidence scores của B bounding boxes và $C$ giá trị xác suất của các lớp đối tượng (các class trong dataset), trong đó:</p>
@@ -152,15 +161,6 @@
 </ul>
 <p><strong>Bước 4</strong>: Xây dựng hàm Loss [<a href="#sse" style="color:red;">1</a>]</p>
 <p>Công thức tổng quát:</p>
-<div>
-\begin{multline}
-\lambda_{coord} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} [(x_{i} - \hat{x}_{i})^{2} + (y_{i} - \hat{y}_{i})^{2}]\\ 
-+ \lambda_{coord}\displaystyle\sum_{i=0}^{S^{2}}\displaystyle\sum_{j=0}^{B}\mathbb{1}_{ij}^{obj}[(\sqrt{w_{i}} - \sqrt{\hat{w}_{i}})^{2} + (\sqrt{h_{i}} - \sqrt{\hat{h}_{i}})^{2}]\\
-+ \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} (C_{i} - \hat{C}_{i}^)^{2} \\
-+ \lambda_{noobj} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{noobj} (C_{i} - \hat{C}_{i})^2 \\ 
-+ \displaystyle \sum_{i=0}^{S^{2}} \mathbb{1}_{i}^{obj} \displaystyle \sum_{c \in classes}(p_{i}(c) - \hat{p_{i}}(c))^{2}
-\end{multline}
-</div>
 <div class="text-center my-3">
 <figure class="figure">
   <img src="https://hungvm2.github.io/images/yolov1/loss_function.png" alt="Loss Function" class="figure-img">
