@@ -209,13 +209,13 @@
 Thêm bước Non-max suppression (NMS) giúp triệt tiêu những box bị trùng khi detect cùng một object. Cải thiện thêm 2-3% mAP cho model.</p>
 <p>Pipe line của prediction:</p>
 <blockquote>
-<p>Image (448,448,3) =&gt; Network Prediction =&gt; Output (7,7,30) =&gt; Tính lại class probabilities $Pr_{i}(class_{c})$ =&gt; Bỏ qua các box có low probabilities =&gt; Non-max suppression =&gt; Final prediction</p>
+<p>Image (448,448,3) =&gt; Network Prediction =&gt; Output (7,7,30) =&gt; Tính lại class probabilities $Pr(c)$ =&gt; Bỏ qua các box có low probabilities =&gt; Non-max suppression =&gt; Final prediction</p>
 </blockquote>
-<p>$Pr_{i}(class_{c})$ của mỗi grid cell sẽ được tính theo công thức sau:</p>
+<p>$Pr(c)$ của mỗi class trong mỗi grid cell sẽ được tính lại theo công thức sau:</p>
 <div>
 \begin{multline}
-Pr_{i}(class_{c}) = \hat{p}_{i}(Class_{c}) * \hat{C}_{i}\\
- = Pr(Class_{c}|Object) * Pr(Object) * IOU_{pred}^{truth}\\
+Pr(c) = \hat{p}(c) * \hat{C}\\
+ = Pr(Class_c|Object) * Pr(Object) * IOU_{pred}^{truth}\\
   = Pr(Class_{c}) * IOU_{pred}^{truth}
 \end{multline}
 </div>
