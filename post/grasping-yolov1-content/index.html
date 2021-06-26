@@ -110,7 +110,7 @@
     <p>Trong bài viết này, chúng ta hãy cùng đọc và phân tích nội dung của paper <a href="https://paperswithcode.com/paper/you-only-look-once-unified-real-time-object">&ldquo;You Only Look One: Unified, Real-Time Object Detection&rdquo;</a> pulished năm 2016 nhé!</p>
 <h3 id="i-đọc-paper">I. Đọc Paper</h3>
 <blockquote>
-<p>Trong phần &ldquo;Đọc Paper&rdquo; này, mình sẽ đi thứ tự theo các section của paper và tóm lược lại những ý chính của tác giả, có bỏ qua một số phần không quá quan trọng. Khi đọc sẽ có các reference (có dạng [Câu hỏi?]). Bạn có thể click vào các câu hỏi đó để dẫn xuống phần &ldquo;Hiểu Paper&rdquo; bên dưới để đọc sâu hơn về vấn đề được đề cập.</p>
+<p>Trong phần &ldquo;Đọc Paper&rdquo; này, mình sẽ tóm lược lại những ý chính của tác giả, có bỏ qua một số phần không quá quan trọng. Khi đọc sẽ có các reference (có dạng [?]). Bạn có thể click vào các câu hỏi đó để dẫn xuống phần &ldquo;Hiểu Paper&rdquo; bên dưới để đọc sâu hơn về vấn đề được đề cập.</p>
 </blockquote>
 <h4 id="1-giới-thiệu-chung-về-mô-hình-model">1: Giới thiệu chung về mô hình (model)</h4>
 <p>Các nghiên cứu trước đây xử lý bài toán Object Detection theo hướng Classification (phân loại) [<a href="#previous_model" style="color:red;">?</a>]<a name="previous_model_b" style="color:red;"></a>, còn tác giả YOLO lại <strong>tiếp cận theo hướng Regression</strong> (hồi quy).</p>
@@ -208,17 +208,13 @@
 <blockquote>
 <p>Image (448,448,3) =&gt; Network Prediction =&gt; Output (7,7,30) =&gt; Tính lại class probabilities $Pr(c)$ =&gt; Bỏ qua các box có low probabilities =&gt; Non-max suppression =&gt; Final prediction</p>
 </blockquote>
-<p>$Pr(c)$ của mỗi class trong mỗi grid cell sẽ được tính lại theo công thức sau:</p>
+<p>$Pr(c)$ của mỗi class trong mỗi grid cell sẽ được tính lại theo công thức sau: [<a href="#" style="color:red;">?</a>]<a name="_b" style="color:red;"></a></p>
 <div>
 \begin{multline}
 Pr(c) = \hat{p}(c) * \hat{C}\\
  = Pr(Class_c|Object) * Pr(Object) * IOU_{pred}^{truth}\\
   = Pr(Class_{c}) * IOU_{pred}^{truth}
 \end{multline}
-</div>
-<div class="text-center my-3">
-  <img src="https://hungvm2.github.io/images/yolov1/final_class_probs.png" alt="Class Probabilities" class="figure-img">
-</div>
 <h4 id="3-so-sánh-độ-chính-xác-và-hiệu-năng-với-các-mô-hình-khác">3. So sánh độ chính xác và hiệu năng với các mô hình khác</h4>
 <ul>
 <li>So sánh tốc độ/mAP của YOLO, biến thể Fast YOLO với các mô hình khác</li>
@@ -288,6 +284,11 @@ Pr(c) = \hat{p}(c) * \hat{C}\\
 <li>Learning rate (LR) schedule: tăng dần LR từ $10^{-3}$ tới $10^{-2}$ thay vì để LR cao từ đầu để tránh model bị phân kỳ (diverge) giai đoạn đầu, sau đó giữ nguyên LR $10^{-2}$ trong 75 epochs, giảm xuống $10^{-3}$ cho 30 epochs tiếp theo, giảm xuống $10^{-4}$ cho 30 epochs cuối.</li>
 <li>Data augmentation (làm giàu bộ dữ liệu): Random scaling (phóng to, thu nhỏ ngẫu nhiên), random translation (xê dịch vị trí pixel ngẫu nhiên) tới 20% kích thước ảnh. Ngẫu nhiên điều chỉnh độ phơi sáng (exposure) và bão hoà (saturation) của ảnh tới 1.5 lần trong không gian màu HSV. Data augmentation được sử dụng để giúp giảm overfit cho model</li>
 </ul>
+<p>[<a href="#_b" style="color:red;">Back?</a>]<a name="" style="color:red;"></a>: Công thức gốc tính xác suất của mỗi class trong grid cell?</p>
+ </div>
+<div class="text-center my-3">
+  <img src="https://hungvm2.github.io/images/yolov1/final_class_probs.png" alt="Class Probabilities" class="figure-img">
+</div>
 <h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
 
 
