@@ -122,43 +122,42 @@
 </ul>
 <p>Tuy nhiên YOLO vẫn có nhược điểm:</p>
 <ul>
-<li>Độ chính xác thấp hơn các phương pháp state-of-the-art khác</li>
-<li>Khó khăn khi xác định chính xác vị trí của các vật thể (Localization), đặc biệt các vật thể cỡ nhỏ.</li>
+<li><strong>Độ chính xác thấp hơn</strong> các phương pháp state-of-the-art khác</li>
+<li>Khó khăn khi xác định <strong>chính xác vị trí</strong> của các vật thể (Localization), đặc biệt các <strong>vật thể cỡ nhỏ</strong>.</li>
 </ul>
 <h4 id="2-kiến-trúc-của-yolo">2: Kiến trúc của YOLO</h4>
-<p>Hệ thống YOLO chia ảnh đầu vào thành một lưới SxS các ô vuông (grid cell). Nếu trung tâm (center) của vật thể rơi vào ô vuông nào, thì ô vuông đó sẽ chịu trách nhiệm phát hiện vật thể đó [<a href="#r1" style="color:red;">1</a>].</p>
-<p>Mỗi grid cell cần dự đoán $B$ bounding boxes và $N$ giá trị xác suất của các lớp đối tượng (các class trong dataset):</p>
+<p>Hệ thống YOLO <strong>chia</strong> ảnh đầu vào thành <strong>một lưới</strong> $SxS$ các ô vuông (grid cell). Nếu trung tâm (center) của vật thể rơi vào ô vuông nào, thì ô vuông đó sẽ chịu trách nhiệm phát hiện vật thể đó [<a href="#r1" style="color:red;">1</a>].</p>
+<p><em>Mỗi Grid cell</em> cần dự đoán $B$ bounding boxes và $N$ giá trị xác suất của các lớp (class) đối tượng:</p>
 <ul>
 <li>
 <p>Mỗi bounding box gồm có:</p>
 <ul>
 <li>
-<p>4 giá trị toạ độ (coordinates): $(x, y, w, h)$. Trong đó $(x,y)$ là toạ độ tâm của box được dự đoán, $(w,h)$ là chiều dài và rộng của box</p>
+<p>4 giá trị toạ độ (coordinates): $(x, y, w, h)$. Trong đó $(x,y)$ là toạ độ tâm, $(w,h)$ là chiều dài và rộng</p>
 </li>
 <li>
-<p>1 confidence score $C$ tương ứng, tính theo công thức:</p>
+<p>1 confidence score $C$, tính theo công thức:</p>
 <p>\begin{equation}C_{z} = Pr(Object) * IOU_{pred_{z}}^{truth}, \quad z = (1,&hellip;,B)\end{equation}</p>
 <p>$Pr(Object)$: Xác suất có object xuất hiện trong grid cell</p>
-<p>$IOU_{pred_{z}}^{truth}$: Giá trị IOU giữa ground truth bounding box và predicted bounding box</p>
+<p>$IOU_{pred_{z}}^{truth}$: Giá trị IOU giữa ground truth và predicted bounding box</p>
 </li>
 </ul>
 </li>
 <li>
-<p>Giá trị xác suất của các class trong một grid cell được tính theo công thức:</p>
+<p>Giá trị xác suất của mỗi class được tính theo công thức:</p>
 <p>\begin{equation}p(c) = Pr(Class_{c}|Object), \quad c = (1,&hellip;,N)\end{equation}</p>
 <p>$Pr(Class_{c}|Object)$: Là xác suất có điều kiện. Xác suất của class thứ c trong N classes khi có Object xuất hiện trong grid cell</p>
 </li>
 </ul>
-<h5 id="21-kiến-trúc-mạng">2.1. Kiến trúc mạng</h5>
-<p>Kiến trúc mạng được truyền cảm hứng bởi mạng GoogLeNet (Inception) [<a href="#1by1_conv" style="color:red;">1</a>]<a name="1by1_conv_b" style="color:red;"></a></p>
-<p>Mạng gồm 24 Convolutional Layers để trích xuất đặc trưng (extract features) và 2 Fully Connected Layers để dự đoán final output [<a href="#network_detail" style="color:red;">1</a>]. Kiến trúc như bên dưới:</p>
+<h5 id="21-kiến-trúc-mạng-a-href1by1_conv-stylecolorred1aa-name1by1_conv_b-stylecolorreda">2.1. Kiến trúc mạng [<a href="#1by1_conv" style="color:red;">1</a>]<a name="1by1_conv_b" style="color:red;"></a></h5>
+<p>Mạng gồm 24 Convolutional (Conv) Layers để trích xuất đặc trưng (extract features) và 2 Fully Connected (FC) Layers để dự đoán final output [<a href="#network_detail" style="color:red;">1</a>].</p>
 <div class="text-center my-4">
 <figure class="figure">
   <img src="https://hungvm2.github.io/images/yolov1/network_architecture.png" alt="Network Architecture" class="figure-img">
   <figcaption class="figure-caption">Ảnh 1: Kiến trúc mạng detection của YOLO</figcaption>
 </figure>
 </div>
-<p><em>Kích thước của Output Layer:</em></p>
+<p><em>Kích thước Output của Network:</em></p>
 <p>\begin{equation}Ouput\quad Shape = (S , S , B * 4 + B + C) = (S, S , B * 5+ C)\end{equation}</p>
 <h5 id="22-các-bước-khi-huấn-luyện-mô-hình-training">2.2. Các bước khi huấn luyện mô hình (training):</h5>
 <p><strong>Bước 1</strong>: đặt 20 lớp Conv Layers đầu tiên của mạng detection (Ảnh 1) trong 1 kiến trúc mạng Classification [<a href="#classification_network" style="color:red;">1</a>]<a name="classification_network_b" style="color:red;"></a> , và train trên tập ImageNet 1000 classes.</p>
@@ -167,8 +166,8 @@
 <ul>
 <li>Normalize (w,h) của bounding box để w,h trong đoạn [0,1]: (w = w/W , h = h/H | W,H: size của input)</li>
 <li>Biến đổi toạ độ (x,y) thành toạ độ offset từ top-left của grid cell mà nó nằm trong để x, y nằm trong đoạn [0,1]. VD: x,y nằm chính giữa cell thì x = 0.5, y = 0.5</li>
-<li>Confidence score của bounding box = IOU nên cũng nằm trong đoạn [0,1]</li>
-<li>Ci là xác suất detect ra vật thể class i nên cũng nằm trong đoạn [0,1]</li>
+<li>Confidence score $C = IOU$ hoặc $C = 0$ nên cũng nằm trong đoạn [0,1]</li>
+<li>$p(c)$ là xác suất detect ra vật thể class c nên cũng nằm trong đoạn [0,1]</li>
 </ul>
 <p><strong>Bước 4</strong>: Xây dựng hàm Loss [<a href="#sse" style="color:red;">1</a>]<a name="sse_b" style="color:red;"></a> [<a href="#loss_formular" style="color:red;">1</a>]<a name="loss_formular_b" style="color:red;"></a></p>
 <div>
@@ -251,7 +250,7 @@ Pr_{i}(class_{c}) = \hat{p}_{i}(Class_{c}) * \hat{C}_{i}\\
 </ul>
 <p>[<a name="network_detail" style="color:red;">1</a>]: Chi tiết về kiến trúc của network, bạn có thể xem trong file config của YOLO, thứ tự các layer trong file config chính là thứ tự các layer của YOLO Network <a href="https://github.com/pjreddie/darknet/blob/master/cfg/yolov1.cfg">https://github.com/pjreddie/darknet/blob/master/cfg/yolov1.cfg</a></p>
 <p>[<a name="r1" style="color:red;">1</a>]: Grid cell được chia ở bước nào?</p>
-<p>[<a href="#1by1_conv_b" style="color:red;">1</a>]<a name="1by1_conv" style="color:red;"></a>: (Sử dụng 1x1 Conv layer)
+<p>[<a href="#1by1_conv_b" style="color:red;">1</a>]<a name="1by1_conv" style="color:red;"></a>: Kiến trúc mạng được truyền cảm hứng bởi mạng GoogLeNet (Inception) (Sử dụng 1x1 Conv layer)
 [<a href="#loss_formular_b" style="color:red;">1</a>]<a name="loss_formular" style="color:red;"></a>:</p>
 <p>Để đánh giá YOLO trên tập PASCAL POC, S = 7, B = 2 [<a href="#r2" style="color:red;">2</a>], C = 20, công thức sử dụng cho pretrained model của tác giả sẽ có dạng:</p>
 <p>\begin{multline}
