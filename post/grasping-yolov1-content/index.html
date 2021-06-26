@@ -253,15 +253,15 @@ Pr_{i}(class_{c}) = \hat{p}_{i}(Class_{c}) * \hat{C}_{i}\\
 <p>[<a href="#1by1_conv_b" style="color:red;">1</a>]<a name="1by1_conv" style="color:red;"></a>: Kiến trúc mạng được truyền cảm hứng bởi mạng GoogLeNet (Inception) (Sử dụng 1x1 Conv layer)
 [<a href="#loss_formular_b" style="color:red;">1</a>]<a name="loss_formular" style="color:red;"></a>:</p>
 <p>Để đánh giá YOLO trên tập PASCAL POC, S = 7, B = 2 [<a href="#r2" style="color:red;">2</a>], C = 20, công thức sử dụng cho pretrained model của tác giả sẽ có dạng:</p>
-<p>\begin{multline}
-\lambda_{coord} \displaystyle \sum_{i=0}^{49} \displaystyle \sum_{j=0}^{2} \mathbb{1}_{ij}^{obj} [(x_{i} - \hat{x}_{i})^{2} + (y_{i} - \hat{y}_{i})^{2}]\</p>
-<ul>
-<li>\lambda_{coord}\displaystyle\sum_{i=0}^{49}\displaystyle\sum_{j=0}^{2}\mathbb{1}_{ij}^{obj}[(\sqrt{w_{i}} - \sqrt{\hat{w}_{i}})^{2} + (\sqrt{h_{i}} - \sqrt{\hat{h}_{i}})^{2}]\</li>
-<li>\displaystyle \sum_{i=0}^{49} \displaystyle \sum_{j=0}^{2} \mathbb{1}_{ij}^{obj} (C_{i} - \hat{C}_{i})^{2}\</li>
-<li>\lambda_{noobj} \displaystyle \sum_{i=0}^{49} \displaystyle \sum_{j=0}^{2} \mathbb{1}_{ij}^{noobj} (C_{i} - \hat{C}_{i})^2\</li>
-<li>\displaystyle \sum_{i=0}^{49} \mathbb{1}_{i}^{obj} \displaystyle \sum_{c \in classes}(p_{i}(c) - \hat{p_{i}}(c))^{2}
-\end{multline}</li>
-</ul>
+<div>
+\begin{multline}
+\lambda_{coord} \displaystyle \sum_{i=0}^{49} \displaystyle \sum_{j=0}^{2} \mathbb{1}_{ij}^{obj}[(x_{i} - \hat{x}\_{i})^{2} + (y_{i} - \hat{y}_{i})^{2}]\\ 
++ \lambda_{coord}\displaystyle\sum_{i=0}^{49}\displaystyle\sum_{j=0}^{2}\mathbb{1}_{ij}^{obj}[(\sqrt{w_{i}} - \sqrt{\hat{w}\_{i}})^{2} + (\sqrt{h_{i}} - \sqrt{\hat{h}_{i}})^{2}]\\
++ \displaystyle \sum_{i=0}^{49} \displaystyle \sum_{j=0}^{2} \mathbb{1}\_{ij}^{obj} (C_{i} - \hat{C}_{i})^{2}\\
++ \lambda_{noobj} \displaystyle \sum_{i=0}^{49} \displaystyle \sum_{j=0}^{2} \mathbb{1}\_{ij}^{noobj} (C_{i} - \hat{C}_{i})^2\\
++ \displaystyle \sum_{i=0}^{49} \mathbb{1}\_{i}^{obj} \displaystyle \sum_{c \in classes}(p_{i}(c) - \hat{p_{i}}(c))^{2}
+\end{multline}
+</div>
 <p>Shape của output tensor sẽ là:</p>
 <p>\begin{equation}Ouput\quad Shape = (S , S , B * 5 + C) = (7 , 7 , 2 * 5 + 20) = (7 , 7 , 30)\end{equation}</p>
 <p>[<a href="#feature_scaling_b" style="color:red;">1</a>]<a name="feature_scaling" style="color:red;"></a>: Tại sao phải có bước xử lý này? Đây là bước Scaling Features: đưa khoảng giá trị của các feature về cùng một scale trước khi vào hàm loss để giúp mô hình hội tụ nhanh và ổn định hơn khi training</p>
