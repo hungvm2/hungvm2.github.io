@@ -144,7 +144,7 @@
 </ul>
 </li>
 <li>
-<p>Giá trị xác suất của mỗi class được tính theo công thức:</p>
+<p>Giá trị xác suất của mỗi class được tính theo công thức: [<a href="#original_pc" style="color:red;">?</a>]<a name="original_pc_b" style="color:red;"></a></p>
 <p>\begin{equation}p(c) = Pr(Class_{c}|Object), \quad c = (1,&hellip;,N) \label{ref_pc}\end{equation}</p>
 <p>$Pr(Class_{c}|Object)$: Là xác suất với điều kiện có Object xuất hiện trong grid cell. Là xác suất của class thứ c trong N classes</p>
 </li>
@@ -284,7 +284,7 @@ Pr(c) = \hat{p}(c) * \hat{C}\\
 <li>Learning rate (LR) schedule: tăng dần LR từ $10^{-3}$ tới $10^{-2}$ thay vì để LR cao từ đầu để tránh model bị phân kỳ (diverge) giai đoạn đầu, sau đó giữ nguyên LR $10^{-2}$ trong 75 epochs, giảm xuống $10^{-3}$ cho 30 epochs tiếp theo, giảm xuống $10^{-4}$ cho 30 epochs cuối.</li>
 <li>Data augmentation (làm giàu bộ dữ liệu): Random scaling (phóng to, thu nhỏ ngẫu nhiên), random translation (xê dịch vị trí pixel ngẫu nhiên) tới 20% kích thước ảnh. Ngẫu nhiên điều chỉnh độ phơi sáng (exposure) và bão hoà (saturation) của ảnh tới 1.5 lần trong không gian màu HSV. Data augmentation được sử dụng để giúp giảm overfit cho model</li>
 </ul>
-<p>[<a href="#_b" style="color:red;">Back?</a>]<a name="" style="color:red;"></a>: Công thức gốc tính xác suất của mỗi class trong grid cell?</p>
+<p>[<a href="#original_pc_b" style="color:red;">Back?</a>]<a name="original_pc" style="color:red;"></a>: Công thức gốc tính xác suất của mỗi class trong grid cell?</p>
  </div>
 <div class="text-center my-3">
   <img src="https://hungvm2.github.io/images/yolov1/final_class_probs.png" alt="Class Probabilities" class="figure-img">
