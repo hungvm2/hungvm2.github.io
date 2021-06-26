@@ -152,13 +152,13 @@
 <h5 id="21-kiến-trúc-mạng">2.1. Kiến trúc mạng</h5>
 <p>Kiến trúc mạng được truyền cảm hứng bởi mạng GoogLeNet (Inception) [<a href="#1by1_conv" style="color:red;">1</a>]<a name="1by1_conv_b" style="color:red;"></a></p>
 <p>Mạng gồm 24 Convolutional Layers để trích xuất đặc trưng (extract features) và 2 Fully Connected Layers để dự đoán final output [<a href="#network_detail" style="color:red;">1</a>]. Kiến trúc như bên dưới:</p>
-<div class="text-center my-3">
+<div class="text-center my-4">
 <figure class="figure">
   <img src="https://hungvm2.github.io/images/yolov1/network_architecture.png" alt="Network Architecture" class="figure-img">
   <figcaption class="figure-caption">Ảnh 1: Kiến trúc mạng detection của YOLO</figcaption>
 </figure>
 </div>
-<p>Kích thước của Output Layer:</p>
+<p><em>Kích thước của Output Layer:</em></p>
 <p>\begin{equation}Ouput\quad Shape = (S , S , B * 4 + B + C) = (S, S , B * 5+ C)\end{equation}</p>
 <h5 id="22-các-bước-khi-huấn-luyện-mô-hình-training">2.2. Các bước khi huấn luyện mô hình (training):</h5>
 <p><strong>Bước 1</strong>: đặt 20 lớp Conv Layers đầu tiên của mạng detection (Ảnh 1) trong 1 kiến trúc mạng Classification (Input 224x224 =&gt; 24 Conv layers =&gt; 1 Average Pooling layer =&gt; 1 Fully Connected Layer), train trên tập ImageNet 1000 classes. Bước này giúp 24 lớp Conv Layers có bộ weights tốt trong việc trích xuất đặc trưng từ ảnh.
