@@ -40,7 +40,16 @@
     
     <link href="https://hungvm2.github.io/index.xml" rel="alternate" type="application/rss+xml" title="HungVM2&#39;s Notes" />
     
-
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script>
+  MathJax = {
+    tex: {
+      tags: 'all',
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 </head>
 
 <body>
@@ -168,11 +177,11 @@
 </figure>
 </div>
 <p>Để đánh giá YOLO trên tập PASCAL POC, tác giả lấy S = 7, B = 2 [<a href="#r2" style="color:red;">2</a>], C = 20 (số lớp đối tượng trong tập dữ liệu PASCAL VOC), nên shape của output tensor sẽ là:</p>
-<p>\begin{equation}Ouput \quadShape = (S , S , B * 5 + C) = (7 , 7 , 2 * 5 + 20) = (7 , 7 , 30)\end{equation}</p>
+<p>\begin{equation}Ouput\quad Shape = (S , S , B * 5 + C) = (7 , 7 , 2 * 5 + 20) = (7 , 7 , 30)\end{equation}</p>
 <p>Công thức trở về dạng:</p>
 <p>Trong đó:</p>
 <div>
-- $λ_{coord} = 5$ , $λ_{noobj} = 0.5$ <br> 
+- $\lambda_{coord} = 5$ , $\lambda_{noobj} = 0.5$ <br> 
 - $\mathbb{1}_{i}^{obj}$ nhận giá trị 1 nếu object xuất hiện ở cell thứ $i$, 0 nếu ngược lại và $\mathbb{1}_{ij}^{obj}$ nhận giá trị 1 nếu bounding box thứ $j$ là "predictor", 0 nếu ngược lại
 </div>
 <p><strong>Bước 5</strong>: Cấu hình và training</p>
@@ -292,15 +301,6 @@ Thêm bước Non-max suppression (NMS) giúp triệt tiêu những box bị tr�
 
 
     
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script>
-  MathJax = {
-    tex: {
-      tags: 'all',
-    inlineMath: [['$', '$'], ['\\(', '\\)']]
-    }
-  };
-  </script>
-  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
 </body>
 </html>
