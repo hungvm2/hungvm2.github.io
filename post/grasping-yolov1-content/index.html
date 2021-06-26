@@ -195,7 +195,7 @@
 </div>
 <p>Trong đó:</p>
 <div>
-- $\lambda_{coord} = 5$ , $\lambda_{noobj} = 0.5$ <br> 
+- $\lambda_{coord} = 5$ , $\lambda_{noobj} = 0.5$ [<a href="#lambda" style="color:red;">1</a>]<a name="lambda_b" style="color:red;"></a> <br> 
 - $\mathbb{1}_{i}^{obj}$ nhận giá trị 1 nếu object xuất hiện ở cell thứ $i$, 0 nếu ngược lại và $\mathbb{1}_{ij}^{obj}$ nhận giá trị 1 nếu bounding box thứ $j$ là "predictor", 0 nếu ngược lại
 </div>
 <p>Shape của output tensor sẽ là:</p>
@@ -262,7 +262,7 @@ Thêm bước Non-max suppression (NMS) giúp triệt tiêu những box bị tr�
 <p>Tuy nhiên hàm này không đạt được độ chính xác AP (Average Precision) như mong đợi vì:</p>
 <ul>
 <li>Hàm này coi các giá trị về lỗi toạ độ (localization error) và lỗi phân loại (classification error) là tương đương với nhau (có thể thấy rõ trên công thức ở Ảnh 2)</li>
-<li>Những grid cell không chứa object thì các giá trị Confidence scores sẽ bằng 0, việc này làm tăng sức mạnh của gradient (overpowering the gradient) ở những cell có chứa objects, khiến model bị mất ổn định. Để giải quyết, tác giả thêm các hệ số &ldquo;$λ_{coord} = 5$&rdquo; và &ldquo;$λ_{noobj} = 0.5$&rdquo; để tăng loss từ toạ độ bounding box và giảm loss từ Confidence score.</li>
+<li>Những grid cell không chứa object thì các giá trị Confidence scores sẽ bằng 0, việc này làm tăng sức mạnh của gradient (overpowering the gradient) ở những cell có chứa objects, khiến model bị mất ổn định. Để giải quyết, [<a href="#lambda_b" style="color:red;">1</a>]<a name="lambda" style="color:red;"></a>: tác giả thêm các hệ số &ldquo;$λ_{coord} = 5$&rdquo; và &ldquo;$λ_{noobj} = 0.5$&rdquo; để tăng loss từ toạ độ bounding box và giảm loss từ Confidence score.</li>
 </ul>
 <p>Còn một vấn đề: box lớn thì sai số về kích thước (w, h) giữa predicted value và ground truth value cũng sẽ lớn hơn là box nhỏ. Để xử lý vấn đề này, tác giả sử dụng sai số giữa căn bậc hai của kích thước predict và ground truth thay vì giá trị w,h gốc [<a href="#square_root_wh" style="color:red;">1</a>].</p>
 <p>Khi training, mỗi grid cell cần predict B bounding boxes, tuy nhiên sẽ chỉ Bounding box có IOU lớn nhất so với ground truth box mới được chọn lựa để tính toán hàm loss (chọn làm &ldquo;predictor&rdquo;). Điều này sẽ giúp mỗi predicted Bounding box sẽ chỉ chuyên môn hoá vào việc detect object có kích thước, tỉ lệ nhất định, giúp tăng Recall của model</p>
