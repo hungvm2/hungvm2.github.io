@@ -138,15 +138,21 @@
 <li>
 <p>1 confidence score $C$ tương ứng, tính theo công thức:</p>
 <p>\begin{equation}C_{z} = Pr(Object) * IOU_{pred_{z}}^{truth}, \quad z = (1,&hellip;,B)\end{equation}</p>
-<p>Pr(Object): Xác suất có object xuất hiện trong grid cell</p>
-<p>IOU_{pred_{z}}^{truth}: Giá trị IOU giữa ground truth bounding box và predicted bounding box</p>
+<ul>
+<li>
+<p>$Pr(Object)$: Xác suất có object xuất hiện trong grid cell</p>
+</li>
+<li>
+<p>$IOU_{pred_{z}}^{truth}$: Giá trị IOU giữa ground truth bounding box và predicted bounding box</p>
+</li>
+</ul>
 </li>
 </ul>
 </li>
 <li>
 <p>Giá trị xác suất của các class trong một grid cell được tính theo công thức:</p>
-<p>\begin{equation}Pr_{k} = Pr(Class_{k}|Object), \quad k = (1,&hellip;,N)\end{equation}</p>
-<p>Pr(Class_{k}|Object): Là xác suất có điều kiện. Xác suất của class thứ k trong N classes khi có Object xuất hiện trong grid cell</p>
+<p>\begin{equation}p(c) = Pr(Class_{c}|Object), \quad c = (1,&hellip;,N)\end{equation}</p>
+<p>$Pr(Class_{c}|Object)$: Là xác suất có điều kiện. Xác suất của class thứ c trong N classes khi có Object xuất hiện trong grid cell</p>
 </li>
 </ul>
 <h5 id="21-kiến-trúc-mạng">2.1. Kiến trúc mạng</h5>
@@ -159,7 +165,7 @@
 </figure>
 </div>
 <p>Kích thước của Output Layer:</p>
-<p>\begin{equation}Ouput\quad Shape = (S , S , B * 4 + B + C) = (S, S , 5 * B + C)\end{equation}</p>
+<p>\begin{equation}Ouput\quad Shape = (S , S , B * 4 + B + C) = (S, S , B * 5+ C)\end{equation}</p>
 <h5 id="22-các-bước-khi-huấn-luyện-mô-hình-training">2.2. Các bước khi huấn luyện mô hình (training):</h5>
 <p><strong>Bước 1</strong>: đặt 20 lớp Conv Layers đầu tiên của mạng detection (Ảnh 1) trong 1 kiến trúc mạng Classification (Input 224x224 =&gt; 24 Conv layers =&gt; 1 Average Pooling layer =&gt; 1 Fully Connected Layer), train trên tập ImageNet 1000 classes. Bước này giúp 24 lớp Conv Layers có bộ weights tốt trong việc trích xuất đặc trưng từ ảnh.
 <strong>Bước 2</strong>: Sử dụng Transfer Learning, đặt weights của 20 lớp Conv Layers đã được train ở bước 1 vào mạng detection (Ảnh 1). Do Weights của Conv Layers không phụ thuộc vào Input size nên tăng Input size lên 448x448 để mạng học được những đặc trưng chi tiết hơn của ảnh.
@@ -181,22 +187,30 @@
 + \displaystyle \sum_{i=0}^{S^{2}} \mathbb{1}_{i}^{obj} \displaystyle \sum_{c \in classes}(p_{i}(c) - \hat{p_{i}}(c))^{2}
 \end{multline}
 </div>
-<p>b. Công thức sử dụng cho pretrained model mà tác giả cung cấp:
-Để đánh giá YOLO trên tập PASCAL POC, tác giả lấy S = 7, B = 2 [<a href="#r2" style="color:red;">2</a>], C = 20 (số lớp đối tượng trong tập dữ liệu PASCAL VOC):</p>
-<p>Công thức trở về dạng:</p>
-<div>
-\begin{multline}
-\lambda_{coord} \displaystyle \sum_{i=0}^{7^{2}} \displaystyle \sum_{j=0}^{2} \mathbb{1}_{ij}^{obj} [(x_{i} - \hat{x}_{i})^{2} + (y_{i} - \hat{y}_{i})^{2}]\\ 
-+ \lambda_{coord}\displaystyle\sum_{i=0}^{7^{2}}\displaystyle\sum_{j=0}^{2}\mathbb{1}_{ij}^{obj}[(\sqrt{w_{i}} - \sqrt{\hat{w}_{i}})^{2} + (\sqrt{h_{i}} - \sqrt{\hat{h}_{i}})^{2}]\\
-+ \displaystyle \sum_{i=0}^{7^{2}} \displaystyle \sum_{j=0}^{2} \mathbb{1}_{ij}^{obj} (C_{i} - \hat{C}_{i})^{2}\\
-+ \lambda_{noobj} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{noobj} (C_{i} - \hat{C}_{i})^2\\
-+ \displaystyle \sum_{i=0}^{S^{2}} \mathbb{1}_{i}^{obj} \displaystyle \sum_{c \in classes}(p_{i}(c) - \hat{p_{i}}(c))^{2}
-\end{multline}
-</div>
 <p>Trong đó:</p>
 <div>
+Gọi "Box Predictor" là Bounding box có IOU lớn nhất trong grid cell với ground truth box 
 - $\lambda_{coord} = 5$ , $\lambda_{noobj} = 0.5$ [<a href="#lambda" style="color:red;">1</a>]<a name="lambda_b" style="color:red;"></a> <br> 
-- $\mathbb{1}_{i}^{obj}$ nhận giá trị 1 nếu object xuất hiện ở cell thứ $i$, 0 nếu ngược lại và $\mathbb{1}_{ij}^{obj}$ nhận giá trị 1 nếu bounding box thứ $j$ là "predictor", 0 nếu ngược lại
+- $\mathbb{1}_{i}^{obj}$ nhận giá trị 1 nếu object xuất hiện ở cell thứ $i$ ; 0 nếu ngược lại
+- $\mathbb{1}_{ij}^{obj}$ nhận giá trị 1 nếu bounding box là "Box Predictor" ; 0 nếu ngược lại 
+- $x_{i},y_{i}$: Toạ độ tâm (đã biến đổi) của ground truth box ở grid cell thứ $i$ 
+- $w_{i},h_{i}$: Kích thước rộng, dài của ground truth box ở grid cell thứ $i$
+- $\hat{x}_{i}, \hat{y}_{i}$: Toạ độ tâm (đã biến đổi) của "Box Predictor" ở grid cell thứ $i$
+- $\hat{w}_{i}, \hat{w}_{i}$: Kích thước rộng, dài của "Box Predictor" ở grid cell thứ $i$
+- $C_{i}$: IOU của ground truth box với chính nó (=1) ở Grid cell thứ $i$
+- $\hat{C}_{i}$: IOU của "Box Predictor" với ground truth box ở Grid cell thứ $i$
+- $p_{i}(c)$: Giá trị xác suất của class thứ c (trong N classes) của ground truth data ở Grid cell thứ $i$ ($=1$ nếu ground truth box chỉ class c, $=0$ nếu ngược lại) 
+- $\hat{p}_{i}(c)$: Giá trị xác suất của class thứ c (trong N classes) của predicted data ở Grid cell thứ $i$
+</div>
+<p>b. Để đánh giá YOLO trên tập PASCAL POC, S = 7, B = 2 [<a href="#r2" style="color:red;">2</a>], C = 20, công thức sử dụng cho pretrained model của tác giả sẽ có dạng:</p>
+<div>
+\begin{multline}
+\lambda_{coord} \displaystyle \sum_{i=0}^{49} \displaystyle \sum_{j=0}^{2} \mathbb{1}_{ij}^{obj} [(x_{i} - \hat{x}_{i})^{2} + (y_{i} - \hat{y}_{i})^{2}]\\ 
++ \lambda_{coord}\displaystyle\sum_{i=0}^{49}\displaystyle\sum_{j=0}^{2}\mathbb{1}_{ij}^{obj}[(\sqrt{w_{i}} - \sqrt{\hat{w}_{i}})^{2} + (\sqrt{h_{i}} - \sqrt{\hat{h}_{i}})^{2}]\\
++ \displaystyle \sum_{i=0}^{49} \displaystyle \sum_{j=0}^{2} \mathbb{1}_{ij}^{obj} (C_{i} - \hat{C}_{i})^{2}\\
++ \lambda_{noobj} \displaystyle \sum_{i=0}^{49} \displaystyle \sum_{j=0}^{2} \mathbb{1}_{ij}^{noobj} (C_{i} - \hat{C}_{i})^2\\
++ \displaystyle \sum_{i=0}^{49} \mathbb{1}_{i}^{obj} \displaystyle \sum_{c \in classes}(p_{i}(c) - \hat{p_{i}}(c))^{2}
+\end{multline}
 </div>
 <p>Shape của output tensor sẽ là:</p>
 <p>\begin{equation}Ouput\quad Shape = (S , S , B * 5 + C) = (7 , 7 , 2 * 5 + 20) = (7 , 7 , 30)\end{equation}</p>
@@ -215,9 +229,14 @@
 Thêm bước Non-max suppression (NMS) giúp triệt tiêu những box bị trùng khi detect cùng một object. Cải thiện thêm 2-3% mAP cho model.</p>
 <p>Pipe line của prediction:</p>
 <blockquote>
-<p>Image (448,448,3) =&gt; Network Prediction =&gt; Output (7,7,30) =&gt; Tính lại class probabilities =&gt; Bỏ qua các box có low probabilities =&gt; Non-max suppression =&gt; Final prediction</p>
+<p>Image (448,448,3) =&gt; Network Prediction =&gt; Output (7,7,30) =&gt; Tính lại class probabilities $Pr_{i}(class_{c})$ =&gt; Bỏ qua các box có low probabilities =&gt; Non-max suppression =&gt; Final prediction</p>
 </blockquote>
-<p>Xác suất nhận diện của các class trong ảnh sẽ được tính theo công thức sau:</p>
+<p>$Pr_{i}(class_{c})$ của mỗi grid cell sẽ được tính theo công thức sau:</p>
+<div>
+\start{equation}
+Pr_{i}(class_{c}) = \hat{p}_{i}(c) * \hat{C}_{i} = Pr(Class_{c}|Object) * Pr(Object) * IOU_{pred}^{truth} = Pr(Class_{c}) * IOU_{pred}^{truth}
+\end{equation}
+</div>
 <div class="text-center my-3">
   <img src="https://hungvm2.github.io/images/yolov1/final_class_probs.png" alt="Class Probabilities" class="figure-img">
 </div>
