@@ -138,14 +138,8 @@
 <li>
 <p>1 confidence score $C$ tương ứng, tính theo công thức:</p>
 <p>\begin{equation}C_{z} = Pr(Object) * IOU_{pred_{z}}^{truth}, \quad z = (1,&hellip;,B)\end{equation}</p>
-<ul>
-<li>
 <p>$Pr(Object)$: Xác suất có object xuất hiện trong grid cell</p>
-</li>
-<li>
 <p>$IOU_{pred_{z}}^{truth}$: Giá trị IOU giữa ground truth bounding box và predicted bounding box</p>
-</li>
-</ul>
 </li>
 </ul>
 </li>
@@ -176,8 +170,7 @@
 <li>Confidence score của bounding box = IOU nên cũng nằm trong đoạn [0,1]</li>
 <li>Ci là xác suất detect ra vật thể class i nên cũng nằm trong đoạn [0,1]</li>
 </ul>
-<p><strong>Bước 4</strong>: Xây dựng hàm Loss [<a href="#sse" style="color:red;">1</a>]</p>
-<p>a. Công thức tổng quát: [<a href="#loss_formular" style="color:red;">1</a>]<a name="loss_formular_b" style="color:red;"></a></p>
+<p><strong>Bước 4</strong>: Xây dựng hàm Loss [<a href="#sse" style="color:red;">1</a>]<a name="sse_b" style="color:red;"></a> [<a href="#loss_formular" style="color:red;">1</a>]<a name="loss_formular_b" style="color:red;"></a></p>
 <div>
 \begin{multline}
 \lambda_{coord} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} [(x_{i} - \hat{x}_{i})^{2} + (y_{i} - \hat{y}_{i})^{2}]\\ 
@@ -187,7 +180,7 @@
 + \displaystyle \sum_{i=0}^{S^{2}} \mathbb{1}_{i}^{obj} \displaystyle \sum_{c \in classes}(p_{i}(c) - \hat{p_{i}}(c))^{2}
 \end{multline}
 </div>
-<p>Trong đó:</p>
+<p><strong>Trong đó:</strong></p>
 <p>Gọi &ldquo;Box Predictor&rdquo; là Bounding box có IOU lớn nhất trong grid cell với ground truth box</p>
 <ul>
 <li>$\lambda_{coord} = 5$ , $\lambda_{noobj} = 0.5$ [<a href="#lambda" style="color:red;">1</a>]<a name="lambda_b" style="color:red;"></a> <br></li>
@@ -195,25 +188,13 @@
 <li>$\mathbb{1}_{ij}^{obj}$ nhận giá trị 1 nếu bounding box là &ldquo;Box Predictor&rdquo; ; 0 nếu ngược lại</li>
 <li>$x_{i},y_{i}$: Toạ độ tâm (đã biến đổi) của ground truth box ở grid cell thứ $i$</li>
 <li>$w_{i},h_{i}$: Kích thước rộng, dài của ground truth box ở grid cell thứ $i$</li>
-<li>$\hat{x}_{i}$, \hat{y}_{i}$: Toạ độ tâm (đã biến đổi) của &ldquo;Box Predictor&rdquo; ở grid cell thứ $i$</li>
+<li>$\hat{x}_{i}, \hat{y}_{i}$: Toạ độ tâm (đã biến đổi) của &ldquo;Box Predictor&rdquo; ở grid cell thứ $i$</li>
 <li>$\hat{w}_{i}, \hat{w}_{i}$: Kích thước rộng, dài của &ldquo;Box Predictor&rdquo; ở grid cell thứ $i$</li>
 <li>$C_{i}$: IOU của ground truth box với chính nó (=1) ở Grid cell thứ $i$</li>
 <li>$\hat{C}_{i}$: IOU của &ldquo;Box Predictor&rdquo; với ground truth box ở Grid cell thứ $i$</li>
 <li>$p_{i}(c)$: Giá trị xác suất của class thứ c (trong N classes) của ground truth data ở Grid cell thứ $i$ ($=1$ nếu ground truth box chỉ class c, $=0$ nếu ngược lại)</li>
 <li>$\hat{p}_{i}(c)$: Giá trị xác suất của class thứ c (trong N classes) của predicted data ở Grid cell thứ $i$</li>
 </ul>
-<p>b. Để đánh giá YOLO trên tập PASCAL POC, S = 7, B = 2 [<a href="#r2" style="color:red;">2</a>], C = 20, công thức sử dụng cho pretrained model của tác giả sẽ có dạng:</p>
-<div>
-\begin{multline}
-\lambda_{coord} \displaystyle \sum_{i=0}^{49} \displaystyle \sum_{j=0}^{2} \mathbb{1}_{ij}^{obj} [(x_{i} - \hat{x}_{i})^{2} + (y_{i} - \hat{y}_{i})^{2}]\\ 
-+ \lambda_{coord}\displaystyle\sum_{i=0}^{49}\displaystyle\sum_{j=0}^{2}\mathbb{1}_{ij}^{obj}[(\sqrt{w_{i}} - \sqrt{\hat{w}_{i}})^{2} + (\sqrt{h_{i}} - \sqrt{\hat{h}_{i}})^{2}]\\
-+ \displaystyle \sum_{i=0}^{49} \displaystyle \sum_{j=0}^{2} \mathbb{1}_{ij}^{obj} (C_{i} - \hat{C}_{i})^{2}\\
-+ \lambda_{noobj} \displaystyle \sum_{i=0}^{49} \displaystyle \sum_{j=0}^{2} \mathbb{1}_{ij}^{noobj} (C_{i} - \hat{C}_{i})^2\\
-+ \displaystyle \sum_{i=0}^{49} \mathbb{1}_{i}^{obj} \displaystyle \sum_{c \in classes}(p_{i}(c) - \hat{p_{i}}(c))^{2}
-\end{multline}
-</div>
-<p>Shape của output tensor sẽ là:</p>
-<p>\begin{equation}Ouput\quad Shape = (S , S , B * 5 + C) = (7 , 7 , 2 * 5 + 20) = (7 , 7 , 30)\end{equation}</p>
 <p><strong>Bước 5</strong>: Cấu hình và training</p>
 <ul>
 <li>Số Epochs: 135</li>
@@ -271,13 +252,19 @@ Pr_{i}(class_{c}) = \hat{p}_{i}(Class_{c}) * \hat{C}_{i}\\
 <p>[<a name="network_detail" style="color:red;">1</a>]: Chi tiết về kiến trúc của network, bạn có thể xem trong file config của YOLO, thứ tự các layer trong file config chính là thứ tự các layer của YOLO Network <a href="https://github.com/pjreddie/darknet/blob/master/cfg/yolov1.cfg">https://github.com/pjreddie/darknet/blob/master/cfg/yolov1.cfg</a></p>
 <p>[<a name="r1" style="color:red;">1</a>]: Grid cell được chia ở bước nào?</p>
 <p>[<a href="#1by1_conv_b" style="color:red;">1</a>]<a name="1by1_conv" style="color:red;"></a>: (Sử dụng 1x1 Conv layer)
-[<a href="#loss_formular_b" style="color:red;">1</a>]<a name="loss_formular" style="color:red;"></a>: Công thức gốc trong paper như hình dưới</p>
-<div class="text-center my-3">
-<figure class="figure">
-  <img src="https://hungvm2.github.io/images/yolov1/loss_function.png" alt="Loss Function" class="figure-img">
-  <figcaption class="figure-caption">Ảnh 2: Hàm loss</figcaption>
-</figure>
-</div>
+[<a href="#loss_formular_b" style="color:red;">1</a>]<a name="loss_formular" style="color:red;"></a>:</p>
+<p>Để đánh giá YOLO trên tập PASCAL POC, S = 7, B = 2 [<a href="#r2" style="color:red;">2</a>], C = 20, công thức sử dụng cho pretrained model của tác giả sẽ có dạng:</p>
+<p>\begin{multline}
+\lambda_{coord} \displaystyle \sum_{i=0}^{49} \displaystyle \sum_{j=0}^{2} \mathbb{1}_{ij}^{obj} [(x_{i} - \hat{x}_{i})^{2} + (y_{i} - \hat{y}_{i})^{2}]\</p>
+<ul>
+<li>\lambda_{coord}\displaystyle\sum_{i=0}^{49}\displaystyle\sum_{j=0}^{2}\mathbb{1}_{ij}^{obj}[(\sqrt{w_{i}} - \sqrt{\hat{w}_{i}})^{2} + (\sqrt{h_{i}} - \sqrt{\hat{h}_{i}})^{2}]\</li>
+<li>\displaystyle \sum_{i=0}^{49} \displaystyle \sum_{j=0}^{2} \mathbb{1}_{ij}^{obj} (C_{i} - \hat{C}_{i})^{2}\</li>
+<li>\lambda_{noobj} \displaystyle \sum_{i=0}^{49} \displaystyle \sum_{j=0}^{2} \mathbb{1}_{ij}^{noobj} (C_{i} - \hat{C}_{i})^2\</li>
+<li>\displaystyle \sum_{i=0}^{49} \mathbb{1}_{i}^{obj} \displaystyle \sum_{c \in classes}(p_{i}(c) - \hat{p_{i}}(c))^{2}
+\end{multline}</li>
+</ul>
+<p>Shape của output tensor sẽ là:</p>
+<p>\begin{equation}Ouput\quad Shape = (S , S , B * 5 + C) = (7 , 7 , 2 * 5 + 20) = (7 , 7 , 30)\end{equation}</p>
 <p>[<a name="feature_scaling" style="color:red;">1</a>]: Tại sao phải có bước xử lý này? Đây là bước Scaling Features: đưa khoảng giá trị của các feature về cùng một scale trước khi vào hàm loss để giúp mô hình hội tụ nhanh và ổn định hơn khi training</p>
 <p>[<a name="sse" style="color:red;">1</a>]: Hàm loss sử dụng là hàm Sum Squared Error. Tác giả giải thích lí do sử dụng hàm này vì nó dễ để tối ưu.</p>
 <p>Tuy nhiên hàm này không đạt được độ chính xác AP (Average Precision) như mong đợi vì:</p>
