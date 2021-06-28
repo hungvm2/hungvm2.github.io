@@ -261,7 +261,8 @@ Pr(c) = \hat{p}(c) * \hat{C}\\
 </div>
 <p>Hoặc bằng code Python minh hoạ đơn giản như bên dưới:</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">def</span> iou(box1, box2):
-    <span style="color:#008000"># box1, box2 là mảng chứa 4 phần tử: toạ độ tâm (x,y), kích thước rộng, dài của box (w,h)</span>
+    <span style="color:#008000"># box1, box2 là mảng chứa 4 phần tử: </span>
+    <span style="color:#008000"># toạ độ tâm (x,y), kích thước rộng, dài của box (w,h)</span>
     x1, y1, w1, h1 = box1
     x2, y2, w2, h2 = box2
     <span style="color:#008000"># Tính toán (left, top) và (right, bot) của intersection (vùng giao nhau giữa 2 box) </span>
