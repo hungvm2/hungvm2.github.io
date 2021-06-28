@@ -113,7 +113,7 @@
 <p>Trong phần &ldquo;Đọc Paper&rdquo; này, mình sẽ tóm lược lại những ý chính của tác giả, có bỏ qua một số phần không quá quan trọng. Khi đọc sẽ có các reference (có dạng [?]). Bạn có thể click vào các câu hỏi đó để dẫn xuống phần &ldquo;Hiểu Paper&rdquo; bên dưới để đọc sâu hơn về vấn đề được đề cập.</p>
 </blockquote>
 <h4 id="1-giới-thiệu-chung-về-mô-hình-model">1: Giới thiệu chung về mô hình (model)</h4>
-<p>Các nghiên cứu trước đây xử lý bài toán Object Detection theo hướng Classification (phân loại) [<a href="#previous_model" style="color:red;">?</a>]<a name="previous_model_b" style="color:red;"></a>, còn tác giả YOLO lại <strong>tiếp cận theo hướng Regression</strong> (hồi quy).</p>
+<p>Các nghiên cứu trước đây xử lý bài toán Object Detection theo hướng Classification (phân loại) [<a href="#previous_model" style="color:red;">?</a>]<a name="previous_model_b"></a>, còn tác giả YOLO lại <strong>tiếp cận theo hướng Regression</strong> (hồi quy).</p>
 <p>YOLO là <strong>một Neural Network đơn nhất</strong> dự đoán đồng thời cả Bounding boxes và Class probabilities từ ảnh đầu vào qua một evaluation duy nhất.</p>
 <p>Kiến trúc hợp nhất này giúp cho YOLO có các ưu điểm:</p>
 <ul>
@@ -157,8 +157,8 @@
 </li>
 </ul>
 <h5 id="21-kiến-trúc-mạng">2.1. Kiến trúc mạng:</h5>
-<p>Mạng có lấy cảm hứng từ mạng Inception của Google. [<a href="#1by1_conv" style="color:red;">?</a>]<a name="1by1_conv_b" style="color:red;"></a></p>
-<p>Mạng gồm 24 Convolutional (Conv) Layers để trích xuất đặc trưng (extract features) và 2 Fully Connected (FC) Layers để dự đoán final output [<a href="#network_detail" style="color:red;">?</a>]<a name="network_detail_b" style="color:red;"></a>.</p>
+<p>Mạng có lấy cảm hứng từ mạng Inception của Google. [<a href="#1by1_conv" style="color:red;">?</a>]<a name="1by1_conv_b"></a></p>
+<p>Mạng gồm 24 Convolutional (Conv) Layers để trích xuất đặc trưng (extract features) và 2 Fully Connected (FC) Layers để dự đoán final output [<a href="#network_detail" style="color:red;">?</a>]<a name="network_detail_b"></a>.</p>
 <div class="text-center my-4">
 <figure class="figure">
   <img src="https://hungvm2.github.io/images/yolov1/network_architecture.png" alt="Network Architecture" class="figure-img">
@@ -168,16 +168,16 @@
 <p><em>Kích thước Output của Network:</em></p>
 <p>\begin{equation}Ouput\quad Shape = (S , S , B * 4 + B + C) = (S, S , B * 5+ C)\end{equation}</p>
 <h5 id="22-các-bước-khi-huấn-luyện-mô-hình-training">2.2. Các bước khi huấn luyện mô hình (training):</h5>
-<p><strong>Bước 1</strong>: Đặt 20 lớp Conv Layers đầu tiên của mạng detection (<a href="#anh_1_b" style="color:red;">Ảnh 1)/a&gt;<a name="anh_1" style="color:red;"></a>) trong 1 kiến trúc mạng Classification [<a href="#classification_network" style="color:red;">?</a>]<a name="classification_network_b" style="color:red;"></a> , và train trên tập ImageNet 1000 classes.</p>
+<p><strong>Bước 1</strong>: Đặt 20 lớp Conv Layers đầu tiên của mạng detection (<a href="#anh_1_b" style="color:red;">Ảnh 1</a><a name="anh_1"></a>) trong 1 kiến trúc mạng Classification [<a href="#classification_network" style="color:red;">?</a>]<a name="classification_network_b"></a> , và train trên tập ImageNet 1000 classes.</p>
 <p><strong>Bước 2</strong>: Sử dụng Transfer Learning, đặt lại Weights của 20 lớp Conv Layers đã được train ở bước 1 trở lại mạng detection (Ảnh 1). Do Weights của phần Conv Layers không phụ thuộc vào Input size nên tăng Input size lên $448\times 448$ để mạng học được những đặc trưng chi tiết hơn của ảnh.</p>
-<p><strong>Bước 3</strong>: Lấy kết quả output của mạng detection, biến đổi lại các giá trị nằm trong khoảng $[0,1]$ [<a href="#feature_scaling" style="color:red;">?</a>]<a name="feature_scaling_b" style="color:red;"></a> trước khi đặt vào hàm Loss</p>
+<p><strong>Bước 3</strong>: Lấy kết quả output của mạng detection, biến đổi lại các giá trị nằm trong khoảng $[0,1]$ [<a href="#feature_scaling" style="color:red;">?</a>]<a name="feature_scaling_b"></a> trước khi đặt vào hàm Loss</p>
 <ul>
 <li>Normalize (w,h) của bounding box để w,h trong đoạn [0,1]: (w = w/W , h = h/H | W,H: size của input)</li>
 <li>Biến đổi toạ độ (x,y) thành toạ độ offset từ top-left của grid cell mà nó nằm trong để x, y nằm trong đoạn [0,1]. VD: x,y nằm chính giữa cell thì x = 0.5, y = 0.5</li>
 <li>Confidence score [Công thức \ref{ref_c}]: $C = IOU$ hoặc $C = 0$ nên cũng nằm trong đoạn [0,1]</li>
 <li>$p(c)$ [Công thức \ref{ref_pc}]: là xác suất detect ra vật thể class c nên cũng nằm trong đoạn [0,1]</li>
 </ul>
-<p><strong>Bước 4</strong>: Xây dựng hàm Loss [<a href="#sse" style="color:red;">?</a>]<a name="sse_b" style="color:red;"></a> [<a href="#loss_formular" style="color:red;">?</a>]<a name="loss_formular_b" style="color:red;"></a></p>
+<p><strong>Bước 4</strong>: Xây dựng hàm Loss [<a href="#sse" style="color:red;">?</a>]<a name="sse_b" style="color:red;"></a> [<a href="#loss_formular" style="color:red;">?</a>]<a name="loss_formular_b"></a></p>
 <div>
 \begin{multline}
 \lambda_{coord} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} [(x_{i} - \hat{x}_{i})^{2} + (y_{i} - \hat{y}_{i})^{2}]\\ 
@@ -188,7 +188,7 @@
 \end{multline}
 </div>
 <p><strong>Trong đó:</strong></p>
-<p>Gọi &ldquo;Box Predictor&rdquo; là Bounding box có IOU lớn nhất trong grid cell với ground truth box [<a href="#bounding_box" style="color:red;">?</a>]<a name="bounding_box_b" style="color:red;"></a></p>
+<p>Gọi &ldquo;Box Predictor&rdquo; là Bounding box có IOU lớn nhất trong grid cell với ground truth box [<a href="#bounding_box" style="color:red;">?</a>]<a name="bounding_box_b"></a></p>
 <ul>
 <li>$\lambda_{coord} = 5$ , $\lambda_{noobj} = 0.5$ [<a href="#lambda" style="color:red;">?</a>]<a name="lambda_b" style="color:red;"></a></li>
 <li>$\mathbb{1}_{i}^{obj}$ nhận giá trị 1 nếu object xuất hiện ở cell thứ $i$ ; 0 nếu ngược lại</li>
@@ -210,12 +210,12 @@
 </ul>
 <h5 id="23-inference-testing">2.3. Inference (Testing)</h5>
 <p>Thường tâm của object sẽ chỉ nằm trong 1 gird cell, tuy nhiên có những trường hợp như object lớn hoặc object nằm gần viền của nhiều cell nên dễ bị detect ra nhiều box cho cùng một object.
-Để xử lý vấn đề này, khi testing, output của Network được đi qua một bước post processing sử dụng Non-max suppression (NMS) giúp triệt tiêu những box bị trùng nhau. Bước này giúp cải thiện thêm 2-3% mAP cho model. [<a href="#nms" style="color:red;">?</a>]<a name="nms_b" style="color:red;"></a></p>
+Để xử lý vấn đề này, khi testing, output của Network được đi qua một bước post processing sử dụng Non-max suppression (NMS) giúp triệt tiêu những box bị trùng nhau. Bước này giúp cải thiện thêm 2-3% mAP cho model. [<a href="#nms" style="color:red;">?</a>]<a name="nms_b"></a></p>
 <p>Pipe line của prediction:</p>
 <blockquote>
 <p>Image (448,448,3) =&gt; Network Prediction =&gt; Output (7,7,30) =&gt; Tính lại class probabilities $Pr(c)$ =&gt; Bỏ qua các box có low probabilities =&gt; Non-max suppression =&gt; Final prediction</p>
 </blockquote>
-<p>$Pr(c)$ của mỗi class trong mỗi grid cell sẽ được tính lại theo công thức sau: [<a href="#original_pc" style="color:red;">?</a>]<a name="original_pc_b" style="color:red;"></a></p>
+<p>$Pr(c)$ của mỗi class trong mỗi grid cell sẽ được tính lại theo công thức sau: [<a href="#original_pc" style="color:red;">?</a>]<a name="original_pc_b"></a></p>
 <div>
 \begin{multline}
 Pr(c) = \hat{p}(c) * \hat{C}\\
@@ -245,16 +245,16 @@ Pr(c) = \hat{p}(c) * \hat{C}\\
 <blockquote>
 <p>Trong phần &ldquo;Hiểu Paper&rdquo; này, mình sẽ đi vào phân tích các lý do tại sao tác giả chọn hướng tiếp cận đó, cũng như giải thích và làm rõ thêm các thuật ngữ, công thức&hellip;</p>
 </blockquote>
-<p>[<a href="#previous_model_b" style="color:red;">Back?</a>]<a name="previous_model" style="color:red;"></a>: Kỹ thuật sử dụng ở một số phương pháp trước đây?</p>
+<p>[<a href="#previous_model_b" style="color:red;">Back?</a>]<a name="previous_model"></a>: Kỹ thuật sử dụng ở một số phương pháp trước đây?</p>
 <ul>
 <li>Deformable Parts Models (DPM) sử dụng &ldquo;Sliding Window&rdquo; sau đó phân loại trên các &ldquo;Window&rdquo; này</li>
 <li>R-CNN sử dụng &ldquo;Region Proposal&rdquo; để đề xuất ra các Bounding boxes tiềm năng, sau đó phân loại (Classify) trên những boxes này và một bước hậu xử lý được sử dụng để định vị lại chính xác các Bounding boxes, bỏ đi các boxes bị trùng lặp&hellip; Hướng tiếp cận này là một Pipeline phức tạp (gồm nhiều step/model nối tiếp nhau) nên rất chậm và khó để tối ưu.</li>
 </ul>
-<p>[<a href="#network_detail_b" style="color:red;">Back?</a>]<a name="network_detail" style="color:red;"></a>: Chi tiết về kiến trúc của network?</p>
+<p>[<a href="#network_detail_b" style="color:red;">Back?</a>]<a name="network_detail"></a>: Chi tiết về kiến trúc của network?</p>
 <p>Bạn có thể xem trong <a href="https://github.com/pjreddie/darknet/blob/master/cfg/yolov1.cfg">file config</a> của YOLO, thứ tự các layer trong file config chính là thứ tự các layer của YOLO Network</p>
-<p>[<a href="#grid_cell_b" style="color:red;">Back?</a>]<a name="grid_cell" style="color:red;"></a>: Chia grid cell ở bước nào?</p>
+<p>[<a href="#grid_cell_b" style="color:red;">Back?</a>]<a name="grid_cell"></a>: Chia grid cell ở bước nào?</p>
 <p>Không có bước chia grid cell, mà việc phân định toạ độ bounding box nằm ở grid cell nào sẽ được tính toán lúc đưa vào hàm Loss để training</p>
-<p>[<a href="#iou" style="color:red;">$\triangleleft$</a>]<a name="iou_b" style="color:red;"></a>: IOU được tính như thế nào?</p>
+<p>[<a href="#iou_b" style="color:red;">$\triangleleft$</a>]<a name="iou"></a>: IOU được tính như thế nào?</p>
 <p>Cách tính IOU được minh hoạ bằng hình vẽ sau:</p>
 <div class="text-center my-3">
 <img src="https://hungvm2.github.io/images/yolov1/IOU.png" alt="IOU">
@@ -272,9 +272,9 @@ Pr(c) = \hat{p}(c) * \hat{C}\\
     intersection_area = (i_right - i_left) * (i_bot - i_top)
     union_area = (w1 * h1 + w2 * h2 - intersection_area)
     <span style="color:#00f">return</span> intersection_area/union_area
-</code></pre></div><p>[<a href="#1by1_conv_b" style="color:red;">Back?</a>]<a name="1by1_conv" style="color:red;"></a>: Kiến trúc mạng được truyền cảm hứng bởi mạng GoogLeNet (Inception) như thế nào?</p>
+</code></pre></div><p>[<a href="#1by1_conv_b" style="color:red;">Back?</a>]<a name="1by1_conv"></a>: Kiến trúc mạng được truyền cảm hứng bởi mạng GoogLeNet (Inception) như thế nào?</p>
 <p>Kiến trúc mạng của YOLO có sử dụng 1x1 Conv layer,</p>
-<p>[<a href="#loss_formular_b" style="color:red;">Back?</a>]<a name="loss_formular" style="color:red;"></a>: Hàm Loss dùng cho pretrained model của tác giả?</p>
+<p>[<a href="#loss_formular_b" style="color:red;">Back?</a>]<a name="loss_formular"></a>: Hàm Loss dùng cho pretrained model của tác giả?</p>
 <p>Để đánh giá YOLO trên tập PASCAL POC, S = 7, B = 2, C = 20, hàm Loss vì thế sẽ có dạng:</p>
 <div>
 \begin{multline}
@@ -288,10 +288,10 @@ Pr(c) = \hat{p}(c) * \hat{C}\\
 <p>Shape của output tensor sẽ là:</p>
 <p>\begin{equation}Ouput\quad Shape = (S , S , B * 5 + C) = (7 , 7 , 2 * 5 + 20) = (7 , 7 , 30)\end{equation}</p>
 <p>Tại sao tác giả chọn B = 2 cho mỗi grid cell?</p>
-<p>[<a href="#bounding_box_b" style="color:red;">Back?</a>]<a name="bounding_box" style="color:red;"></a>:</p>
-<p>[<a href="#feature_scaling_b" style="color:red;">Back?</a>]<a name="feature_scaling" style="color:red;"></a> Tại sao phải có bước xử lý này?</p>
+<p>[<a href="#bounding_box_b" style="color:red;">Back?</a>]<a name="bounding_box"></a>:</p>
+<p>[<a href="#feature_scaling_b" style="color:red;">Back?</a>]<a name="feature_scaling"></a> Tại sao phải có bước xử lý này?</p>
 <p>Đây là bước Scaling Features: đưa khoảng giá trị của các feature về cùng một scale trước khi vào hàm loss để giúp mô hình hội tụ nhanh và ổn định hơn khi training.</p>
-<p>[<a href="#sse_b" style="color:red;">Back?</a>]<a name="sse" style="color:red;"></a>: Hàm loss sử dụng là dạng gì?</p>
+<p>[<a href="#sse_b" style="color:red;">Back?</a>]<a name="sse"></a>: Hàm loss sử dụng là dạng gì?</p>
 <p>Hàm được sử dụng là Sum Squared Error. Tác giả giải thích lí do sử dụng hàm này vì nó dễ để tối ưu.</p>
 <p>Tuy nhiên hàm này không đạt được độ chính xác AP (Average Precision) như mong đợi vì:</p>
 <ul>
@@ -300,19 +300,19 @@ Pr(c) = \hat{p}(c) * \hat{C}\\
 </ul>
 <p>Còn một vấn đề: box lớn thì sai số về kích thước (w, h) giữa predicted value và ground truth value cũng sẽ lớn hơn là box nhỏ. Để xử lý vấn đề này, tác giả sử dụng sai số giữa căn bậc hai của kích thước predict và ground truth thay vì giá trị w,h gốc [<a href="#square_root_wh" style="color:red;">1</a>].</p>
 <p>Khi training, mỗi grid cell cần predict B bounding boxes, tuy nhiên sẽ chỉ Bounding box có IOU lớn nhất so với ground truth box mới được chọn lựa để tính toán hàm loss (chọn làm &ldquo;predictor&rdquo;). Điều này sẽ giúp mỗi predicted Bounding box sẽ chỉ chuyên môn hoá vào việc detect object có kích thước, tỉ lệ nhất định, giúp tăng Recall của model</p>
-<p>[<a href="#quare_root_wh_b" style="color:red;">Back?</a>]<a name="square_root_wh" style="color:red;"></a>: Tại sao lại sử dụng căn bậc hai của (w,h)</p>
+<p>[<a href="#quare_root_wh_b" style="color:red;">Back?</a>]<a name="square_root_wh"></a>: Tại sao lại sử dụng căn bậc hai của (w,h)</p>
 <p>Ví dụ: Box To có predicted W = 9 và ground truth W = 8 =&gt; độ lệch = 1, Box Nhỏ có predicted W = 3 và ground truth W = 2 =&gt; độ lệch = 1. Rõ ràng Box nhỏ có sai số lớn hơn xét theo tỉ lệ, nhưng số tuyệt đối độ lệch thì như nhau</p>
-<p>[<a href="#classification_network_b" style="color:red;">Back?</a>]<a name="classification_network" style="color:red;"></a>: Tại sao lại cần training trước các lớp Conv Layer?</p>
+<p>[<a href="#classification_network_b" style="color:red;">Back?</a>]<a name="classification_network"></a>: Tại sao lại cần training trước các lớp Conv Layer?</p>
 <p>Bước này giúp 24 lớp Conv Layers có bộ weights tốt trong việc trích xuất đặc trưng từ ảnh.</p>
 <p>Network của mạng classification này có dạng: Input 224x224 =&gt; 24 Conv layers =&gt; 1 Average Pooling layer =&gt; 1 Fully Connected Layer =&gt; Output class</p>
-<p>[<a href="#tuning_technique_b" style="color:red;">Back?</a>]<a name="tuning_technique" style="color:red;"></a>: Chi tiết các kỹ thuật tuning được sử dụng trong Paper?</p>
+<p>[<a href="#tuning_technique_b" style="color:red;">Back?</a>]<a name="tuning_technique"></a>: Chi tiết các kỹ thuật tuning được sử dụng trong Paper?</p>
 <ul>
 <li>Momentum: Lấy bằng 0.9. Kỹ thuật này là một biến thể của Gradient Descent giúp model hội tụ nhanh hơn</li>
 <li>Decay: 0.0005. Ý của tác giả ở đây có lẽ là Weight decay, một kỹ thuật regularization giúp giảm High Variance (Overfitting)</li>
 <li>Learning rate (LR) schedule: tăng dần LR từ $10^{-3}$ tới $10^{-2}$ thay vì để LR cao từ đầu để tránh model bị phân kỳ (diverge) giai đoạn đầu, sau đó giữ nguyên LR $10^{-2}$ trong 75 epochs, giảm xuống $10^{-3}$ cho 30 epochs tiếp theo, giảm xuống $10^{-4}$ cho 30 epochs cuối.</li>
 <li>Data augmentation (làm giàu bộ dữ liệu): Random scaling (phóng to, thu nhỏ ngẫu nhiên), random translation (xê dịch vị trí pixel ngẫu nhiên) tới 20% kích thước ảnh. Ngẫu nhiên điều chỉnh độ phơi sáng (exposure) và bão hoà (saturation) của ảnh tới 1.5 lần trong không gian màu HSV. Data augmentation được sử dụng để giúp giảm overfit cho model</li>
 </ul>
-<p>[<a href="#original_pc_b" style="color:red;">Back?</a>]<a name="original_pc" style="color:red;"></a>: Công thức gốc tính xác suất của mỗi class trong grid cell?</p>
+<p>[<a href="#original_pc_b" style="color:red;">Back?</a>]<a name="original_pc"></a>: Công thức gốc tính xác suất của mỗi class trong grid cell?</p>
  </div>
 <div class="text-center my-3">
   <img src="https://hungvm2.github.io/images/yolov1/final_class_probs.png" alt="Class Probabilities" class="figure-img">
