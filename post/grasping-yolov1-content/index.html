@@ -326,7 +326,7 @@ Pr(c) = \hat{p}(c) * \hat{C}\\
 <li>Data augmentation (làm giàu bộ dữ liệu): Random scaling (phóng to, thu nhỏ ngẫu nhiên), random translation (xê dịch vị trí pixel ngẫu nhiên) tới 20% kích thước ảnh. Ngẫu nhiên điều chỉnh độ phơi sáng (exposure) và bão hoà (saturation) của ảnh tới 1.5 lần trong không gian màu HSV. Data augmentation được sử dụng để giúp giảm overfit cho model</li>
 </ul>
 <p>[<a href="#original_pc_b" style="color:red;">$ \triangleleft $</a>]<a name="original_pc"></a>: Công thức này khác với công thức gốc trong paper?</p>
-<p>Mình chỉ thay đổi một chút về ký hiệu để đỡ lầm tưởng ký tự (c) có liên quan đến giá trị Confidence Score C của Bounding box. Bên dưới là công thức gốc:</p>
+<p>Mình chỉ thay đổi một chút về ký hiệu để đỡ lầm tưởng ký tự (i) có liên quan đến số thứ tự của Grid cell trong công thức hàm Loss. Bên dưới là công thức gốc:</p>
  </div>
 <div class="text-center my-3">
   <img src="https://hungvm2.github.io/images/yolov1/final_class_probs.png" alt="Class Probabilities" class="figure-img">
