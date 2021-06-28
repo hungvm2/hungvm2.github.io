@@ -162,13 +162,13 @@
 <div class="text-center my-4">
 <figure class="figure">
   <img src="https://hungvm2.github.io/images/yolov1/network_architecture.png" alt="Network Architecture" class="figure-img">
-  <figcaption class="figure-caption"> <a href="#anh_1" style="color:red;">Ảnh 1</a><a name="anh_1_b" style="color:#ff0000;"></a>: Kiến trúc mạng detection của YOLO</figcaption>
+  <figcaption class="figure-caption"> <a href="#anh_1" style="color:red;">Back?</a><a name="anh_1_b" style="color:#ff0000;"></a>Ảnh 1: Kiến trúc mạng detection của YOLO</figcaption>
 </figure>
 </div>
 <p><em>Kích thước Output của Network:</em></p>
 <p>\begin{equation}Ouput\quad Shape = (S , S , B * 4 + B + C) = (S, S , B * 5+ C)\end{equation}</p>
 <h5 id="22-các-bước-khi-huấn-luyện-mô-hình-training">2.2. Các bước khi huấn luyện mô hình (training):</h5>
-<p><strong>Bước 1</strong>: Đặt 20 lớp Conv Layers đầu tiên của mạng detection <a href="#anh_1_b" style="color:red;">(Ảnh 1)</a><a name="anh_1" style="color:red;"></a> trong 1 kiến trúc mạng Classification [<a href="#classification_network" style="color:red;">?</a>]<a name="classification_network_b" style="color:red;"></a> , và train trên tập ImageNet 1000 classes.</p>
+<p><strong>Bước 1</strong>: Đặt 20 lớp Conv Layers đầu tiên của mạng detection (<a href="#anh_1_b" style="color:red;">Ảnh 1)/a&gt;<a name="anh_1" style="color:red;"></a>) trong 1 kiến trúc mạng Classification [<a href="#classification_network" style="color:red;">?</a>]<a name="classification_network_b" style="color:red;"></a> , và train trên tập ImageNet 1000 classes.</p>
 <p><strong>Bước 2</strong>: Sử dụng Transfer Learning, đặt lại Weights của 20 lớp Conv Layers đã được train ở bước 1 trở lại mạng detection (Ảnh 1). Do Weights của phần Conv Layers không phụ thuộc vào Input size nên tăng Input size lên $448\times 448$ để mạng học được những đặc trưng chi tiết hơn của ảnh.</p>
 <p><strong>Bước 3</strong>: Lấy kết quả output của mạng detection, biến đổi lại các giá trị nằm trong khoảng $[0,1]$ [<a href="#feature_scaling" style="color:red;">?</a>]<a name="feature_scaling_b" style="color:red;"></a> trước khi đặt vào hàm Loss</p>
 <ul>
