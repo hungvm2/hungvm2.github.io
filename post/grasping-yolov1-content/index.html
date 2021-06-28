@@ -107,7 +107,7 @@
                     <h1 class="mx-0 mx-md-4">Đọc và phân tích Paper &#34;You Only Look One: Unified, Real-Time Object Detection&#34;(YOLOv1)</h1>
                     <div class="markdown">
                         
-    <p>Trong bài viết này, chúng ta hãy cùng đọc và phân tích nội dung của paper <a href="https://paperswithcode.com/paper/you-only-look-once-unified-real-time-object">&ldquo;You Only Look One: Unified, Real-Time Object Detection&rdquo;</a> pulished năm 2016 nhé!</p>
+    <p>Trong bài viết này, chúng ta hãy cùng đọc và phân tích nội dung của paper &ldquo;You Only Look One: Unified, Real-Time Object Detection&rdquo; pulished năm 2016 nhé!</p>
 <h3 id="i-đọc-paper">I. Đọc Paper</h3>
 <blockquote>
 <p>Trong phần &ldquo;Đọc Paper&rdquo; này, mình sẽ tóm lược lại những ý chính của tác giả, có bỏ qua một số phần không quá quan trọng. Khi đọc sẽ có các reference (có dạng [?]). Bạn có thể click vào các câu hỏi đó để dẫn xuống phần &ldquo;Hiểu Paper&rdquo; bên dưới để đọc sâu hơn về vấn đề được đề cập.</p>
@@ -138,7 +138,12 @@
 <li>
 <p>1 confidence score $C$, tính theo công thức:</p>
 <p>\begin{equation}C_{z} = Pr(Object) * IOU_{pred_{z}}^{truth}, \quad z = (1,&hellip;,B) \label{ref_c}\end{equation}</p>
-<p>$Pr(Object)$: Xác suất có vật thể (object) xuất hiện trong grid cell</p>
+<p>[Pr(Object) =
+\begin{cases}$
+0 &amp; \quad \text{nếu không có object trong grid cell}\<br>
+1 &amp; \quad \text{nếu có object trong grid cell}
+\end{cases}
+]</p>
 <p>$IOU_{pred_{z}}^{truth}$: Giá trị IOU giữa ground truth và predicted bounding box. [<a href="#iou" style="color:red;">?</a>]<a name="iou_b" style="color:red;"></a></p>
 </li>
 </ul>
@@ -161,14 +166,14 @@
 <p><em>Kích thước Output của Network:</em></p>
 <p>\begin{equation}Ouput\quad Shape = (S , S , B * 4 + B + C) = (S, S , B * 5+ C)\end{equation}</p>
 <h5 id="22-các-bước-khi-huấn-luyện-mô-hình-training">2.2. Các bước khi huấn luyện mô hình (training):</h5>
-<p><strong>Bước 1</strong>: đặt 20 lớp Conv Layers đầu tiên của mạng detection <a href="#anh_1_b" style="color:red;">(Ảnh 1)</a><a name="anh_1" style="color:red;"></a> trong 1 kiến trúc mạng Classification [<a href="#classification_network" style="color:red;">?</a>]<a name="classification_network_b" style="color:red;"></a> , và train trên tập ImageNet 1000 classes.</p>
+<p><strong>Bước 1</strong>: Đặt 20 lớp Conv Layers đầu tiên của mạng detection <a href="#anh_1_b" style="color:red;">(Ảnh 1)</a><a name="anh_1" style="color:red;"></a> trong 1 kiến trúc mạng Classification [<a href="#classification_network" style="color:red;">?</a>]<a name="classification_network_b" style="color:red;"></a> , và train trên tập ImageNet 1000 classes.</p>
 <p><strong>Bước 2</strong>: Sử dụng Transfer Learning, đặt lại Weights của 20 lớp Conv Layers đã được train ở bước 1 trở lại mạng detection (Ảnh 1). Do Weights của phần Conv Layers không phụ thuộc vào Input size nên tăng Input size lên $448\times 448$ để mạng học được những đặc trưng chi tiết hơn của ảnh.</p>
 <p><strong>Bước 3</strong>: Lấy kết quả output của mạng detection, biến đổi lại các giá trị nằm trong khoảng $[0,1]$ [<a href="#feature_scaling" style="color:red;">?</a>]<a name="feature_scaling_b" style="color:red;"></a> trước khi đặt vào hàm Loss</p>
 <ul>
 <li>Normalize (w,h) của bounding box để w,h trong đoạn [0,1]: (w = w/W , h = h/H | W,H: size của input)</li>
 <li>Biến đổi toạ độ (x,y) thành toạ độ offset từ top-left của grid cell mà nó nằm trong để x, y nằm trong đoạn [0,1]. VD: x,y nằm chính giữa cell thì x = 0.5, y = 0.5</li>
-<li>Confidence score [\ref{ref_c}] $C = IOU$ hoặc $C = 0$ nên cũng nằm trong đoạn [0,1]</li>
-<li>$p(c)$ [\ref{ref_pc}] là xác suất detect ra vật thể class c nên cũng nằm trong đoạn [0,1]</li>
+<li>Confidence score [Công thức \ref{ref_c}]: $C = IOU$ hoặc $C = 0$ nên cũng nằm trong đoạn [0,1]</li>
+<li>$p(c)$ [Công thức \ref{ref_pc}]: là xác suất detect ra vật thể class c nên cũng nằm trong đoạn [0,1]</li>
 </ul>
 <p><strong>Bước 4</strong>: Xây dựng hàm Loss [<a href="#sse" style="color:red;">?</a>]<a name="sse_b" style="color:red;"></a> [<a href="#loss_formular" style="color:red;">?</a>]<a name="loss_formular_b" style="color:red;"></a></p>
 <div>
@@ -181,7 +186,7 @@
 \end{multline}
 </div>
 <p><strong>Trong đó:</strong></p>
-<p>Gọi &ldquo;Box Predictor&rdquo; là Bounding box có IOU lớn nhất trong grid cell với ground truth box</p>
+<p>Gọi &ldquo;Box Predictor&rdquo; là Bounding box có IOU lớn nhất trong grid cell với ground truth box [<a href="#bounding_box" style="color:red;">?</a>]<a name="bounding_box_b" style="color:red;"></a></p>
 <ul>
 <li>$\lambda_{coord} = 5$ , $\lambda_{noobj} = 0.5$ [<a href="#lambda" style="color:red;">?</a>]<a name="lambda_b" style="color:red;"></a></li>
 <li>$\mathbb{1}_{i}^{obj}$ nhận giá trị 1 nếu object xuất hiện ở cell thứ $i$ ; 0 nếu ngược lại</li>
@@ -201,9 +206,9 @@
 <li>Batch size: 64 (nếu có $m$ data points trong tập train thì mỗi epoch sẽ có $m/64$ iterations)</li>
 <li>Các kỹ thuật tuning được sử dụng: Momentum, Decay, Learning rate schedule, Data augmentation. [<a href="#tuning_technique" style="color:red;">?</a>]<a name="tuning_technique_b" style="color:red;"></a></li>
 </ul>
-<h5 id="23-inference">2.3. Inference</h5>
+<h5 id="23-inference-testing">2.3. Inference (Testing)</h5>
 <p>Thường tâm của object sẽ chỉ nằm trong 1 gird cell, tuy nhiên có những trường hợp như object lớn hoặc object nằm gần viền của nhiều cell nên dễ bị detect ra nhiều box cho cùng một object.
-Để xử lý vấn đề này, output của Network được đi qua một bước post processing sử dụng Non-max suppression (NMS) giúp triệt tiêu những box bị trùng nhau. Bước này giúp cải thiện thêm 2-3% mAP cho model. [<a href="#nms" style="color:red;">?</a>]<a name="nms_b" style="color:red;"></a></p>
+Để xử lý vấn đề này, khi testing, output của Network được đi qua một bước post processing sử dụng Non-max suppression (NMS) giúp triệt tiêu những box bị trùng nhau. Bước này giúp cải thiện thêm 2-3% mAP cho model. [<a href="#nms" style="color:red;">?</a>]<a name="nms_b" style="color:red;"></a></p>
 <p>Pipe line của prediction:</p>
 <blockquote>
 <p>Image (448,448,3) =&gt; Network Prediction =&gt; Output (7,7,30) =&gt; Tính lại class probabilities $Pr(c)$ =&gt; Bỏ qua các box có low probabilities =&gt; Non-max suppression =&gt; Final prediction</p>
@@ -247,7 +252,22 @@ Pr(c) = \hat{p}(c) * \hat{C}\\
 <p>Bạn có thể xem trong <a href="https://github.com/pjreddie/darknet/blob/master/cfg/yolov1.cfg">file config</a> của YOLO, thứ tự các layer trong file config chính là thứ tự các layer của YOLO Network</p>
 <p>[<a href="#grid_cell_b" style="color:red;">Back?</a>]<a name="grid_cell" style="color:red;"></a>: Chia grid cell ở bước nào?</p>
 <p>Không có bước chia grid cell, mà việc phân định toạ độ bounding box nằm ở grid cell nào sẽ được tính toán lúc đưa vào hàm Loss để training</p>
-<p>[<a href="#1by1_conv_b" style="color:red;">Back?</a>]<a name="1by1_conv" style="color:red;"></a>: Kiến trúc mạng được truyền cảm hứng bởi mạng GoogLeNet (Inception) như thế nào?</p>
+<p>[<a href="#iou" style="color:red;">?</a>]<a name="iou_b" style="color:red;"></a>: IOU được tính như thế nào?</p>
+<p>Cách tính IOU được minh hoạ bằng hình vẽ sau:</p>
+<div class="text-center my-3">
+<img src="https://hungvm2.github.io/images/yolov1/iou.png" alt="IOU">
+</div>
+<p>Hoặc bằng code Python minh hoạ đơn giản như bên dưới:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">def</span> iou(box1, box2):
+    <span style="color:#008000"># box1, box2 là mảng chứa 4 phần tử: toạ độ tâm (x,y), kích thước rộng, dài của box (w,h)</span>
+    x1, y1, w1, h1 = box1
+    x2, y2, w2, h2 = box2
+    <span style="color:#008000"># Tính toán (left, top) và (right, bot) của intersection (vùng giao nhau giữa 2 box) </span>
+    i_left, i_top = max(x1 - int(w1/2), x2 - int(w2/2)), max(y1 - int(h1/2), y2 - int(h1/2))
+    i_right, i_bot = min(x1 + int(w1/2), x2 + int(w2/3)), min(y1 + int(h1/2), y2 + int(h1/2))
+    i_area = (i_right - i_left) * (i_bot - i_top)
+    <span style="color:#00f">return</span> i_area/(w1 * h1 + w2 * h2 - i_area)
+</code></pre></div><p>[<a href="#1by1_conv_b" style="color:red;">Back?</a>]<a name="1by1_conv" style="color:red;"></a>: Kiến trúc mạng được truyền cảm hứng bởi mạng GoogLeNet (Inception) như thế nào?</p>
 <p>Kiến trúc mạng của YOLO có sử dụng 1x1 Conv layer,</p>
 <p>[<a href="#loss_formular_b" style="color:red;">Back?</a>]<a name="loss_formular" style="color:red;"></a>: Hàm Loss dùng cho pretrained model của tác giả?</p>
 <p>Để đánh giá YOLO trên tập PASCAL POC, S = 7, B = 2, C = 20, hàm Loss vì thế sẽ có dạng:</p>
@@ -263,6 +283,7 @@ Pr(c) = \hat{p}(c) * \hat{C}\\
 <p>Shape của output tensor sẽ là:</p>
 <p>\begin{equation}Ouput\quad Shape = (S , S , B * 5 + C) = (7 , 7 , 2 * 5 + 20) = (7 , 7 , 30)\end{equation}</p>
 <p>Tại sao tác giả chọn B = 2 cho mỗi grid cell?</p>
+<p>[<a href="#bounding_box_b" style="color:red;">Back?</a>]<a name="bounding_box" style="color:red;"></a>:</p>
 <p>[<a href="#feature_scaling_b" style="color:red;">Back?</a>]<a name="feature_scaling" style="color:red;"></a> Tại sao phải có bước xử lý này?</p>
 <p>Đây là bước Scaling Features: đưa khoảng giá trị của các feature về cùng một scale trước khi vào hàm loss để giúp mô hình hội tụ nhanh và ổn định hơn khi training.</p>
 <p>[<a href="#sse_b" style="color:red;">Back?</a>]<a name="sse" style="color:red;"></a>: Hàm loss sử dụng là dạng gì?</p>
@@ -292,6 +313,10 @@ Pr(c) = \hat{p}(c) * \hat{C}\\
   <img src="https://hungvm2.github.io/images/yolov1/final_class_probs.png" alt="Class Probabilities" class="figure-img">
 </div>
 <h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
+<ul>
+<li><a href="https://arxiv.org/abs/1506.02640">You Only Look Once: Unified, Real-Time Object Detection</a> by Joseph Redmon, Santosh Divvala, Ross Girshick, Ali Farhadi</li>
+<li></li>
+</ul>
 
 
 
