@@ -211,7 +211,11 @@
 <h5 id="23-inference-testing">2.3. Inference (Testing)</h5>
 <p>Thường tâm của object sẽ chỉ nằm trong 1 gird cell, tuy nhiên có những trường hợp như object lớn hoặc object nằm gần viền của nhiều cell nên dễ bị detect ra nhiều box cho cùng một object.
 Để xử lý vấn đề này, khi testing, output của Network được đi qua một bước post processing sử dụng Non-max suppression (NMS) giúp triệt tiêu những box bị trùng nhau. Bước này giúp cải thiện thêm 2-3% mAP cho model. [<a href="#nms" style="color:red;">?</a>]<a name="nms_b"></a></p>
-<p>Pipe line của prediction:</p>
+<div class="text-center my-3">
+<img src="https://hungvm2.github.io/images/yolov1/nms.png" alt="NMS">
+</div>
+<p>Trên hình có thể thấy rõ, có 3 bounding box thuộc về 3 grid cell (3,1), (2,3), (3,3) cùng detect ra Object người. Bước NMS sẽ lấy Bounding box có Confidence Score lớn nhất trong 3 box này.</p>
+<p><strong><em>Pipe line của prediction:</em></strong></p>
 <blockquote>
 <p>Image (448,448,3) =&gt; Network Prediction =&gt; Output (7,7,30) =&gt; Tính lại class probabilities $Pr(c)$ =&gt; Bỏ qua các box có low probabilities =&gt; Non-max suppression =&gt; Final prediction</p>
 </blockquote>
@@ -261,10 +265,10 @@ Pr(c) = \hat{p}(c) * \hat{C}\\
 </div>
 <p>Hoặc bằng code Python minh hoạ đơn giản như bên dưới:</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">def</span> iou(box1, box2):
-    <span style="color:#008000"># box1, box2 là mảng chứa 4 phần tử: </span>
-    <span style="color:#008000"># toạ độ tâm (x,y), kích thước rộng, dài của box (w,h)</span>
-    x1, y1, w1, h1 = box1
-    x2, y2, w2, h2 = box2
+    <span style="color:#008000"># box1, box2 là mảng chứa 4 phần tử: x,y,w,h</span>
+    <span style="color:#008000"># x,y: toạ độ tâm; w,h: kích thước rộng, dài của box</span>
+    x1, y1, w1, h1 = box1[:4]
+    x2, y2, w2, h2 = box2[:4]
     <span style="color:#008000"># Tính toán (left, top) và (right, bot) của intersection (vùng giao nhau giữa 2 box) </span>
     i_left, i_top = max(x1 - int(w1/2), x2 - int(w2/2)), \
                     max(y1 - int(h1/2), y2 - int(h1/2))
@@ -274,9 +278,9 @@ Pr(c) = \hat{p}(c) * \hat{C}\\
     union_area = (w1 * h1 + w2 * h2 - intersection_area)
     <span style="color:#00f">return</span> intersection_area/union_area
 </code></pre></div><p>[<a href="#1by1_conv_b" style="color:red;">$ \triangleleft $</a>]<a name="1by1_conv"></a>: <strong>Kiến trúc mạng được truyền cảm hứng bởi mạng GoogLeNet (Inception)?</strong></p>
-<p>Kiến trúc mạng của YOLO có sử dụng 1x1 Conv layer, lấy cảm hứng từ mạng Inception. 1x1 Conv layer được sử dụng để giảm (hoặc tăng) chiều sâu của feature maps mà vẫn giữ nguyên kích thước dài rộng của feature maps.</p>
+<p>Kiến trúc mạng của YOLO có sử dụng <strong>1x1 Conv Layer</strong>, lấy cảm hứng từ mạng Inception. 1x1 Conv layer được sử dụng để <strong>giảm</strong> (hoặc tăng) chiều sâu của feature maps mà vẫn giữ nguyên kích thước dài rộng của feature maps.</p>
 <p>Thường 1x1 Conv layer sẽ sử dụng trước khi qua các 3x3, 5x5.. Conv layer để giúp Network giảm khối lượng tính toán và weights.</p>
-<p>Ví dụ:</p>
+<p><strong><em>Ví dụ:</em></strong></p>
 <p>Kích thước Input Tensor A (Batch size, Channel, High, Width): (1, 20, 64, 64).</p>
 <p>Cho Tensor A đi qua một Conv layer 3x3; Số Filters: 32; Stride = 1; Padding = 0 (Lưu ý: số channel của 1 filter luôn bằng số channel của input tensor, tuy nhiên khi ký hiệu thì quy ước ko ghi số channel của filter)</p>
 <p>=&gt; Kích thước Output sẽ là: (1, 32, 62, 62), Số lượng Weights = 32x(20x3x3) =  5760</p>
@@ -321,12 +325,17 @@ Pr(c) = \hat{p}(c) * \hat{C}\\
 <li>Learning rate (LR) schedule: tăng dần LR từ $10^{-3}$ tới $10^{-2}$ thay vì để LR cao từ đầu để tránh model bị phân kỳ (diverge) giai đoạn đầu, sau đó giữ nguyên LR $10^{-2}$ trong 75 epochs, giảm xuống $10^{-3}$ cho 30 epochs tiếp theo, giảm xuống $10^{-4}$ cho 30 epochs cuối.</li>
 <li>Data augmentation (làm giàu bộ dữ liệu): Random scaling (phóng to, thu nhỏ ngẫu nhiên), random translation (xê dịch vị trí pixel ngẫu nhiên) tới 20% kích thước ảnh. Ngẫu nhiên điều chỉnh độ phơi sáng (exposure) và bão hoà (saturation) của ảnh tới 1.5 lần trong không gian màu HSV. Data augmentation được sử dụng để giúp giảm overfit cho model</li>
 </ul>
-<p>[<a href="#original_pc_b" style="color:red;">$ \triangleleft $</a>]<a name="original_pc"></a>: Công thức gốc tính xác suất của mỗi class trong grid cell?</p>
+<p>[<a href="#original_pc_b" style="color:red;">$ \triangleleft $</a>]<a name="original_pc"></a>: Công thức này khác với công thức gốc trong paper?</p>
+<p>Mình chỉ thay đổi một chút về ký hiệu để đỡ lầm tưởng ký tự (c) có liên quan đến giá trị Confidence Score C của Bounding box. Bên dưới là công thức gốc:</p>
  </div>
 <div class="text-center my-3">
   <img src="https://hungvm2.github.io/images/yolov1/final_class_probs.png" alt="Class Probabilities" class="figure-img">
 </div>
-<h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
+<p>[<a href="#nms_b" style="color:red;">$ \triangleleft $</a>]<a name="nms"></a>:<strong>NMS được tính như thế nào?</strong></p>
+<p>Thuật toán NMS được minh hoạ bằng đoạn code sau:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">def</span> nms(boxes_list):
+    <span style="color:#00f">pass</span>
+</code></pre></div><h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
 <ul>
 <li><a href="https://arxiv.org/abs/1506.02640">You Only Look Once: Unified, Real-Time Object Detection</a> by Joseph Redmon, Santosh Divvala, Ross Girshick, Ali Farhadi</li>
 <li><a href="https://stats.stackexchange.com/questions/194142/what-does-1x1-convolution-mean-in-a-neural-network">What does 1x1 Convolution mean in a Neural Network</a></li>
