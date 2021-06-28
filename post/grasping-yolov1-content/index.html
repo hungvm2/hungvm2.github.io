@@ -190,7 +190,7 @@
 <p><strong>Trong đó:</strong></p>
 <p>Gọi &ldquo;Box Predictor&rdquo; là Bounding box có IOU lớn nhất trong grid cell với ground truth box [<a href="#bounding_box" style="color:red;">?</a>]<a name="bounding_box_b"></a></p>
 <ul>
-<li>$\lambda_{coord} = 5$ , $\lambda_{noobj} = 0.5$ [<a href="#lambda" style="color:red;">?</a>]<a name="lambda_b" style="color:red;"></a></li>
+<li>$\lambda_{coord} = 5$ , $\lambda_{noobj} = 0.5$ [<a href="#lambda" style="color:red;">?</a>]<a name="lambda_b"></a></li>
 <li>$\mathbb{1}_{i}^{obj}$ nhận giá trị 1 nếu object xuất hiện ở cell thứ $i$ ; 0 nếu ngược lại</li>
 <li>$\mathbb{1}_{ij}^{obj}$ nhận giá trị 1 nếu bounding box là &ldquo;Box Predictor&rdquo; ; 0 nếu ngược lại</li>
 <li>$x_{i},y_{i}$: Toạ độ tâm (đã biến đổi) của ground truth box ở grid cell thứ $i$</li>
@@ -254,7 +254,7 @@ Pr(c) = \hat{p}(c) * \hat{C}\\
 <p>Bạn có thể xem trong <a href="https://github.com/pjreddie/darknet/blob/master/cfg/yolov1.cfg">file config</a> của YOLO, thứ tự các layer trong file config chính là thứ tự các layer của YOLO Network</p>
 <p>[<a href="#grid_cell_b" style="color:red;">Back?</a>]<a name="grid_cell"></a>: Chia grid cell ở bước nào?</p>
 <p>Không có bước chia grid cell, mà việc phân định toạ độ bounding box nằm ở grid cell nào sẽ được tính toán lúc đưa vào hàm Loss để training</p>
-<p>[<a href="#iou_b" style="color:red;">$\triangleleft$</a>]<a name="iou"></a>: IOU được tính như thế nào?</p>
+<p>[<a href="#iou_b" style="color:red;">\triangleleft</a>]<a name="iou"></a>: IOU được tính như thế nào?</p>
 <p>Cách tính IOU được minh hoạ bằng hình vẽ sau:</p>
 <div class="text-center my-3">
 <img src="https://hungvm2.github.io/images/yolov1/IOU.png" alt="IOU">
