@@ -188,7 +188,7 @@
 \end{multline}
 </div>
 <p><strong>Trong đó:</strong></p>
-<p>Gọi &ldquo;Box Predictor&rdquo; là Bounding box có IOU lớn nhất trong grid cell với ground truth box [<a href="#bounding_box" style="color:red;">?</a>]<a name="bounding_box_b"></a></p>
+<p>Gọi &ldquo;Box Predictor&rdquo; là Bounding box có IOU lớn nhất trong grid cell với ground truth box</p>
 <ul>
 <li>$\lambda_{coord} = 5$ , $\lambda_{noobj} = 0.5$ [<a href="#lambda" style="color:red;">?</a>]<a name="lambda_b"></a></li>
 <li>$\mathbb{1}_{i}^{obj}$ nhận giá trị 1 nếu object xuất hiện ở cell thứ $i$ ; 0 nếu ngược lại</li>
@@ -301,7 +301,6 @@ Pr(c) = \hat{p}(c) * \hat{C}\\
 <p>Shape của output tensor sẽ là:</p>
 <p>\begin{equation}Ouput\quad Shape = (S , S , B * 5 + C) = (7 , 7 , 2 * 5 + 20) = (7 , 7 , 30)\end{equation}</p>
 <p>Tại sao tác giả chọn B = 2 cho mỗi grid cell?</p>
-<p>[<a href="#bounding_box_b" style="color:red;">$ \triangleleft $</a>]<a name="bounding_box"></a>:</p>
 <p>[<a href="#feature_scaling_b" style="color:red;">$ \triangleleft $</a>]<a name="feature_scaling"></a>: <strong>Tại sao phải có bước xử lý này?</strong></p>
 <p>Đây là bước Scaling Features: đưa khoảng giá trị của các feature về cùng một scale trước khi vào hàm loss để giúp mô hình hội tụ nhanh và ổn định hơn khi training.</p>
 <p>[<a href="#sse_b" style="color:red;">$ \triangleleft $</a>]<a name="sse"></a>: Hàm loss sử dụng là dạng gì?</p>
