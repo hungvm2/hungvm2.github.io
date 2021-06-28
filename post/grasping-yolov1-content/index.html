@@ -245,14 +245,14 @@ Pr(c) = \hat{p}(c) * \hat{C}\\
 <blockquote>
 <p>Trong phần &ldquo;Hiểu Paper&rdquo; này, mình sẽ đi vào phân tích các lý do tại sao tác giả chọn hướng tiếp cận đó, cũng như giải thích và làm rõ thêm các thuật ngữ, công thức&hellip;</p>
 </blockquote>
-<p>[<a href="#previous_model_b" style="color:red;">$ \triangleleft $</a>]<a name="previous_model"></a>: Kỹ thuật sử dụng ở một số phương pháp trước đây?</p>
+<p>[<a href="#previous_model_b" style="color:red;">$ \triangleleft $</a>]<a name="previous_model"></a>: <strong>Kỹ thuật sử dụng ở một số phương pháp trước đây?</strong></p>
 <ul>
 <li>Deformable Parts Models (DPM) sử dụng &ldquo;Sliding Window&rdquo; sau đó phân loại trên các &ldquo;Window&rdquo; này</li>
 <li>R-CNN sử dụng &ldquo;Region Proposal&rdquo; để đề xuất ra các Bounding boxes tiềm năng, sau đó phân loại (Classify) trên những boxes này và một bước hậu xử lý được sử dụng để định vị lại chính xác các Bounding boxes, bỏ đi các boxes bị trùng lặp&hellip; Hướng tiếp cận này là một Pipeline phức tạp (gồm nhiều step/model nối tiếp nhau) nên rất chậm và khó để tối ưu.</li>
 </ul>
-<p>[<a href="#network_detail_b" style="color:red;">$ \triangleleft $</a>]<a name="network_detail"></a>: Chi tiết về kiến trúc của network?</p>
+<p>[<a href="#network_detail_b" style="color:red;">$ \triangleleft $</a>]<a name="network_detail"></a>: <strong>Chi tiết về kiến trúc của network?</strong></p>
 <p>Bạn có thể xem trong <a href="https://github.com/pjreddie/darknet/blob/master/cfg/yolov1.cfg">file config</a> của YOLO, thứ tự các layer trong file config chính là thứ tự các layer của YOLO Network</p>
-<p>[<a href="#grid_cell_b" style="color:red;">$ \triangleleft $</a>]<a name="grid_cell"></a>: Chia grid cell ở bước nào?</p>
+<p>[<a href="#grid_cell_b" style="color:red;">$ \triangleleft $</a>]<a name="grid_cell"></a>: <strong>Chia grid cell ở bước nào?</strong></p>
 <p>Không có bước chia grid cell, mà việc phân định toạ độ bounding box nằm ở grid cell nào sẽ được tính toán lúc đưa vào hàm Loss để training</p>
 <p>[<a href="#iou_b" style="color:red;">$ \triangleleft $</a>]<a name="iou"></a>: <strong>IOU được tính như thế nào?</strong></p>
 <p>Cách tính IOU được minh hoạ bằng hình vẽ sau:</p>
@@ -273,9 +273,17 @@ Pr(c) = \hat{p}(c) * \hat{C}\\
     intersection_area = (i_right - i_left) * (i_bot - i_top)
     union_area = (w1 * h1 + w2 * h2 - intersection_area)
     <span style="color:#00f">return</span> intersection_area/union_area
-</code></pre></div><p>[<a href="#1by1_conv_b" style="color:red;">$ \triangleleft $</a>]<a name="1by1_conv"></a>: Kiến trúc mạng được truyền cảm hứng bởi mạng GoogLeNet (Inception) như thế nào?</p>
-<p>Kiến trúc mạng của YOLO có sử dụng 1x1 Conv layer,</p>
-<p>[<a href="#loss_formular_b" style="color:red;">$ \triangleleft $</a>]<a name="loss_formular"></a>: Hàm Loss dùng cho pretrained model của tác giả?</p>
+</code></pre></div><p>[<a href="#1by1_conv_b" style="color:red;">$ \triangleleft $</a>]<a name="1by1_conv"></a>: <strong>Kiến trúc mạng được truyền cảm hứng bởi mạng GoogLeNet (Inception)?</strong></p>
+<p>Kiến trúc mạng của YOLO có sử dụng 1x1 Conv layer, lấy cảm hứng từ mạng Inception. 1x1 Conv layer được sử dụng để giảm (hoặc tăng) chiều sâu của feature maps mà vẫn giữ nguyên kích thước dài rộng của feature maps.</p>
+<p>Thường 1x1 Conv layer sẽ sử dụng trước khi qua các 3x3, 5x5.. Conv layer để giúp Network giảm khối lượng tính toán và weights.</p>
+<p>Ví dụ:</p>
+<p>Kích thước Input Tensor A (Batch size, Channel, High, Width): (1, 20, 64, 64).</p>
+<p>Cho Tensor A đi qua một Conv layer 3x3; Số Filters: 32; Stride = 1; Padding = 0 (Lưu ý: số channel của 1 filter luôn bằng số channel của input tensor, tuy nhiên khi ký hiệu thì quy ước ko ghi số channel của filter)</p>
+<p>=&gt; Kích thước Output sẽ là: (1, 32, 62, 62), Số lượng Weights = 32x(20x3x3) =  5760</p>
+<p>Nếu cho Tensor A đi qua 1x1 Conv Layer có 8 filters rồi qua 3x3 Conv Layer có 32 filter giống như trên (Stride = 1, Padding = 0 ở cả 2 Conv layer)</p>
+<p>=&gt; Kích thước Output vẫn là: (1, 32, 62, 62), Số lượng Weights = 8x(20x1x1) + 32x(8x3x3) = 2464</p>
+<p>Ta có thể thấy số lượng Weights đã giảm gần 1/2 cho tình huống trên, dù không thay đổi shape của Input và Output.</p>
+<p>[<a href="#loss_formular_b" style="color:red;">$ \triangleleft $</a>]<a name="loss_formular"></a>: <strong>Hàm Loss dùng cho pretrained model của tác giả?</strong></p>
 <p>Để đánh giá YOLO trên tập PASCAL POC, S = 7, B = 2, C = 20, hàm Loss vì thế sẽ có dạng:</p>
 <div>
 \begin{multline}
@@ -290,7 +298,7 @@ Pr(c) = \hat{p}(c) * \hat{C}\\
 <p>\begin{equation}Ouput\quad Shape = (S , S , B * 5 + C) = (7 , 7 , 2 * 5 + 20) = (7 , 7 , 30)\end{equation}</p>
 <p>Tại sao tác giả chọn B = 2 cho mỗi grid cell?</p>
 <p>[<a href="#bounding_box_b" style="color:red;">$ \triangleleft $</a>]<a name="bounding_box"></a>:</p>
-<p>[<a href="#feature_scaling_b" style="color:red;">$ \triangleleft $</a>]<a name="feature_scaling"></a> Tại sao phải có bước xử lý này?</p>
+<p>[<a href="#feature_scaling_b" style="color:red;">$ \triangleleft $</a>]<a name="feature_scaling"></a>: <strong>Tại sao phải có bước xử lý này?</strong></p>
 <p>Đây là bước Scaling Features: đưa khoảng giá trị của các feature về cùng một scale trước khi vào hàm loss để giúp mô hình hội tụ nhanh và ổn định hơn khi training.</p>
 <p>[<a href="#sse_b" style="color:red;">$ \triangleleft $</a>]<a name="sse"></a>: Hàm loss sử dụng là dạng gì?</p>
 <p>Hàm được sử dụng là Sum Squared Error. Tác giả giải thích lí do sử dụng hàm này vì nó dễ để tối ưu.</p>
@@ -321,7 +329,7 @@ Pr(c) = \hat{p}(c) * \hat{C}\\
 <h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
 <ul>
 <li><a href="https://arxiv.org/abs/1506.02640">You Only Look Once: Unified, Real-Time Object Detection</a> by Joseph Redmon, Santosh Divvala, Ross Girshick, Ali Farhadi</li>
-<li></li>
+<li><a href="https://stats.stackexchange.com/questions/194142/what-does-1x1-convolution-mean-in-a-neural-network">What does 1x1 Convolution mean in a Neural Network</a></li>
 </ul>
 
 
