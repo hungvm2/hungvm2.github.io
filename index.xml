@@ -17,16 +17,5 @@
 I. Đọc Paper  Trong phần &amp;ldquo;Đọc Paper&amp;rdquo; này, mình sẽ tóm lược lại những ý chính của tác giả, có bỏ qua một số phần không quá quan trọng. Khi đọc sẽ có các reference (có dạng [?]). Bạn có thể click vào các câu hỏi đó để dẫn xuống phần &amp;ldquo;Hiểu Paper&amp;rdquo; bên dưới để đọc sâu hơn về vấn đề được đề cập.</description>
     </item>
     
-    <item>
-      <title>Yolo Versions Comparison</title>
-      <link>https://hungvm2.github.io/post/yolo-versions-comparison/</link>
-      <pubDate>Sun, 13 Jun 2021 16:53:39 +0700</pubDate>
-      
-      <guid>https://hungvm2.github.io/post/yolo-versions-comparison/</guid>
-      <description>Yolov4 Scaled:
- Input: 512x512x3 Scaling Cross-Stage-Partial (CSP) Network approach  Yolov4:
- Backbone: CSPDarknet53  Data Augmentation: CutMix and Mosaic Mish Activation Cross-stage partial connections (CSP) Multiinput weighted residual connections (MiWRC) DropBlock regularization Class label smoothing   Detector:  Neck: PANet path-aggregation Head: same as YOLOv3 CIoU-loss CmBN DropBlock regularization Mosaic data augmentation Self-Adversarial Training Eliminate grid sensitivity Using multiple anchors for a single ground truth Cosine annealing scheduler Optimal hyperparameters Random training shapes Mish activation, SPP-block SAM-block DIoU-NMS    Yolov3:</description>
-    </item>
-    
   </channel>
 </rss>
