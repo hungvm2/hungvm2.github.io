@@ -127,6 +127,9 @@
 </ul>
 <h4 id="2-kiến-trúc-của-yolo">2: Kiến trúc của YOLO</h4>
 <p>Hệ thống YOLO <strong>chia</strong> ảnh đầu vào thành <strong>một lưới</strong> $S\times S$ các ô vuông (grid cell). Nếu trung tâm (center) của vật thể rơi vào cell nào, thì cell đó sẽ chịu trách nhiệm phát hiện vật thể đó. [<a href="#grid_cell" style="color:red;">?</a>]<a name="grid_cell_b" style="color:red;"></a></p>
+<div class="text-center my-3">
+<img src="https://hungvm2.github.io/images/yolov1/grid_cell.png" alt="Grid Cell">
+</div>
 <p><strong>Mỗi Grid cell</strong> cần dự đoán $B$ bounding boxes và $N$ giá trị xác suất của các lớp (class) đối tượng:</p>
 <ul>
 <li>
@@ -139,7 +142,7 @@
 <p>1 confidence score $C$, tính theo công thức:</p>
 <p>\begin{equation}C_{z} = Pr(Object) * IOU_{pred_{z}}^{truth}, \quad z = (1,&hellip;,B) \label{ref_c}\end{equation}</p>
 <p>[Pr(Object) =
-\begin{cases}$
+\begin{cases}
 0 &amp; \quad \text{nếu không có object trong grid cell}\<br>
 1 &amp; \quad \text{nếu có object trong grid cell}
 \end{cases}
@@ -255,7 +258,7 @@ Pr(c) = \hat{p}(c) * \hat{C}\\
 <p>[<a href="#iou" style="color:red;">?</a>]<a name="iou_b" style="color:red;"></a>: IOU được tính như thế nào?</p>
 <p>Cách tính IOU được minh hoạ bằng hình vẽ sau:</p>
 <div class="text-center my-3">
-<img src="https://hungvm2.github.io/images/yolov1/iou.png" alt="IOU">
+<img src="https://hungvm2.github.io/images/yolov1/IOU.png" alt="IOU">
 </div>
 <p>Hoặc bằng code Python minh hoạ đơn giản như bên dưới:</p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">def</span> iou(box1, box2):
