@@ -265,10 +265,13 @@ Pr(c) = \hat{p}(c) * \hat{C}\\
     x1, y1, w1, h1 = box1
     x2, y2, w2, h2 = box2
     <span style="color:#008000"># Tính toán (left, top) và (right, bot) của intersection (vùng giao nhau giữa 2 box) </span>
-    i_left, i_top = max(x1 - int(w1/2), x2 - int(w2/2)), max(y1 - int(h1/2), y2 - int(h1/2))
-    i_right, i_bot = min(x1 + int(w1/2), x2 + int(w2/3)), min(y1 + int(h1/2), y2 + int(h1/2))
-    i_area = (i_right - i_left) * (i_bot - i_top)
-    <span style="color:#00f">return</span> i_area/(w1 * h1 + w2 * h2 - i_area)
+    i_left, i_top = max(x1 - int(w1/2), x2 - int(w2/2)), \
+                    max(y1 - int(h1/2), y2 - int(h1/2))
+    i_right, i_bot = min(x1 + int(w1/2), x2 + int(w2/3)), \
+                    min(y1 + int(h1/2), y2 + int(h1/2))
+    intersection_area = (i_right - i_left) * (i_bot - i_top)
+    union_area = (w1 * h1 + w2 * h2 - intersection_area)
+    <span style="color:#00f">return</span> intersection_area/union_area
 </code></pre></div><p>[<a href="#1by1_conv_b" style="color:red;">Back?</a>]<a name="1by1_conv" style="color:red;"></a>: Kiến trúc mạng được truyền cảm hứng bởi mạng GoogLeNet (Inception) như thế nào?</p>
 <p>Kiến trúc mạng của YOLO có sử dụng 1x1 Conv layer,</p>
 <p>[<a href="#loss_formular_b" style="color:red;">Back?</a>]<a name="loss_formular" style="color:red;"></a>: Hàm Loss dùng cho pretrained model của tác giả?</p>
