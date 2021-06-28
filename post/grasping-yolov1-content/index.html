@@ -281,16 +281,12 @@ Pr(c) = p(c) * C\\
 <p>Kiến trúc mạng của YOLO có sử dụng <strong>1x1 Conv Layer</strong>, lấy cảm hứng từ mạng Inception. 1x1 Conv layer được sử dụng để <strong>giảm</strong> (hoặc tăng) chiều sâu của feature maps mà vẫn giữ nguyên kích thước dài rộng của feature maps.</p>
 <p>Thường 1x1 Conv layer sẽ sử dụng trước khi qua các 3x3, 5x5.. Conv layer để giúp Network giảm khối lượng tính toán và weights.</p>
 <p><strong><em>Ví dụ:</em></strong></p>
-<pre><code>Kích thước Input Tensor A (Batch size, Channel, High, Width): (1, 20, 64, 64).
-
-Cho Tensor A đi qua một Conv layer 3x3; Số Filters: 32; Stride = 1; Padding = 0 (Lưu ý: số channel của 1 filter luôn bằng số channel của input tensor, tuy nhiên khi ký hiệu thì quy ước ko ghi số channel của filter)
-
-=&gt; Kích thước Output sẽ là: (1, 32, 62, 62), Số lượng Weights = 32x(20x3x3) =  5760
-
-Nếu cho Tensor A đi qua 1x1 Conv Layer có 8 filters rồi qua 3x3 Conv Layer có 32 filter giống như trên (Stride = 1, Padding = 0 ở cả 2 Conv layer)
-
-=&gt; Kích thước Output vẫn là: (1, 32, 62, 62), Số lượng Weights = 8x(20x1x1) + 32x(8x3x3) = 2464
-</code></pre><p>Ta có thể thấy số lượng Weights đã giảm gần 1/2 cho tình huống trên, dù không thay đổi shape của Input và Output.</p>
+<p>Kích thước Input Tensor A (Batch size, Channel, High, Width): (1, 20, 64, 64).</p>
+<p>Cho Tensor A đi qua một Conv layer 3x3; Số Filters: 32; Stride = 1; Padding = 0 (Lưu ý: số channel của 1 filter luôn bằng số channel của input tensor, tuy nhiên khi ký hiệu thì quy ước ko ghi số channel của filter)</p>
+<p>=&gt; Kích thước Output sẽ là: (1, 32, 62, 62), Số lượng Weights = 32x(20x3x3) =  5760</p>
+<p>Nếu cho Tensor A đi qua 1x1 Conv Layer có 8 filters rồi qua 3x3 Conv Layer có 32 filter giống như trên (Stride = 1, Padding = 0 ở cả 2 Conv layer)</p>
+<p>=&gt; Kích thước Output vẫn là: (1, 32, 62, 62), Số lượng Weights = 8x(20x1x1) + 32x(8x3x3) = 2464</p>
+<p>Ta có thể thấy số lượng Weights đã giảm gần 1/2 cho tình huống trên, dù không thay đổi shape của Input và Output.</p>
 <p>[<a href="#loss_formular_b" style="color:red;">$ \triangleleft $</a>]<a name="loss_formular"></a>: <strong>Hàm Loss dùng cho pretrained model của tác giả?</strong></p>
 <p>Để đánh giá YOLO trên tập PASCAL POC, S = 7, B = 2, C = 20, hàm Loss vì thế sẽ có dạng:</p>
 <div>
