@@ -112,7 +112,7 @@
 <blockquote>
 <p>Trong phần &ldquo;Đọc Paper&rdquo; này, mình sẽ tóm lược lại những ý chính của tác giả, có bỏ qua một số phần không quá quan trọng. Khi đọc sẽ có các reference (có dạng [<a style="color:red;">?</a>]). Bạn có thể click vào các câu hỏi đó để dẫn xuống phần &ldquo;Hiểu Paper&rdquo; bên dưới để đọc sâu hơn về vấn đề được đề cập.</p>
 </blockquote>
-<h4 id="1-giới-thiệu-chung-về-mô-hình-model">1: Giới thiệu chung về mô hình (model)</h4>
+<h4 id="1-giới-thiệu-chung-về-mô-hình-model">1. Giới thiệu chung về mô hình (model)</h4>
 <p>Các nghiên cứu trước đây xử lý bài toán Object Detection theo hướng Classification (phân loại) [<a href="#previous_model" style="color:red;">?</a>]<a name="previous_model_b"></a>, còn tác giả YOLO lại <strong>tiếp cận theo hướng Regression</strong> (hồi quy).</p>
 <p>YOLO là <strong>một Neural Network đơn nhất</strong> dự đoán đồng thời cả Bounding boxes và Class probabilities từ ảnh đầu vào qua một evaluation duy nhất.</p>
 <p>Kiến trúc hợp nhất này giúp cho YOLO có các ưu điểm:</p>
@@ -125,7 +125,7 @@
 <li><strong>Độ chính xác thấp hơn</strong> các phương pháp state-of-the-art khác</li>
 <li><strong>Khó khăn</strong> khi xác định chính xác <strong>vị trí</strong> của các vật thể (Localization), đặc biệt các <strong>vật thể cỡ nhỏ</strong>.</li>
 </ul>
-<h4 id="2-kiến-trúc-của-yolo">2: Kiến trúc của YOLO</h4>
+<h4 id="2-kiến-trúc-của-yolo">2. Kiến trúc của YOLO</h4>
 <p>Hệ thống YOLO <strong>chia</strong> ảnh đầu vào thành <strong>một lưới</strong> $S\times S$ các ô vuông (grid cell). Nếu trung tâm (center) của vật thể rơi vào cell nào, thì cell đó sẽ chịu trách nhiệm phát hiện vật thể đó. [<a href="#grid_cell" style="color:red;">?</a>]<a name="grid_cell_b" style="color:red;"></a></p>
 <div class="text-center my-3">
 <img src="https://hungvm2.github.io/images/yolov1/grid_cell.png" alt="Grid Cell">
@@ -140,12 +140,12 @@
 </li>
 <li>
 <p>1 <strong>confidence score</strong> $C$, tính theo công thức:</p>
-<p>\begin{equation}C_{z} = Pr(Object) * IOU_{pred_{z}}^{truth}, \quad z = (1,&hellip;,B) \label{ref_c}\end{equation}</p>
-<p>[ Pr(Object) =
+<p>\begin{equation*}C_{z} = Pr(Object) * IOU_{pred_{z}}^{truth}, \quad z = (1,&hellip;,B) \label{ref_c}\end{equation}</p>
+<p>\( Pr(Object) =
 \begin{cases}
 0 &amp; \quad \text{nếu không có object trong grid cell} \<br>
 1 &amp; \quad \text{nếu có object trong grid cell}
-\end{cases} ]</p>
+\end{cases} \)</p>
 <p>$IOU_{pred_{z}}^{truth}$: Giá trị IOU giữa ground truth và predicted bounding box. [<a href="#iou" style="color:red;">?</a>]<a name="iou_b" style="color:red;"></a></p>
 </li>
 </ul>
@@ -175,7 +175,7 @@
 <li><strong>Normalize</strong> (w,h) của bounding box để w,h trong đoạn [0,1]: (w = w/W , h = h/H | W,H: size của input)</li>
 <li>Biến đổi toạ độ (x,y) thành toạ độ <strong>offset từ top-left của grid cell</strong> mà nó nằm trong để x, y nằm trong đoạn [0,1]. VD: x,y nằm chính giữa cell thì x = 0.5, y = 0.5</li>
 <li>Confidence score (\ref{ref_c}): $C = IOU$ hoặc $C = 0$ nên cũng nằm trong đoạn [0,1]</li>
-<li>$p(c)$ (\ref{ref_pc}): là xác suất detect ra vật thể class c nên cũng nằm trong đoạn [0,1]</li>
+<li>$p(c)$ [<a style="color:red;">(\ref{ref_pc})</a>]: là xác suất detect ra vật thể class c nên cũng nằm trong đoạn [0,1]</li>
 </ul>
 <p><strong>Bước 4</strong>: Xây dựng hàm Loss [<a href="#sse" style="color:red;">?</a>]<a name="sse_b" style="color:red;"></a> [<a href="#loss_formular" style="color:red;">?</a>]<a name="loss_formular_b"></a></p>
 <div>
@@ -215,11 +215,11 @@
 <img src="https://hungvm2.github.io/images/yolov1/nms.png" alt="NMS">
 </div>
 <p>Trên hình có thể thấy rõ, có 3 bounding box thuộc về 3 grid cell (3,1), (2,3), (3,3) cùng detect ra Object người. Bước NMS sẽ lấy Bounding box có Confidence Score lớn nhất trong 3 box này.</p>
-<p><strong><em>Pipe line của prediction:</em></strong>
-$Image (448,448,3) =&gt; Network Prediction =&gt; Output (7,7,30) =&gt; Tính lại class probabilities Pr(c) =&gt; Bỏ qua các box có low probabilities =&gt; Non-max suppression =&gt; Final prediction$</p>
-<p>Giá trị xác suất nhận diện của mỗi class trong một grid cell sẽ được tính lại theo công thức sau: [<a href="#original_pc" style="color:red;">?</a>]<a name="original_pc_b"></a></p>
+<p><strong><em>Pipe line của prediction:</em></strong></p>
+<p>Image $(448,448,3) \Rightarrow $ Network Prediction $\Rightarrow $ Output $(7,7,30) \Rightarrow $ Tính lại class probabilities $Pr(c) \Rightarrow $ Bỏ qua các box có low probabilities $\Rightarrow $ Non-max suppression $\Rightarrow $ Final prediction.</p>
+<p><strong><em>Giá trị xác suất nhận diện của mỗi class trong một grid cell sẽ được tính lại theo công thức sau:</em></strong> [<a href="#original_pc" style="color:red;">?</a>]<a name="original_pc_b"></a></p>
 <div>
-\begin{multline}
+\begin{multline*}
 Pr(c) = p(c) * C\\
  = Pr(Class_c|Object) * Pr(Object) * IOU_{pred}^{truth}\\
   = Pr(Class_{c}) * IOU_{pred}^{truth}
@@ -249,8 +249,8 @@ Pr(c) = p(c) * C\\
 </blockquote>
 <p>[<a href="#previous_model_b" style="color:red;">$ \triangleleft $</a>]<a name="previous_model"></a>: <strong>Kỹ thuật sử dụng ở một số phương pháp trước đây?</strong></p>
 <ul>
-<li>Deformable Parts Models (DPM) sử dụng &ldquo;Sliding Window&rdquo; sau đó phân loại trên các &ldquo;Window&rdquo; này</li>
-<li>R-CNN sử dụng &ldquo;Region Proposal&rdquo; để đề xuất ra các Bounding boxes tiềm năng, sau đó phân loại (Classify) trên những boxes này và một bước hậu xử lý được sử dụng để định vị lại chính xác các Bounding boxes, bỏ đi các boxes bị trùng lặp&hellip; Hướng tiếp cận này là một Pipeline phức tạp (gồm nhiều step/model nối tiếp nhau) nên rất chậm và khó để tối ưu.</li>
+<li>Deformable Parts Models (DPM) sử dụng &ldquo;<strong>Sliding Window</strong>&rdquo; sau đó phân loại trên các &ldquo;Window&rdquo; này</li>
+<li>R-CNN sử dụng &ldquo;<strong>Region Proposal</strong>&rdquo; để đề xuất ra các Bounding boxes tiềm năng, sau đó phân loại (Classify) trên những boxes này và một bước hậu xử lý được sử dụng để định vị lại chính xác các Bounding boxes, bỏ đi các boxes bị trùng lặp&hellip; Hướng tiếp cận này là một Pipeline phức tạp (gồm nhiều step/model nối tiếp nhau) nên rất chậm và khó để tối ưu.</li>
 </ul>
 <p>[<a href="#network_detail_b" style="color:red;">$ \triangleleft $</a>]<a name="network_detail"></a>: <strong>Chi tiết về kiến trúc của network?</strong></p>
 <p>Bạn có thể xem trong <a href="https://github.com/pjreddie/darknet/blob/master/cfg/yolov1.cfg">file config</a> của YOLO, thứ tự các layer trong file config chính là thứ tự các layer của YOLO Network</p>
@@ -258,7 +258,7 @@ Pr(c) = p(c) * C\\
 <p>Không có bước chia grid cell, mà việc phân định toạ độ bounding box nằm ở grid cell nào sẽ được tính toán lúc đưa vào hàm Loss để training</p>
 <p>[<a href="#1by1_conv_b" style="color:red;">$ \triangleleft $</a>]<a name="1by1_conv"></a>: <strong>Kiến trúc mạng được truyền cảm hứng bởi mạng GoogLeNet (Inception)?</strong></p>
 <p>Kiến trúc mạng của YOLO có sử dụng <strong>1x1 Conv Layer</strong>, lấy cảm hứng từ mạng Inception. 1x1 Conv layer được sử dụng để <strong>giảm</strong> (hoặc tăng) chiều sâu của feature maps mà vẫn giữ nguyên kích thước dài rộng của feature maps.</p>
-<p>Thường 1x1 Conv layer sẽ sử dụng trước khi qua các 3x3, 5x5.. Conv layer để giúp Network giảm khối lượng tính toán và weights.</p>
+<p>Thường 1x1 Conv layer sẽ sử dụng trước khi qua các Conv layer 3x3, 5x5&hellip; để giúp Network giảm khối lượng tính toán.</p>
 <p><strong><em>Ví dụ:</em></strong></p>
 <p>Kích thước Input Tensor A (Batch size, Channel, High, Width): $(1, 20, 64, 64)$.</p>
 <p>Cho Tensor A đi qua một Conv layer 3x3; Số Filters: 32; Stride = 1; Padding = 0 (Lưu ý: số channel của 1 filter luôn bằng số channel của input tensor, tuy nhiên khi ký hiệu thì quy ước ko ghi số channel của filter)</p>
@@ -290,10 +290,10 @@ Pr(c) = p(c) * C\\
 <li>Những grid cell không chứa object thì các giá trị Confidence scores sẽ bằng 0, việc này làm tăng sức mạnh của gradient (overpowering the gradient) ở những cell có chứa objects, khiến model bị mất ổn định. Để giải quyết, [<a href="#lambda_b" style="color:red;">$ \triangleleft $</a>]<a name="lambda"></a> tác giả thêm các hệ số &ldquo;$λ_{coord} = 5$&rdquo; và &ldquo;$λ_{noobj} = 0.5$&rdquo; để tăng loss từ toạ độ bounding box và giảm loss từ Confidence score.</li>
 </ul>
 <p>Khi training, mỗi grid cell cần predict B bounding boxes, tuy nhiên sẽ chỉ Bounding box có IOU lớn nhất so với ground truth box mới được chọn lựa để tính toán hàm loss (chọn làm &ldquo;predictor&rdquo;). Điều này sẽ giúp mỗi predicted Bounding box sẽ chỉ chuyên môn hoá vào việc detect object có kích thước, tỉ lệ nhất định, giúp tăng Recall của model</p>
-<p>[<a href="#quare_root_wh_b" style="color:red;">$ \triangleleft $</a>]<a name="square_root_wh"></a>: <strong>Tại sao lại sử dụng căn bậc hai của (w,h)</strong>
-Lí do là vì, Box càng lớn thì sai số tuyệt đối về kích thước (w, h) giữa predicted value và ground truth value cũng sẽ càng lớn hơn là box nhỏ. Để xử lý vấn đề này, tác giả sử dụng sai số giữa căn bậc hai của kích thước predict và ground truth thay vì giá trị w,h gốc.</p>
-<p><strong><em>Ví dụ:</em></strong>
-<em>Nếu tính theo kích thước gốc:</em></p>
+<p>[<a href="#quare_root_wh_b" style="color:red;">$ \triangleleft $</a>]<a name="square_root_wh"></a>: <strong>Tại sao lại sử dụng căn bậc hai của (w,h)</strong></p>
+<p>Lí do là vì, Box càng lớn thì sai số tuyệt đối về kích thước (w, h) giữa predicted value và ground truth value cũng sẽ càng lớn hơn là box nhỏ. Để xử lý vấn đề này, tác giả sử dụng sai số giữa căn bậc hai của kích thước predict và ground truth thay vì giá trị w,h gốc.</p>
+<p><strong><em>Ví dụ:</em></strong></p>
+<p><em>Nếu tính theo kích thước gốc:</em></p>
 <p>Box Lớn: $W_{predict} = 9, W_{truth} = 8 \Rightarrow |{W_{predict} - W_{truth}| = 1$</p>
 <p>Box Nhỏ: $W_{predict} = 3, W_{truth} = 2 \Rightarrow |{W_{predict} - W_{truth}| = 1$</p>
 <p>$\Rightarrow $ Rõ ràng xét theo tỉ lệ sai số với kích thước thì Box nhỏ có sai số lớn hơn, nhưng số tuyệt đối độ lệch thì như nhau</p>
