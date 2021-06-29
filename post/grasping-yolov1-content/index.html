@@ -108,9 +108,10 @@
                     <div class="markdown">
                         
     <p>\begin{equation*}
-X(\omega) = \begin{cases}
-1 &amp;\text{se $\omega\in A$}\<br>
-1250 &amp;\text{se $\omega \in A^c$}
+f(n) =
+\begin{cases}
+n/2       &amp; \quad \text{if } n \text{ is even}\<br>
+-(n+1)/2  &amp; \quad \text{if } n \text{ is odd}
 \end{cases}
 \end{equation*}</p>
 <p>Trong bài viết này, chúng ta hãy cùng đọc và phân tích nội dung của paper &ldquo;<strong>You Only Look One: Unified, Real-Time Object Detection</strong>&rdquo; pulished năm 2016 nhé!</p>
@@ -159,7 +160,7 @@ X(\omega) = \begin{cases}
 <li>
 <p>Giá trị xác suất của mỗi class được tính theo công thức:</p>
 <p>\begin{equation}p(c) = Pr(Class_{c}|Object), \quad c = (1,&hellip;,N) \label{ref_pc}\end{equation}</p>
-<p>$Pr(Class_{c}|Object)$: Là xác suất với **điều kiện có Object** xuất hiện trong grid cell; là xác suất của class thứ c trong N classes</p>
+<p>$Pr(Class_{c}|Object) $: Là xác suất với **điều kiện** có Object xuất hiện trong grid cell, là xác suất của class thứ c trong N classes.</p>
 </li>
 </ul>
 <h5 id="21-kiến-trúc-mạng">2.1. Kiến trúc mạng:</h5>
@@ -333,7 +334,8 @@ Pr(c) = p(c) * C\<br>
     <span style="color:#008000"># x,y: toạ độ tâm; w,h: kích thước rộng, dài của box</span>
     x1, y1, w1, h1 = box1[:4]
     x2, y2, w2, h2 = box2[:4]
-    <span style="color:#008000"># Tính toán (left, top) và (right, bot) của intersection (vùng giao nhau giữa 2 box) </span>
+    <span style="color:#008000"># Tính toán (left, top) và (right, bot) </span>
+    <span style="color:#008000"># của intersection (vùng giao nhau giữa 2 box) </span>
     i_left, i_top = max(x1 - int(w1/2), x2 - int(w2/2)), \
                     max(y1 - int(h1/2), y2 - int(h1/2))
     i_right, i_bot = min(x1 + int(w1/2), x2 + int(w2/3)), \

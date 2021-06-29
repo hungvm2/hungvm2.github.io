@@ -13,8 +13,8 @@
       <pubDate>Mon, 21 Jun 2021 22:44:24 +0700</pubDate>
       
       <guid>https://hungvm2.github.io/post/grasping-yolov1-content/</guid>
-      <description>\begin{equation*} X(\omega) = \begin{cases} 1 &amp;amp;\text{se $\omega\in A$}\
-1250 &amp;amp;\text{se $\omega \in A^c$} \end{cases} \end{equation*}
+      <description>\begin{equation*} f(n) = \begin{cases} n/2 &amp;amp; \quad \text{if } n \text{ is even}\
+-(n+1)/2 &amp;amp; \quad \text{if } n \text{ is odd} \end{cases} \end{equation*}
 Trong bài viết này, chúng ta hãy cùng đọc và phân tích nội dung của paper &amp;ldquo;You Only Look One: Unified, Real-Time Object Detection&amp;rdquo; pulished năm 2016 nhé!
 I. Đọc Paper  Trong phần &amp;ldquo;Đọc Paper&amp;rdquo; này, mình sẽ tóm lược lại những ý chính của tác giả, có bỏ qua một số phần không quá quan trọng.</description>
     </item>
