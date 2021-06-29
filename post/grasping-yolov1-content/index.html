@@ -107,14 +107,13 @@
                     <h1 class="mx-0 mx-md-4">Đọc và phân tích Paper &#34;You Only Look One: Unified, Real-Time Object Detection&#34;(YOLOv1)</h1>
                     <div class="markdown">
                         
-    <p><strong>điều kiện</strong></p>
-<p>\begin{equation*}
+    <p>\begin{equation}
 f(n) =
 \begin{cases}
 n/2       &amp; \quad \text{if } n \text{ is even}\<br>
 -(n+1)/2  &amp; \quad \text{if } n \text{ is odd}
 \end{cases}
-\end{equation*}</p>
+\end{equation}</p>
 <p>Trong bài viết này, chúng ta hãy cùng đọc và phân tích nội dung của paper &ldquo;<strong>You Only Look One: Unified, Real-Time Object Detection</strong>&rdquo; pulished năm 2016 nhé!</p>
 <h3 id="i-đọc-paper">I. Đọc Paper</h3>
 <blockquote>
@@ -140,7 +139,8 @@ n/2       &amp; \quad \text{if } n \text{ is even}\<br>
 </div>
 <p><strong>Mỗi Grid cell</strong> cần dự đoán $B$ <strong>bounding boxes</strong> và $N$ giá trị <strong>xác suất của các lớp</strong> (class) đối tượng:</p>
 <ul>
-<li>Mỗi bounding box gồm có:
+<li>
+<p>Mỗi bounding box gồm có:</p>
 <ul>
 <li>
 <p>4 giá trị <strong>toạ độ</strong> (coordinates): $(x, y, w, h)$. Trong đó $(x,y)$ là toạ độ tâm, $(w,h)$ là chiều dài và rộng</p>
@@ -157,13 +157,10 @@ n/2       &amp; \quad \text{if } n \text{ is even}\<br>
 </li>
 </ul>
 </li>
-</ul>
-<p><strong>điều kiện</strong></p>
-<ul>
 <li>
 <p>Giá trị xác suất của mỗi class được tính theo công thức:</p>
 <p>\begin{equation}p(c) = Pr(Class_{c}|Object), \quad c = (1,&hellip;,N) \label{ref_pc}\end{equation}</p>
-<p>$Pr(Class_{c}|Object) $: Là xác suất với **điều kiện** có Object xuất hiện trong grid cell, là xác suất của class thứ c trong N classes.</p>
+<p>$Pr(Class_{c}|Object)$ : Là xác suất với **điều kiện có Object** xuất hiện trong grid cell, là xác suất của class thứ c trong N classes.</p>
 </li>
 </ul>
 <h5 id="21-kiến-trúc-mạng">2.1. Kiến trúc mạng:</h5>
