@@ -302,7 +302,8 @@ Pr(c) = p(c) * C\\
 <p>$\Rightarrow $ Rõ ràng sai số box to đã bé hơn box nhỏ $\Rightarrow $ Sai số theo tỉ lệ đã được thể hiện rõ hơn nếu tính theo căn bậc hai</p>
 <p>[<a href="#classification_network_b" style="color:red;">$ \triangleleft $</a>]<a name="classification_network"></a>: <strong>Tại sao lại cần training trước các lớp Conv Layer?</strong></p>
 <p>Bước này giúp 24 lớp Conv Layers có bộ weights tốt trong việc trích xuất đặc trưng từ ảnh.</p>
-<p>Network của mạng classification này có dạng: Input 224x224 =&gt; 24 Conv layers =&gt; 1 Average Pooling layer =&gt; 1 Fully Connected Layer =&gt; Output class</p>
+<p><strong><em>Network của mạng classification này có dạng:</em></strong></p>
+<p>Input $224 \times 224 \Rightarrow 24$ Conv layers $\Rightarrow 1$ Average Pooling layer $\Rightarrow 1$ Fully Connected Layer $\Rightarrow $ Output class.</p>
 <p>[<a href="#tuning_technique_b" style="color:red;">$ \triangleleft $</a>]<a name="tuning_technique"></a>: <strong>Chi tiết các kỹ thuật tuning được sử dụng trong Paper?</strong></p>
 <ul>
 <li><strong><em>Momentum</em></strong>: Lấy bằng 0.9. Kỹ thuật này là một biến thể của Gradient Descent giúp model hội tụ nhanh hơn</li>
