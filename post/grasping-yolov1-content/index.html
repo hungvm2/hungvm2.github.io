@@ -210,7 +210,7 @@ n/2       &amp; \quad \text{if } n \text{ is even}\<br>
 </ul>
 <p><strong>Bước 5</strong>: Cấu hình và training</p>
 <ul>
-<li>Dataset: PASCAL VOC 2017 và 2012</li>
+<li>Dataset: <strong>PASCAL VOC 2017 và 2012</strong></li>
 <li>Batch size: 64 (nếu có $m$ data points trong tập train thì mỗi epoch sẽ có $m/64$ iterations)</li>
 <li>Các kỹ thuật tuning được sử dụng: <em>Momentum, Decay, Learning rate schedule, Data augmentation</em>. [<a href="#tuning_technique" style="color:red;">?</a>]<a name="tuning_technique_b" style="color:red;"></a></li>
 </ul>
@@ -229,7 +229,7 @@ n/2       &amp; \quad \text{if } n \text{ is even}\<br>
 Pr(c) = p(c) * C\\
  = Pr(Class_c|Object) * Pr(Object) * IOU_{pred}^{truth}\\
   = Pr(Class_{c}) * IOU_{pred}^{truth}
-\end{multline}
+\end{multline*}
 <h4 id="3-so-sánh-độ-chính-xác-và-hiệu-năng-với-các-mô-hình-khác">3. So sánh độ chính xác và hiệu năng với các mô hình khác</h4>
 <ul>
 <li>So sánh tốc độ/mAP của YOLO, biến thể Fast YOLO với các mô hình khác</li>
