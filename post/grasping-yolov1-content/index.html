@@ -284,7 +284,7 @@ Pr(c) = p(c) * C\\
 <p>Tại sao tác giả chọn B = 2 cho mỗi grid cell?</p>
 <p>[<a href="#feature_scaling_b" style="color:red;">$ \triangleleft $</a>]<a name="feature_scaling"></a>: <strong>Tại sao phải có bước xử lý này?</strong></p>
 <p>Đây là bước Scaling Features: đưa khoảng giá trị của các feature về cùng một scale trước khi vào hàm loss để giúp mô hình hội tụ nhanh và ổn định hơn khi training.</p>
-<p>[<a href="#sse_b" style="color:red;">$ \triangleleft $</a>]<a name="sse"></a>: Hàm loss sử dụng là dạng gì?</p>
+<p>[<a href="#sse_b" style="color:red;">$ \triangleleft $</a>]<a name="sse"></a>: <strong>Hàm loss sử dụng là dạng gì?</strong></p>
 <p>Hàm được sử dụng là Sum Squared Error. Tác giả giải thích lí do sử dụng hàm này vì nó dễ để tối ưu.</p>
 <p>Tuy nhiên hàm này không đạt được độ chính xác AP (Average Precision) như mong đợi vì:</p>
 <ul>
@@ -293,19 +293,19 @@ Pr(c) = p(c) * C\\
 </ul>
 <p>Còn một vấn đề: box lớn thì sai số về kích thước (w, h) giữa predicted value và ground truth value cũng sẽ lớn hơn là box nhỏ. Để xử lý vấn đề này, tác giả sử dụng sai số giữa căn bậc hai của kích thước predict và ground truth thay vì giá trị w,h gốc [<a href="#square_root_wh" style="color:red;">1</a>].</p>
 <p>Khi training, mỗi grid cell cần predict B bounding boxes, tuy nhiên sẽ chỉ Bounding box có IOU lớn nhất so với ground truth box mới được chọn lựa để tính toán hàm loss (chọn làm &ldquo;predictor&rdquo;). Điều này sẽ giúp mỗi predicted Bounding box sẽ chỉ chuyên môn hoá vào việc detect object có kích thước, tỉ lệ nhất định, giúp tăng Recall của model</p>
-<p>[<a href="#quare_root_wh_b" style="color:red;">$ \triangleleft $</a>]<a name="square_root_wh"></a>: Tại sao lại sử dụng căn bậc hai của (w,h)</p>
+<p>[<a href="#quare_root_wh_b" style="color:red;">$ \triangleleft $</a>]<a name="square_root_wh"></a>: <strong>Tại sao lại sử dụng căn bậc hai của (w,h)</strong></p>
 <p>Ví dụ: Box To có predicted W = 9 và ground truth W = 8 =&gt; độ lệch = 1, Box Nhỏ có predicted W = 3 và ground truth W = 2 =&gt; độ lệch = 1. Rõ ràng Box nhỏ có sai số lớn hơn xét theo tỉ lệ, nhưng số tuyệt đối độ lệch thì như nhau</p>
-<p>[<a href="#classification_network_b" style="color:red;">$ \triangleleft $</a>]<a name="classification_network"></a>: Tại sao lại cần training trước các lớp Conv Layer?</p>
+<p>[<a href="#classification_network_b" style="color:red;">$ \triangleleft $</a>]<a name="classification_network"></a>: <strong>Tại sao lại cần training trước các lớp Conv Layer?</strong></p>
 <p>Bước này giúp 24 lớp Conv Layers có bộ weights tốt trong việc trích xuất đặc trưng từ ảnh.</p>
 <p>Network của mạng classification này có dạng: Input 224x224 =&gt; 24 Conv layers =&gt; 1 Average Pooling layer =&gt; 1 Fully Connected Layer =&gt; Output class</p>
-<p>[<a href="#tuning_technique_b" style="color:red;">$ \triangleleft $</a>]<a name="tuning_technique"></a>: Chi tiết các kỹ thuật tuning được sử dụng trong Paper?</p>
+<p>[<a href="#tuning_technique_b" style="color:red;">$ \triangleleft $</a>]<a name="tuning_technique"></a>: <strong>Chi tiết các kỹ thuật tuning được sử dụng trong Paper?</strong></p>
 <ul>
 <li>Momentum: Lấy bằng 0.9. Kỹ thuật này là một biến thể của Gradient Descent giúp model hội tụ nhanh hơn</li>
 <li>Decay: 0.0005. Ý của tác giả ở đây có lẽ là Weight decay, một kỹ thuật regularization giúp giảm High Variance (Overfitting)</li>
 <li>Learning rate (LR) schedule: tăng dần LR từ $10^{-3}$ tới $10^{-2}$ thay vì để LR cao từ đầu để tránh model bị phân kỳ (diverge) giai đoạn đầu, sau đó giữ nguyên LR $10^{-2}$ trong 75 epochs, giảm xuống $10^{-3}$ cho 30 epochs tiếp theo, giảm xuống $10^{-4}$ cho 30 epochs cuối.</li>
 <li>Data augmentation (làm giàu bộ dữ liệu): Random scaling (phóng to, thu nhỏ ngẫu nhiên), random translation (xê dịch vị trí pixel ngẫu nhiên) tới 20% kích thước ảnh. Ngẫu nhiên điều chỉnh độ phơi sáng (exposure) và bão hoà (saturation) của ảnh tới 1.5 lần trong không gian màu HSV. Data augmentation được sử dụng để giúp giảm overfit cho model</li>
 </ul>
-<p>[<a href="#original_pc_b" style="color:red;">$ \triangleleft $</a>]<a name="original_pc"></a>: Công thức này khác với công thức gốc trong paper?</p>
+<p>[<a href="#original_pc_b" style="color:red;">$ \triangleleft $</a>]<a name="original_pc"></a>: <strong>Công thức này khác với công thức gốc trong paper?</strong></p>
 <p>Mình chỉ thay đổi một chút về ký hiệu để đỡ lầm tưởng ký tự (i) có liên quan đến số thứ tự của Grid cell trong công thức hàm Loss. Bên dưới là công thức gốc:</p>
  </div>
 <div class="text-center my-3">
@@ -331,17 +331,17 @@ Pr(c) = p(c) * C\\
     union_area = (w1 * h1 + w2 * h2 - intersection_area)
     <span style="color:#00f">return</span> intersection_area/union_area
 </code></pre></div><p>[<a href="#nms_b" style="color:red;">$ \triangleleft $</a>]<a name="nms"></a>:<strong>NMS được tính như thế nào?</strong></p>
-<p>Thuật toán NMS gồm các bước sau:</p>
+<p><strong><em>Thuật toán NMS gồm các bước sau:</em></strong></p>
 <ul>
 <li>Input: Mảng P có chứa các Bounding box từ output của Network, mỗi bounding box đã được xử lý để có dạng [x, y, w, h, p(c), c]. Trong đố: p(c) là giá trị xác suất lớn nhất trong N classes, c là id của class có xác suất lớn nhất.</li>
-<li>Bước 1: Khởi tạo mảng F rỗng sẽ chứa các Bounding box cuối cùng, (i = 0)</li>
-<li>Bước 2: Lấy phần tử B ở vị trí (i) trong P</li>
-<li>Bước 3: So sánh B với các phần tử khác mà có chung id (c) và IOU với B lớn hơn threshold (VD: IOU &gt;=0.4)</li>
-<li>Bước 4: Nếu xác suất p(c) của B là lớn nhất thì thêm vào F</li>
-<li>Bước 5: (i++), lặp lại từ bước 2</li>
+<li><em>Bước 1</em>: Khởi tạo mảng F rỗng sẽ chứa các Bounding box cuối cùng, (i = 0)</li>
+<li><em>Bước 2</em>: Lấy phần tử B ở vị trí (i) trong P</li>
+<li><em>Bước 3</em>: So sánh B với các phần tử khác mà có chung id (c) và IOU với B lớn hơn threshold (VD: IOU &gt;=0.4)</li>
+<li><em>Bước 4</em>: Nếu xác suất p(c) của B là lớn nhất thì thêm vào F</li>
+<li><em>Bước 5</em>: (i++), lặp lại từ bước 2</li>
 <li>Output : Mảng F có chứa các Bounding box cuối cùng</li>
 </ul>
-<p>Hoặc minh hoạ bằng đoạn code bên dưới (chưa tối ưu, nhưng dễ hiểu ^^):</p>
+<p><strong><em>Hoặc minh hoạ bằng đoạn code bên dưới:</em></strong></p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">def</span> iou(box1, box2):
     <span style="color:#008000"># cách tính iou xem bên trên</span>
     <span style="color:#00f">pass</span>
@@ -355,7 +355,8 @@ Pr(c) = p(c) * C\\
         <span style="color:#00f">for</span> j <span style="color:#00f">in</span> range(len(boxes_list)): 
             <span style="color:#00f">if</span> i == j: <span style="color:#00f">continue</span>
             box_j = boxes_list[j]
-            <span style="color:#00f">if</span> box_i[5] == box_j[5] <span style="color:#00f">and</span> iou(box_i, box_j) &gt; iou_threshold <span style="color:#00f">and</span> box_i[4] &lt; box_j[4]:
+            <span style="color:#00f">if</span> box_i[5] == box_j[5] <span style="color:#00f">and</span> iou(box_i, box_j) &gt; iou_threshold \
+                    <span style="color:#00f">and</span> box_i[4] &lt; box_j[4]:
                 discard = True
                 <span style="color:#00f">break</span>
         <span style="color:#00f">if</span> <span style="color:#00f">not</span> discard: final_list.append(box_i)
