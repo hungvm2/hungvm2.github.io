@@ -258,26 +258,7 @@ Pr(c) = p(c) * C\\
 <p>Bạn có thể xem trong <a href="https://github.com/pjreddie/darknet/blob/master/cfg/yolov1.cfg">file config</a> của YOLO, thứ tự các layer trong file config chính là thứ tự các layer của YOLO Network</p>
 <p>[<a href="#grid_cell_b" style="color:red;">$ \triangleleft $</a>]<a name="grid_cell"></a>: <strong>Chia grid cell ở bước nào?</strong></p>
 <p>Không có bước chia grid cell, mà việc phân định toạ độ bounding box nằm ở grid cell nào sẽ được tính toán lúc đưa vào hàm Loss để training</p>
-<p>[<a href="#iou_b" style="color:red;">$ \triangleleft $</a>]<a name="iou"></a>: <strong>IOU được tính như thế nào?</strong></p>
-<p>Cách tính IOU được minh hoạ bằng hình vẽ sau:</p>
-<div class="text-center my-3">
-<img src="https://hungvm2.github.io/images/yolov1/IOU.png" alt="IOU">
-</div>
-<p>Hoặc bằng code Python minh hoạ đơn giản như bên dưới:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">def</span> iou(box1, box2):
-    <span style="color:#008000"># box1, box2 là mảng chứa 4 phần tử: x,y,w,h</span>
-    <span style="color:#008000"># x,y: toạ độ tâm; w,h: kích thước rộng, dài của box</span>
-    x1, y1, w1, h1 = box1[:4]
-    x2, y2, w2, h2 = box2[:4]
-    <span style="color:#008000"># Tính toán (left, top) và (right, bot) của intersection (vùng giao nhau giữa 2 box) </span>
-    i_left, i_top = max(x1 - int(w1/2), x2 - int(w2/2)), \
-                    max(y1 - int(h1/2), y2 - int(h1/2))
-    i_right, i_bot = min(x1 + int(w1/2), x2 + int(w2/3)), \
-                    min(y1 + int(h1/2), y2 + int(h1/2))
-    intersection_area = (i_right - i_left) * (i_bot - i_top)
-    union_area = (w1 * h1 + w2 * h2 - intersection_area)
-    <span style="color:#00f">return</span> intersection_area/union_area
-</code></pre></div><p>[<a href="#1by1_conv_b" style="color:red;">$ \triangleleft $</a>]<a name="1by1_conv"></a>: <strong>Kiến trúc mạng được truyền cảm hứng bởi mạng GoogLeNet (Inception)?</strong></p>
+<p>[<a href="#1by1_conv_b" style="color:red;">$ \triangleleft $</a>]<a name="1by1_conv"></a>: <strong>Kiến trúc mạng được truyền cảm hứng bởi mạng GoogLeNet (Inception)?</strong></p>
 <p>Kiến trúc mạng của YOLO có sử dụng <strong>1x1 Conv Layer</strong>, lấy cảm hứng từ mạng Inception. 1x1 Conv layer được sử dụng để <strong>giảm</strong> (hoặc tăng) chiều sâu của feature maps mà vẫn giữ nguyên kích thước dài rộng của feature maps.</p>
 <p>Thường 1x1 Conv layer sẽ sử dụng trước khi qua các 3x3, 5x5.. Conv layer để giúp Network giảm khối lượng tính toán và weights.</p>
 <p><strong><em>Ví dụ:</em></strong></p>
@@ -330,10 +311,55 @@ Pr(c) = p(c) * C\\
 <div class="text-center my-3">
   <img src="https://hungvm2.github.io/images/yolov1/final_class_probs.png" alt="Class Probabilities" class="figure-img">
 </div>
-<p>[<a href="#nms_b" style="color:red;">$ \triangleleft $</a>]<a name="nms"></a>:<strong>NMS được tính như thế nào?</strong></p>
-<p>Thuật toán NMS được minh hoạ bằng đoạn code sau:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">def</span> nms(boxes_list):
+<p>[<a href="#iou_b" style="color:red;">$ \triangleleft $</a>]<a name="iou"></a>: <strong>IOU được tính như thế nào?</strong></p>
+<p>Cách tính IOU được minh hoạ bằng hình vẽ sau:</p>
+<div class="text-center my-3">
+<img src="https://hungvm2.github.io/images/yolov1/IOU.png" alt="IOU">
+</div>
+<p>Hoặc bằng code Python minh hoạ đơn giản như bên dưới (chưa tối ưu):</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">def</span> iou(box1, box2):
+    <span style="color:#008000"># box1, box2 là mảng chứa ít nhất 4 phần tử: x,y,w,h</span>
+    <span style="color:#008000"># x,y: toạ độ tâm; w,h: kích thước rộng, dài của box</span>
+    x1, y1, w1, h1 = box1[:4]
+    x2, y2, w2, h2 = box2[:4]
+    <span style="color:#008000"># Tính toán (left, top) và (right, bot) của intersection (vùng giao nhau giữa 2 box) </span>
+    i_left, i_top = max(x1 - int(w1/2), x2 - int(w2/2)), \
+                    max(y1 - int(h1/2), y2 - int(h1/2))
+    i_right, i_bot = min(x1 + int(w1/2), x2 + int(w2/3)), \
+                    min(y1 + int(h1/2), y2 + int(h1/2))
+    intersection_area = (i_right - i_left) * (i_bot - i_top)
+    union_area = (w1 * h1 + w2 * h2 - intersection_area)
+    <span style="color:#00f">return</span> intersection_area/union_area
+</code></pre></div><p>[<a href="#nms_b" style="color:red;">$ \triangleleft $</a>]<a name="nms"></a>:<strong>NMS được tính như thế nào?</strong></p>
+<p>Thuật toán NMS gồm các bước sau:</p>
+<ul>
+<li>Input: Mảng P có chứa các Bounding box từ output của Network, mỗi bounding box đã được xử lý để có dạng [x, y, w, h, p(c), c]. Trong đố: p(c) là giá trị xác suất lớn nhất trong N classes, c là id của class có xác suất lớn nhất.</li>
+<li>Bước 1: Khởi tạo mảng F rỗng sẽ chứa các Bounding box cuối cùng, (i = 0)</li>
+<li>Bước 2: Lấy phần tử B ở vị trí (i) trong P</li>
+<li>Bước 3: So sánh B với các phần tử khác mà có chung id (c) và IOU với B lớn hơn threshold (VD: IOU &gt;=0.4)</li>
+<li>Bước 4: Nếu xác suất p(c) của B là lớn nhất thì thêm vào F</li>
+<li>Bước 5: (i++), lặp lại từ bước 2</li>
+<li>Output : Mảng F có chứa các Bounding box cuối cùng</li>
+</ul>
+<p>Hoặc minh hoạ bằng đoạn code bên dưới (chưa tối ưu, nhưng dễ hiểu ^^):</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">def</span> iou(box1, box2):
+    <span style="color:#008000"># cách tính iou xem bên trên</span>
     <span style="color:#00f">pass</span>
+
+<span style="color:#00f">def</span> nms(boxes_list, iou_threshold):
+    <span style="color:#008000"># Mỗi box trong boxes_list có dạng: [x, y, w, h, p(c), c]</span>
+    final_list = list()
+    <span style="color:#00f">for</span> i <span style="color:#00f">in</span> range(len(boxes_list)): 
+        box_i = boxes_list[i]
+        discard = False
+        <span style="color:#00f">for</span> j <span style="color:#00f">in</span> range(len(boxes_list)): 
+            <span style="color:#00f">if</span> i == j: <span style="color:#00f">continue</span>
+            box_j = boxes_list[j]
+            <span style="color:#00f">if</span> box_i[5] == box_j[5] <span style="color:#00f">and</span> iou(box_i, box_j) &gt; iou_threshold <span style="color:#00f">and</span> box_i[4] &lt; box_j[4]:
+                discard = True
+                <span style="color:#00f">break</span>
+        <span style="color:#00f">if</span> <span style="color:#00f">not</span> discard: final_list.append(box_i)
+    <span style="color:#00f">return</span> final_list 
 </code></pre></div><h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
 <ul>
 <li><a href="https://arxiv.org/abs/1506.02640">You Only Look Once: Unified, Real-Time Object Detection</a></li>
