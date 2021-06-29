@@ -130,16 +130,16 @@
 <div class="text-center my-3">
 <img src="https://hungvm2.github.io/images/yolov1/grid_cell.png" alt="Grid Cell">
 </div>
-<p><strong>Mỗi Grid cell</strong> cần dự đoán $B$ bounding boxes và $N$ giá trị xác suất của các lớp (class) đối tượng:</p>
+<p><strong>Mỗi Grid cell</strong> cần dự đoán $B$ <strong>bounding boxes</strong> và $N$ giá trị <strong>xác suất của các lớp</strong> (class) đối tượng:</p>
 <ul>
 <li>
 <p>Mỗi bounding box gồm có:</p>
 <ul>
 <li>
-<p>4 giá trị toạ độ (coordinates): $(x, y, w, h)$. Trong đó $(x,y)$ là toạ độ tâm, $(w,h)$ là chiều dài và rộng</p>
+<p>4 giá trị <strong>toạ độ</strong> (coordinates): $(x, y, w, h)$. Trong đó $(x,y)$ là toạ độ tâm, $(w,h)$ là chiều dài và rộng</p>
 </li>
 <li>
-<p>1 confidence score $C$, tính theo công thức:</p>
+<p>1 <strong>confidence score</strong> $C$, tính theo công thức:</p>
 <p>\begin{equation}C_{z} = Pr(Object) * IOU_{pred_{z}}^{truth}, \quad z = (1,&hellip;,B) \label{ref_c}\end{equation}</p>
 <p>\( Pr(Object) =
 \begin{cases}
@@ -153,7 +153,7 @@
 <li>
 <p>Giá trị xác suất của mỗi class được tính theo công thức:</p>
 <p>\begin{equation}p(c) = Pr(Class_{c}|Object), \quad c = (1,&hellip;,N) \label{ref_pc}\end{equation}</p>
-<p>$Pr(Class_{c}|Object)$: Là xác suất với điều kiện có Object xuất hiện trong grid cell. Là xác suất của class thứ c trong N classes</p>
+<p>$Pr(Class_{c}|Object)$: Là xác suất với **điều kiện có Object** xuất hiện trong grid cell; là xác suất của class thứ c trong N classes</p>
 </li>
 </ul>
 <h5 id="21-kiến-trúc-mạng">2.1. Kiến trúc mạng:</h5>
@@ -169,13 +169,13 @@
 <p>\begin{equation}Ouput\quad Shape = (S , S , B * 4 + B + C) = (S, S , B * 5+ C)\end{equation}</p>
 <h5 id="22-các-bước-khi-huấn-luyện-mô-hình-training">2.2. Các bước khi huấn luyện mô hình (training):</h5>
 <p><strong>Bước 1</strong>: Đặt 20 lớp Conv Layers đầu tiên của mạng detection (<a href="#anh_1_b" style="color:red;">Ảnh 1</a><a name="anh_1"></a>) trong 1 kiến trúc mạng Classification [<a href="#classification_network" style="color:red;">?</a>]<a name="classification_network_b"></a> , và train trên tập ImageNet 1000 classes.</p>
-<p><strong>Bước 2</strong>: Sử dụng Transfer Learning, đặt lại Weights của 20 lớp Conv Layers đã được train ở bước 1 trở lại mạng detection (Ảnh 1). Do Weights của phần Conv Layers không phụ thuộc vào Input size nên tăng Input size lên $448\times 448$ để mạng học được những đặc trưng chi tiết hơn của ảnh.</p>
+<p><strong>Bước 2</strong>: Sử dụng Transfer Learning, đặt lại Weights của 20 lớp Conv Layers đã được train ở bước 1 trở lại mạng detection (Ảnh 1). Do <strong>Weights</strong> của phần <strong>Conv Layers không phụ thuộc</strong> vào <strong>Input size</strong> nên train mạng detection với Input size tăng lên $448\times 448$ để mạng học được những đặc trưng chi tiết hơn của ảnh.</p>
 <p><strong>Bước 3</strong>: Lấy kết quả output của mạng detection, biến đổi lại các giá trị nằm trong khoảng $[0,1]$ [<a href="#feature_scaling" style="color:red;">?</a>]<a name="feature_scaling_b"></a> trước khi đặt vào hàm Loss</p>
 <ul>
-<li>Normalize (w,h) của bounding box để w,h trong đoạn [0,1]: (w = w/W , h = h/H | W,H: size của input)</li>
-<li>Biến đổi toạ độ (x,y) thành toạ độ offset từ top-left của grid cell mà nó nằm trong để x, y nằm trong đoạn [0,1]. VD: x,y nằm chính giữa cell thì x = 0.5, y = 0.5</li>
-<li>Confidence score [Công thức \ref{ref_c}]: $C = IOU$ hoặc $C = 0$ nên cũng nằm trong đoạn [0,1]</li>
-<li>$p(c)$ [Công thức \ref{ref_pc}]: là xác suất detect ra vật thể class c nên cũng nằm trong đoạn [0,1]</li>
+<li><strong>Normalize</strong> (w,h) của bounding box để w,h trong đoạn [0,1]: (w = w/W , h = h/H | W,H: size của input)</li>
+<li>Biến đổi toạ độ (x,y) thành toạ độ <strong>offset từ top-left của grid cell</strong> mà nó nằm trong để x, y nằm trong đoạn [0,1]. VD: x,y nằm chính giữa cell thì x = 0.5, y = 0.5</li>
+<li>Confidence score (\ref{ref_c}): $C = IOU$ hoặc $C = 0$ nên cũng nằm trong đoạn [0,1]</li>
+<li>$p(c)$ (\ref{ref_pc}): là xác suất detect ra vật thể class c nên cũng nằm trong đoạn [0,1]</li>
 </ul>
 <p><strong>Bước 4</strong>: Xây dựng hàm Loss [<a href="#sse" style="color:red;">?</a>]<a name="sse_b" style="color:red;"></a> [<a href="#loss_formular" style="color:red;">?</a>]<a name="loss_formular_b"></a></p>
 <div>
@@ -188,7 +188,7 @@
 \end{multline}
 </div>
 <p><strong>Trong đó:</strong></p>
-<p>Gọi &ldquo;Box Predictor&rdquo; là Bounding box có IOU lớn nhất trong grid cell với ground truth box</p>
+<p><em>Gọi &ldquo;Box Predictor&rdquo; là Bounding box có IOU lớn nhất trong grid cell với ground truth box</em></p>
 <ul>
 <li>$\lambda_{coord} = 5$ , $\lambda_{noobj} = 0.5$ [<a href="#lambda" style="color:red;">?</a>]<a name="lambda_b"></a></li>
 <li>$\mathbb{1}_{i}^{obj}$ nhận giá trị 1 nếu object xuất hiện ở cell thứ $i$ ; 0 nếu ngược lại</li>
@@ -206,11 +206,11 @@
 <ul>
 <li>Dataset: PASCAL VOC 2017 và 2012</li>
 <li>Batch size: 64 (nếu có $m$ data points trong tập train thì mỗi epoch sẽ có $m/64$ iterations)</li>
-<li>Các kỹ thuật tuning được sử dụng: Momentum, Decay, Learning rate schedule, Data augmentation. [<a href="#tuning_technique" style="color:red;">?</a>]<a name="tuning_technique_b" style="color:red;"></a></li>
+<li>Các kỹ thuật tuning được sử dụng: <em>Momentum, Decay, Learning rate schedule, Data augmentation</em>. [<a href="#tuning_technique" style="color:red;">?</a>]<a name="tuning_technique_b" style="color:red;"></a></li>
 </ul>
 <h5 id="23-inference-testing">2.3. Inference (Testing)</h5>
-<p>Thường tâm của object sẽ chỉ nằm trong 1 gird cell, tuy nhiên có những trường hợp như object lớn hoặc object nằm gần viền của nhiều cell nên dễ bị detect ra nhiều box cho cùng một object.
-Để xử lý vấn đề này, khi testing, output của Network được đi qua một bước post processing sử dụng Non-max suppression (NMS) giúp triệt tiêu những box bị trùng nhau. Bước này giúp cải thiện thêm 2-3% mAP cho model. [<a href="#nms" style="color:red;">?</a>]<a name="nms_b"></a></p>
+<p>Thường tâm của object sẽ chỉ nằm trong 1 gird cell, tuy nhiên có những trường hợp như object lớn hoặc tâm của object nằm gần viền của nhiều cell nên dễ bị detect ra nhiều box cho cùng một object.
+Để xử lý vấn đề này, khi testing, output của Network được đi qua một bước post processing sử dụng <strong>Non-max suppression</strong> (NMS) giúp triệt tiêu những box bị trùng nhau. Bước này giúp cải thiện thêm 2-3% mAP cho model. [<a href="#nms" style="color:red;">?</a>]<a name="nms_b"></a></p>
 <div class="text-center my-3">
 <img src="https://hungvm2.github.io/images/yolov1/nms.png" alt="NMS">
 </div>
