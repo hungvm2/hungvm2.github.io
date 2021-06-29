@@ -141,11 +141,11 @@
 <li>
 <p>1 <strong>confidence score</strong> $C$, tính theo công thức:</p>
 <p>\begin{equation}C_{z} = Pr(Object) * IOU_{pred_{z}}^{truth}, \quad z = (1,&hellip;,B) \label{ref_c}\end{equation}</p>
-<p>\( Pr(Object) =
+<p>[ Pr(Object) =
 \begin{cases}
 0 &amp; \quad \text{nếu không có object trong grid cell} \<br>
 1 &amp; \quad \text{nếu có object trong grid cell}
-\end{cases} \)</p>
+\end{cases} ]</p>
 <p>$IOU_{pred_{z}}^{truth}$: Giá trị IOU giữa ground truth và predicted bounding box. [<a href="#iou" style="color:red;">?</a>]<a name="iou_b" style="color:red;"></a></p>
 </li>
 </ul>
@@ -215,10 +215,8 @@
 <img src="https://hungvm2.github.io/images/yolov1/nms.png" alt="NMS">
 </div>
 <p>Trên hình có thể thấy rõ, có 3 bounding box thuộc về 3 grid cell (3,1), (2,3), (3,3) cùng detect ra Object người. Bước NMS sẽ lấy Bounding box có Confidence Score lớn nhất trong 3 box này.</p>
-<p><strong><em>Pipe line của prediction:</em></strong></p>
-<blockquote>
-<p>Image (448,448,3) =&gt; Network Prediction =&gt; Output (7,7,30) =&gt; Tính lại class probabilities $Pr(c)$ =&gt; Bỏ qua các box có low probabilities =&gt; Non-max suppression =&gt; Final prediction</p>
-</blockquote>
+<p><strong><em>Pipe line của prediction:</em></strong>
+$Image (448,448,3) =&gt; Network Prediction =&gt; Output (7,7,30) =&gt; Tính lại class probabilities Pr(c) =&gt; Bỏ qua các box có low probabilities =&gt; Non-max suppression =&gt; Final prediction$</p>
 <p>Giá trị xác suất nhận diện của mỗi class trong một grid cell sẽ được tính lại theo công thức sau: [<a href="#original_pc" style="color:red;">?</a>]<a name="original_pc_b"></a></p>
 <div>
 \begin{multline}
@@ -264,12 +262,12 @@ Pr(c) = p(c) * C\\
 <p><strong><em>Ví dụ:</em></strong></p>
 <p>Kích thước Input Tensor A (Batch size, Channel, High, Width): (1, 20, 64, 64).</p>
 <p>Cho Tensor A đi qua một Conv layer 3x3; Số Filters: 32; Stride = 1; Padding = 0 (Lưu ý: số channel của 1 filter luôn bằng số channel của input tensor, tuy nhiên khi ký hiệu thì quy ước ko ghi số channel của filter)</p>
-<p>=&gt; Kích thước Output sẽ là: (1, 32, 62, 62), Số lượng Weights = 32x(20x3x3) =  5760</p>
+<p>$=&gt; Kích thước Output sẽ là: (1, 32, 62, 62), Số lượng Weights = 32x(20x3x3) =  5760$</p>
 <p>Nếu cho Tensor A đi qua 1x1 Conv Layer có 8 filters rồi qua 3x3 Conv Layer có 32 filter giống như trên (Stride = 1, Padding = 0 ở cả 2 Conv layer)</p>
-<p>=&gt; Kích thước Output vẫn là: (1, 32, 62, 62), Số lượng Weights = 8x(20x1x1) + 32x(8x3x3) = 2464</p>
+<p>$=&gt; Kích thước Output vẫn là: (1, 32, 62, 62), Số lượng Weights = 8x(20x1x1) + 32x(8x3x3) = 2464$</p>
 <p>Ta có thể thấy số lượng Weights đã giảm gần 1/2 cho tình huống trên, dù không thay đổi shape của Input và Output.</p>
 <p>[<a href="#loss_formular_b" style="color:red;">$ \triangleleft $</a>]<a name="loss_formular"></a>: <strong>Hàm Loss dùng cho pretrained model của tác giả?</strong></p>
-<p>Để đánh giá YOLO trên tập PASCAL POC, S = 7, B = 2, C = 20, hàm Loss vì thế sẽ có dạng:</p>
+<p>Để đánh giá YOLO trên tập PASCAL POC, $S = 7, B = 2, C = 20$, hàm Loss vì thế sẽ có dạng:</p>
 <div>
 \begin{multline}
 \lambda_{coord} \displaystyle \sum_{i=0}^{49} \displaystyle \sum_{j=0}^{2} \mathbb{1}_{ij}^{obj}[(x_{i} - \hat{x}\_{i})^{2} + (y_{i} - \hat{y}_{i})^{2}]\\ 
@@ -289,34 +287,41 @@ Pr(c) = p(c) * C\\
 <p>Tuy nhiên hàm này không đạt được độ chính xác AP (Average Precision) như mong đợi vì:</p>
 <ul>
 <li>Hàm này coi các giá trị về lỗi toạ độ (localization error) và lỗi phân loại (classification error) là tương đương với nhau (có thể thấy rõ trên công thức ở Ảnh 2)</li>
-<li>Những grid cell không chứa object thì các giá trị Confidence scores sẽ bằng 0, việc này làm tăng sức mạnh của gradient (overpowering the gradient) ở những cell có chứa objects, khiến model bị mất ổn định. Để giải quyết, [<a href="#lambda_b" style="color:red;">1</a>]<a name="lambda" style="color:red;"></a>: tác giả thêm các hệ số &ldquo;$λ_{coord} = 5$&rdquo; và &ldquo;$λ_{noobj} = 0.5$&rdquo; để tăng loss từ toạ độ bounding box và giảm loss từ Confidence score.</li>
+<li>Những grid cell không chứa object thì các giá trị Confidence scores sẽ bằng 0, việc này làm tăng sức mạnh của gradient (overpowering the gradient) ở những cell có chứa objects, khiến model bị mất ổn định. Để giải quyết, [<a href="#lambda_b" style="color:red;">$ \triangleleft $</a>]<a name="lambda"></a> tác giả thêm các hệ số &ldquo;$λ_{coord} = 5$&rdquo; và &ldquo;$λ_{noobj} = 0.5$&rdquo; để tăng loss từ toạ độ bounding box và giảm loss từ Confidence score.</li>
 </ul>
-<p>Còn một vấn đề: box lớn thì sai số về kích thước (w, h) giữa predicted value và ground truth value cũng sẽ lớn hơn là box nhỏ. Để xử lý vấn đề này, tác giả sử dụng sai số giữa căn bậc hai của kích thước predict và ground truth thay vì giá trị w,h gốc [<a href="#square_root_wh" style="color:red;">1</a>].</p>
 <p>Khi training, mỗi grid cell cần predict B bounding boxes, tuy nhiên sẽ chỉ Bounding box có IOU lớn nhất so với ground truth box mới được chọn lựa để tính toán hàm loss (chọn làm &ldquo;predictor&rdquo;). Điều này sẽ giúp mỗi predicted Bounding box sẽ chỉ chuyên môn hoá vào việc detect object có kích thước, tỉ lệ nhất định, giúp tăng Recall của model</p>
-<p>[<a href="#quare_root_wh_b" style="color:red;">$ \triangleleft $</a>]<a name="square_root_wh"></a>: <strong>Tại sao lại sử dụng căn bậc hai của (w,h)</strong></p>
-<p>Ví dụ: Box To có predicted W = 9 và ground truth W = 8 =&gt; độ lệch = 1, Box Nhỏ có predicted W = 3 và ground truth W = 2 =&gt; độ lệch = 1. Rõ ràng Box nhỏ có sai số lớn hơn xét theo tỉ lệ, nhưng số tuyệt đối độ lệch thì như nhau</p>
+<p>[<a href="#quare_root_wh_b" style="color:red;">$ \triangleleft $</a>]<a name="square_root_wh"></a>: <strong>Tại sao lại sử dụng căn bậc hai của (w,h)</strong>
+Lí do là vì, Box càng lớn thì sai số tuyệt đối về kích thước (w, h) giữa predicted value và ground truth value cũng sẽ càng lớn hơn là box nhỏ. Để xử lý vấn đề này, tác giả sử dụng sai số giữa căn bậc hai của kích thước predict và ground truth thay vì giá trị w,h gốc.</p>
+<p><strong><em>Ví dụ:</em></strong>
+<em>Nếu tính theo kích thước gốc:</em></p>
+<p>Box Lớn: $W_{predict} = 9, W_{truth} = 8 \Rightarrow |{W_{predict} - W_{truth}| = 1$</p>
+<p>Box Nhỏ: $W_{predict} = 3, W_{truth} = 2 \Rightarrow |{W_{predict} - W_{truth}| = 1$</p>
+<p>$\Rightarrow$ Rõ ràng xét theo tỉ lệ sai số với kích thước thì Box nhỏ có sai số lớn hơn, nhưng số tuyệt đối độ lệch thì như nhau</p>
+<p><em>Nếu tính theo căn bậc hai</em></p>
+<p>Box lớn: $|\sqrt{9} - \sqrt{8}| \approx 0.17$ , Box nhỏ: $|\sqrt{2} - \sqrt{1}| \approx 0.41$</p>
+<p>$\Rightarrow$ Rõ ràng sai số box to đã bé hơn box nhỏ $\Rightarrow$ Sai số theo tỉ lệ đã được thể hiện rõ hơn nếu tính theo căn bậc hai</p>
 <p>[<a href="#classification_network_b" style="color:red;">$ \triangleleft $</a>]<a name="classification_network"></a>: <strong>Tại sao lại cần training trước các lớp Conv Layer?</strong></p>
 <p>Bước này giúp 24 lớp Conv Layers có bộ weights tốt trong việc trích xuất đặc trưng từ ảnh.</p>
 <p>Network của mạng classification này có dạng: Input 224x224 =&gt; 24 Conv layers =&gt; 1 Average Pooling layer =&gt; 1 Fully Connected Layer =&gt; Output class</p>
 <p>[<a href="#tuning_technique_b" style="color:red;">$ \triangleleft $</a>]<a name="tuning_technique"></a>: <strong>Chi tiết các kỹ thuật tuning được sử dụng trong Paper?</strong></p>
 <ul>
-<li>Momentum: Lấy bằng 0.9. Kỹ thuật này là một biến thể của Gradient Descent giúp model hội tụ nhanh hơn</li>
-<li>Decay: 0.0005. Ý của tác giả ở đây có lẽ là Weight decay, một kỹ thuật regularization giúp giảm High Variance (Overfitting)</li>
-<li>Learning rate (LR) schedule: tăng dần LR từ $10^{-3}$ tới $10^{-2}$ thay vì để LR cao từ đầu để tránh model bị phân kỳ (diverge) giai đoạn đầu, sau đó giữ nguyên LR $10^{-2}$ trong 75 epochs, giảm xuống $10^{-3}$ cho 30 epochs tiếp theo, giảm xuống $10^{-4}$ cho 30 epochs cuối.</li>
-<li>Data augmentation (làm giàu bộ dữ liệu): Random scaling (phóng to, thu nhỏ ngẫu nhiên), random translation (xê dịch vị trí pixel ngẫu nhiên) tới 20% kích thước ảnh. Ngẫu nhiên điều chỉnh độ phơi sáng (exposure) và bão hoà (saturation) của ảnh tới 1.5 lần trong không gian màu HSV. Data augmentation được sử dụng để giúp giảm overfit cho model</li>
+<li><strong><em>Momentum</em></strong>: Lấy bằng 0.9. Kỹ thuật này là một biến thể của Gradient Descent giúp model hội tụ nhanh hơn</li>
+<li><strong><em>Decay</em></strong>: 0.0005. Ý của tác giả ở đây có lẽ là Weight decay, một kỹ thuật regularization giúp giảm High Variance (Overfitting)</li>
+<li><strong><em>Learning rate (LR) schedule</em></strong>: tăng dần LR từ $10^{-3}$ tới $10^{-2}$ thay vì để LR cao từ đầu để tránh model bị phân kỳ (diverge) giai đoạn đầu, sau đó giữ nguyên LR $10^{-2}$ trong 75 epochs, giảm xuống $10^{-3}$ cho 30 epochs tiếp theo, giảm xuống $10^{-4}$ cho 30 epochs cuối.</li>
+<li><strong><em>Data augmentation</em></strong> (làm giàu bộ dữ liệu): Random scaling (phóng to, thu nhỏ ngẫu nhiên), random translation (xê dịch vị trí pixel ngẫu nhiên) tới 20% kích thước ảnh. Ngẫu nhiên điều chỉnh độ phơi sáng (exposure) và bão hoà (saturation) của ảnh tới 1.5 lần trong không gian màu HSV. Data augmentation được sử dụng để giúp giảm overfit cho model</li>
 </ul>
 <p>[<a href="#original_pc_b" style="color:red;">$ \triangleleft $</a>]<a name="original_pc"></a>: <strong>Công thức này khác với công thức gốc trong paper?</strong></p>
-<p>Mình chỉ thay đổi một chút về ký hiệu để đỡ lầm tưởng ký tự (i) có liên quan đến số thứ tự của Grid cell trong công thức hàm Loss. Bên dưới là công thức gốc:</p>
+<p>Mình chỉ thay đổi một chút về ký hiệu để đỡ lầm tưởng ký tự $i$ có liên quan đến số thứ tự của Grid cell trong công thức hàm Loss. Bên dưới là công thức gốc:</p>
  </div>
 <div class="text-center my-3">
   <img src="https://hungvm2.github.io/images/yolov1/final_class_probs.png" alt="Class Probabilities" class="figure-img">
 </div>
 <p>[<a href="#iou_b" style="color:red;">$ \triangleleft $</a>]<a name="iou"></a>: <strong>IOU được tính như thế nào?</strong></p>
-<p>Cách tính IOU được minh hoạ bằng hình vẽ sau:</p>
+<p><strong><em>Cách tính IOU được minh hoạ bằng hình vẽ sau:</em></strong></p>
 <div class="text-center my-3">
 <img src="https://hungvm2.github.io/images/yolov1/IOU.png" alt="IOU">
 </div>
-<p>Hoặc bằng code Python minh hoạ đơn giản như bên dưới (chưa tối ưu):</p>
+<p><strong><em>Hoặc bằng code Python minh hoạ đơn giản như bên dưới:</em></strong></p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">def</span> iou(box1, box2):
     <span style="color:#008000"># box1, box2 là mảng chứa ít nhất 4 phần tử: x,y,w,h</span>
     <span style="color:#008000"># x,y: toạ độ tâm; w,h: kích thước rộng, dài của box</span>
