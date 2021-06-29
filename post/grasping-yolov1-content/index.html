@@ -294,8 +294,8 @@ Pr(c) = p(c) * C\\
 <p>Lí do là vì, Box càng lớn thì sai số tuyệt đối về kích thước (w, h) giữa predicted value và ground truth value cũng sẽ càng lớn hơn là box nhỏ. Để xử lý vấn đề này, tác giả sử dụng sai số giữa căn bậc hai của kích thước predict và ground truth thay vì giá trị w,h gốc.</p>
 <p><strong><em>Ví dụ:</em></strong></p>
 <p><em>Nếu tính theo kích thước gốc:</em></p>
-<p>Box Lớn: $W_{predict} = 9, W_{truth} = 8 \Rightarrow |{W_{predict} - W_{truth}| = 1$</p>
-<p>Box Nhỏ: $W_{predict} = 3, W_{truth} = 2 \Rightarrow |{W_{predict} - W_{truth}| = 1$</p>
+<p>Box Lớn: $W_{predict} = 9, W_{truth} = 8 \Rightarrow | {W_{predict} - W_{truth} | = 1$</p>
+<p>Box Nhỏ: $W_{predict} = 3, W_{truth} = 2 \Rightarrow | {W_{predict} - W_{truth} | = 1$</p>
 <p>$\Rightarrow $ Rõ ràng xét theo tỉ lệ sai số với kích thước thì Box nhỏ có sai số lớn hơn, nhưng số tuyệt đối độ lệch thì như nhau</p>
 <p><em>Nếu tính theo căn bậc hai</em></p>
 <p>Box lớn: $|\sqrt{9} - \sqrt{8}| \approx 0.17$ , Box nhỏ: $|\sqrt{2} - \sqrt{1}| \approx 0.41$</p>
