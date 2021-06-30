@@ -226,8 +226,8 @@ $Pr(Class_{c}|Object)$: Là xác suất với điều kiện có Object xuất h
 <p>Trên hình có thể thấy rõ, có 3 bounding box thuộc về 3 grid cell (3,1), (2,3), (3,3) cùng detect ra Object người. Bước NMS sẽ lấy Bounding box có Confidence Score lớn nhất trong 3 box này.</p>
 <p><strong><em>Pipe line của prediction:</em></strong></p>
 <p>Image $(448,448,3) \Rightarrow $ Network Prediction $\Rightarrow $ Output $(7,7,30) \Rightarrow $ Tính lại class probabilities $Pr(c) \Rightarrow $ Bỏ qua các box có low probabilities $\Rightarrow $ Non-max suppression $\Rightarrow $ Final prediction.</p>
-<p><strong><em>Giá trị xác suất nhận diện của mỗi class trong một grid cell sẽ được tính lại theo công thức sau:</em></strong> [<a href="#original_pc" style="color:red;">?</a>]<a name="original_pc_b"></a></p>
-<p>\begin{multline*}
+<p><strong><em>Giá trị xác suất nhận diện của mỗi class trong một grid cell sẽ được tính lại theo công thức sau:</em></strong> [<a href="#original_pc" style="color:red;">?</a>]<a name="original_pc_b"></a>
+\begin{multline*}
 Pr(c) = p(c) * C\<br>
 = Pr(Class_c|Object) * Pr(Object) * IOU_{pred}^{truth}\<br>
 = Pr(Class_{c}) * IOU_{pred}^{truth}
