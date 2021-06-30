@@ -114,7 +114,7 @@ $Pr(Object) =
 1 & \quad \text{B}
 \end{cases}$
 </div>
-Trong bài viết này, chúng ta hãy cùng đọc và phân tích nội dung của paper "**You Only Look One: Unified, Real-Time Object Detection**" pulished năm 2016 nhé!
+<p>Trong bài viết này, chúng ta hãy cùng đọc và phân tích nội dung của paper &ldquo;<strong>You Only Look One: Unified, Real-Time Object Detection</strong>&rdquo; pulished năm 2016 nhé!</p>
 <h3 id="i-đọc-paper">I. Đọc Paper</h3>
 <blockquote>
 <p>Trong phần &ldquo;Đọc Paper&rdquo; này, mình sẽ tóm lược lại những ý chính của tác giả, có bỏ qua một số phần không quá quan trọng. Khi đọc sẽ có các reference (có dạng [<a style="color:red;">?</a>]). Bạn có thể click vào các câu hỏi đó để dẫn xuống phần &ldquo;Hiểu Paper&rdquo; bên dưới để đọc sâu hơn về vấn đề được đề cập.</p>
@@ -146,13 +146,13 @@ Trong bài viết này, chúng ta hãy cùng đọc và phân tích nội dung c
 <li>1 <strong>confidence score</strong> $C$, tính theo công thức:</li>
 </ul>
 <p>\begin{equation}C_{z} = Pr(Object) * IOU_{pred_{z}}^{truth}, \quad z = (1,&hellip;,B) \label{ref_c}\end{equation}</p>
-  <div>
+  <span style="display:inline-block">
   $Pr(Object) = 
   \begin{cases}
-  0 & \quad \text{A}\\
-  1 & \quad \text{B}
+  0 & \quad \text{nếu không có Object trong Grid cell}\\
+  1 & \quad \text{nếu có Object trong Grid cell}
   \end{cases}$
-  </div>
+  </span>
 <p>$IOU_{pred_{z}}^{truth}$: Giá trị IOU giữa ground truth và predicted bounding box. [<a href="#iou" style="color:red;">?</a>]<a name="iou_b" style="color:red;"></a></p>
 </li>
 <li>
