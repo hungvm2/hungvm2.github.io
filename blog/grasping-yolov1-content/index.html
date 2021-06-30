@@ -136,7 +136,7 @@
 <li><strong>Độ chính xác thấp hơn</strong> các phương pháp state-of-the-art khác</li>
 <li><strong>Khó khăn</strong> khi xác định chính xác <strong>vị trí</strong> của các vật thể (Localization), đặc biệt các <strong>vật thể cỡ nhỏ</strong>.</li>
 </ul>
-<h4 id="2-kiến-trúc-của-yolo">2. Kiến trúc của YOLO</h4>
+<h4 id="2-kiến-trúc-của-hệ-thống-yolo">2. Kiến trúc của hệ thống YOLO</h4>
 <p>Hệ thống YOLO <strong>chia</strong> ảnh đầu vào thành <strong>một lưới</strong> $S\times S$ các ô vuông (grid cell). Nếu trung tâm (center) của vật thể rơi vào cell nào, thì cell đó sẽ chịu trách nhiệm phát hiện vật thể đó. [<a href="#grid_cell" style="color:red;">?</a>]<a name="grid_cell_b" style="color:red;"></a></p>
 <div class="text-center my-3">
 <img src="https://hungvm2.github.io/images/yolov1/grid_cell.png" alt="Grid Cell">
@@ -228,7 +228,7 @@ $Pr(Class_{c}|Object)$: Là xác suất với điều kiện có Object xuất h
 <img src="https://hungvm2.github.io/images/yolov1/nms.png" alt="NMS">
 </div>
 <p>Trên hình có thể thấy rõ, có 3 bounding box thuộc về 3 grid cell (3,1), (2,3), (3,3) cùng detect ra Object người. Bước NMS sẽ lấy Bounding box có Confidence Score lớn nhất trong 3 box này.</p>
-<p><strong><em>Pipe line của prediction:</em></strong></p>
+<p><strong><em>Pipe line của hệ thống YOLO:</em></strong></p>
 <p>Image $(448,448,3) \Rightarrow $ Network Prediction $\Rightarrow $ Output $(7,7,30) \Rightarrow $ Tính lại class probabilities $Pr(c) \Rightarrow $ Bỏ qua các box có low probabilities $\Rightarrow $ Non-max suppression $\Rightarrow $ Final prediction.</p>
 <p><strong><em>Giá trị xác suất nhận diện của mỗi class trong một grid cell sẽ được tính lại theo công thức sau:</em></strong> [<a href="#original_pc" style="color:red;">?</a>]<a name="original_pc_b"></a></p>
    <p style="display: inline-block;">\begin{multline*}
