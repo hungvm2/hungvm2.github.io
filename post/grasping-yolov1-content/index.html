@@ -303,14 +303,14 @@ $Pr(Class_{c}|Object)$: Là xác suất với điều kiện có Object xuất h
 <p>$\Rightarrow $ Rõ ràng sai số box to đã bé hơn box nhỏ $\Rightarrow $ Sai số theo tỉ lệ đã được thể hiện rõ hơn nếu tính theo căn bậc hai</p>
 <p>[<a href="#classification_network_b" style="color:red;">$ \triangleleft $</a>]<a name="classification_network"></a>: <strong>Tại sao lại cần training trước các lớp Conv Layer?</strong></p>
 <p>Bước này giúp 24 lớp Conv Layers có bộ weights tốt trong việc trích xuất đặc trưng từ ảnh.</p>
-<p><strong><em>Network của mạng classification này có dạng:</em></strong></p>
+<p><em>Network của mạng classification này có dạng:</em></p>
 <p>Input $224 \times 224 \Rightarrow 24$ Conv layers $\Rightarrow 1$ Average Pooling layer $\Rightarrow 1$ Fully Connected Layer $\Rightarrow $ Output class.</p>
 <p>[<a href="#tuning_technique_b" style="color:red;">$ \triangleleft $</a>]<a name="tuning_technique"></a>: <strong>Chi tiết các kỹ thuật tuning được sử dụng trong Paper?</strong></p>
 <ul>
-<li><strong><em>Momentum</em></strong>: Lấy bằng 0.9. Kỹ thuật này là một biến thể của Gradient Descent giúp model hội tụ nhanh hơn</li>
-<li><strong><em>Decay</em></strong>: 0.0005. Ý của tác giả ở đây có lẽ là Weight decay, một kỹ thuật regularization giúp giảm High Variance (Overfitting)</li>
-<li><strong><em>Learning rate (LR) schedule</em></strong>: tăng dần LR từ $10^{-3}$ tới $10^{-2}$ thay vì để LR cao từ đầu để tránh model bị phân kỳ (diverge) giai đoạn đầu, sau đó giữ nguyên LR $10^{-2}$ trong 75 epochs, giảm xuống $10^{-3}$ cho 30 epochs tiếp theo, giảm xuống $10^{-4}$ cho 30 epochs cuối.</li>
-<li><strong><em>Data augmentation</em></strong> (làm giàu bộ dữ liệu): Random scaling (phóng to, thu nhỏ ngẫu nhiên), random translation (xê dịch vị trí pixel ngẫu nhiên) tới 20% kích thước ảnh. Ngẫu nhiên điều chỉnh độ phơi sáng (exposure) và bão hoà (saturation) của ảnh tới 1.5 lần trong không gian màu HSV. Data augmentation được sử dụng để giúp giảm overfit cho model</li>
+<li><em>Momentum</em>: Lấy bằng 0.9. Kỹ thuật này là một biến thể của Gradient Descent giúp model hội tụ nhanh hơn</li>
+<li><em>Decay</em>: 0.0005. Ý của tác giả ở đây có lẽ là Weight decay, một kỹ thuật regularization giúp giảm High Variance (Overfitting)</li>
+<li><em>Learning rate (LR) schedule</em>: tăng dần LR từ $10^{-3}$ tới $10^{-2}$ thay vì để LR cao từ đầu để tránh model bị phân kỳ (diverge) giai đoạn đầu, sau đó giữ nguyên LR $10^{-2}$ trong 75 epochs, giảm xuống $10^{-3}$ cho 30 epochs tiếp theo, giảm xuống $10^{-4}$ cho 30 epochs cuối.</li>
+<li><em>Data augmentation</em> (làm giàu bộ dữ liệu): Random scaling (phóng to, thu nhỏ ngẫu nhiên), random translation (xê dịch vị trí pixel ngẫu nhiên) tới 20% kích thước ảnh. Ngẫu nhiên điều chỉnh độ phơi sáng (exposure) và bão hoà (saturation) của ảnh tới 1.5 lần trong không gian màu HSV. Data augmentation được sử dụng để giúp giảm overfit cho model</li>
 </ul>
 <p>[<a href="#original_pc_b" style="color:red;">$ \triangleleft $</a>]<a name="original_pc"></a>: <strong>Công thức này khác với công thức gốc trong paper?</strong></p>
 <p>Mình chỉ thay đổi một chút về ký hiệu để đỡ lầm tưởng ký tự $i$ có liên quan đến số thứ tự của Grid cell trong công thức hàm Loss. Bên dưới là công thức gốc:</p>
@@ -318,11 +318,11 @@ $Pr(Class_{c}|Object)$: Là xác suất với điều kiện có Object xuất h
   <img src="https://hungvm2.github.io/images/yolov1/final_class_probs.png" alt="Class Probabilities" class="figure-img">
 </div>
 <p>[<a href="#iou_b" style="color:red;">$ \triangleleft $</a>]<a name="iou"></a>: <strong>IOU được tính như thế nào?</strong></p>
-<p><strong><em>Cách tính IOU được minh hoạ bằng hình vẽ sau:</em></strong></p>
+<p><em>Cách tính IOU được minh hoạ bằng hình vẽ sau:</em></p>
 <div class="text-center my-3">
 <img src="https://hungvm2.github.io/images/yolov1/IOU.png" alt="IOU">
 </div>
-<p><strong><em>Hoặc bằng code Python minh hoạ đơn giản như bên dưới:</em></strong></p>
+<p><em>Hoặc bằng code Python minh hoạ đơn giản như bên dưới:</em></p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">def</span> iou(box1, box2):
     <span style="color:#008000"># box1, box2 là mảng chứa ít nhất 4 phần tử: x,y,w,h</span>
     <span style="color:#008000"># x,y: toạ độ tâm; w,h: kích thước rộng, dài của box</span>
@@ -338,7 +338,7 @@ $Pr(Class_{c}|Object)$: Là xác suất với điều kiện có Object xuất h
     union_area = (w1 * h1 + w2 * h2 - intersection_area)
     <span style="color:#00f">return</span> intersection_area/union_area
 </code></pre></div><p>[<a href="#nms_b" style="color:red;">$ \triangleleft $</a>]<a name="nms"></a>:<strong>NMS được tính như thế nào?</strong></p>
-<p><strong><em>Thuật toán NMS gồm các bước sau:</em></strong></p>
+<p><em>Thuật toán NMS gồm các bước sau:</em></p>
 <ul>
 <li>Input: Mảng P có chứa các Bounding box từ output của Network, mỗi bounding box đã được xử lý để có dạng [x, y, w, h, p(c), c]. Trong đố: p(c) là giá trị xác suất lớn nhất trong N classes, c là id của class có xác suất lớn nhất.</li>
 <li><em>Bước 1</em>: Khởi tạo mảng F rỗng sẽ chứa các Bounding box cuối cùng, (i = 0)</li>
@@ -348,7 +348,7 @@ $Pr(Class_{c}|Object)$: Là xác suất với điều kiện có Object xuất h
 <li><em>Bước 5</em>: (i++), lặp lại từ bước 2</li>
 <li>Output : Mảng F có chứa các Bounding box cuối cùng</li>
 </ul>
-<p><strong><em>Hoặc minh hoạ bằng đoạn code bên dưới:</em></strong></p>
+<p><em>Hoặc minh hoạ bằng đoạn code bên dưới:</em></p>
 <div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">def</span> iou(box1, box2):
     <span style="color:#008000"># cách tính iou xem bên trên</span>
     <span style="color:#00f">pass</span>
