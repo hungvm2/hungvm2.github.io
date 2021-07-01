@@ -229,7 +229,7 @@ $Pr(Class_{c}|Object)$: Là xác suất với điều kiện có Object xuất h
 </div>
 <p>Trên hình có thể thấy rõ, có 3 bounding box thuộc về 3 grid cell (3,1), (2,3), (3,3) cùng detect ra Object người. Bước NMS sẽ lấy Bounding box có Confidence Score lớn nhất trong 3 box này.</p>
 <p><strong><em>Pipe line của hệ thống YOLO:</em></strong></p>
-<p>Image $(448,448,3) \Rightarrow $ Network Prediction $\Rightarrow $ Output $(7,7,30) \Rightarrow $ Tính lại class probabilities $Pr(c) \Rightarrow $ Bỏ qua các box có low probabilities $\Rightarrow $ Non-max suppression $\Rightarrow $ Final prediction.</p>
+<p>Image $(448,448,3) \Rightarrow $ Network Prediction $\Rightarrow $ Output (đã reshape) $(7,7,30) \Rightarrow $ Tính lại class probabilities $Pr(c) \Rightarrow $ Bỏ qua các box có low probabilities $\Rightarrow $ Non-max suppression $\Rightarrow $ Final prediction.</p>
 <p><strong><em>Giá trị xác suất nhận diện của mỗi class trong một grid cell sẽ được tính lại theo công thức sau:</em></strong> [<a href="#original_pc" style="color:red;">?</a>]<a name="original_pc_b"></a></p>
    <p style="display: inline-block;">\begin{multline*}
     Pr(c) = p(c) * C\\
@@ -289,7 +289,7 @@ $Pr(Class_{c}|Object)$: Là xác suất với điều kiện có Object xuất h
 + \displaystyle \sum_{i=0}^{49} \mathbb{1}\_{i}^{obj} \displaystyle \sum_{c \in classes}(p_{i}(c) - \hat{p_{i}}(c))^{2}
 \end{multline}
 </div>
-<p>Shape của output tensor sẽ là:</p>
+<p>Shape của output tensor, sau khi reshape sẽ là:</p>
 <p>\begin{equation}Ouput\quad Shape = (S , S , B * 5 + C) = (7 , 7 , 2 * 5 + 20) = (7 , 7 , 30)\end{equation}</p>
 <p>Tại sao tác giả chọn B = 2 cho mỗi grid cell?</p>
 <p>[<a href="#feature_scaling_b" style="color:red;">$ \triangleleft $</a>]<a name="feature_scaling"></a>: <strong>Tại sao phải có bước xử lý này?</strong></p>
