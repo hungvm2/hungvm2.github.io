@@ -8,16 +8,21 @@
     margin-top: 50px;
 }
 .header ul.nav {
-   height: 2.5rem;
     border-bottom: 2px solid black;
-    width: 400px;
+    max-width: 400px;
     justify-content: center;
     border-top: 2px solid black;
     margin-top: 1rem;
     margin-bottom: 4rem;
 }
-.header ul li.nav-link {
-    padding: 0.5rem 1rem;
+.header ul:first-child {
+    border-right: 1px solid black;
+}
+.header ul li.nav-item {
+    margin: 10px 0;
+}
+.header ul li a.nav-link {
+    padding: 0 1rem;
 }
 .content h1 {
     font-size: 33px;
