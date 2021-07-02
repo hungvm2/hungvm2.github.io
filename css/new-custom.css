@@ -15,7 +15,7 @@
     margin-top: 1rem;
     margin-bottom: 4rem;
 }
-.header ul:first-child {
+.header ul li:first-child {
     border-right: 1px solid black;
 }
 .header ul li.nav-item {
