@@ -4,7 +4,21 @@
 .header div.col-auto a:hover {
    text-decoration: none;
 }
-/*.content h2.meta-title a:hover {*/
-/*   color: #a71111;*/
-/*   text-decoration: none;*/
-/*}*/
+.header {
+    margin-top: 50px;
+}
+.header ul.nva {
+   height: 3rem;
+    border-bottom: 2px solid black;
+    width: 500px;
+    justify-content: center;
+    border-top: 2px solid black;
+    margin-top: 1rem;
+    margin-bottom: 4rem;
+}
+.header ul li.nav-link {
+    padding: 0.6rem 1rem;
+}
+.content h1 {
+    font-size: 33px;
+}
