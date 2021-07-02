@@ -113,16 +113,20 @@
 </ul>
 <h4 id="2-kiến-trúc-của-yolov2">2. Kiến trúc của YOLOv2</h4>
 <h5 id="21-better">2.1. Better</h5>
-<p>So với YOLOv1, model detection YOLOv2 đạt độ chính xác cao hơn đáng kể nhờ sử dụng những kỹ thuật mới sau:</p>
-<ul>
-<li>Batch Normalization: Tác giả thêm layer Batch Normalization vào tất cả các lớp Conv Layer trong Network và không sử dụng layer Drop out như ở YOLOv1. Kỹ thuật này giúp regularize model, giúp model cải thiện 2% mAP.</li>
-<li>High Resolution Classifier: giống như YOLOv1, YOLOv2 cũng train trước các lớp Conv layer trong một mạng classification, tuy nhiên sử dụng input size $448 \times 448$ thay vì $224 \times 224$ như YOLOv1. Việc train trước các lớp Conv Layer với input độ phân giải cao đã giúp cho Network trích xuất đặc trưng tốt hơn, cải thiện thêm 4% mAP.</li>
-<li>Sử dụng Anchor Boxes: Thay vì chỉ quy định số lượng Bounding box và để model tự predict ra coordinates của các Bounding boxes như ở YOLOv1, YOLOv2 sử dụng một tập 5 Boxes có sẵn với các kích thước cố định gọi là các Anchor boxes và predict offset của bounding box so với các Anchor boxes. Kỹ thuật này giúp model cải thiện 7% recall.</li>
-<li>Dimension Clusters: Thay vì tự chọn kích thước các Anchor boxes, tác giả sử dụng K-means clustering trên tập dữ liệu training bounding box để tự động tìm ra các kích thước và tỉ lệ phù hợp nhất.</li>
-<li>Direct location prediction: predict toạ độ tâm của bounding box gắn với vị trí của grid cell tương ứng. Kỹ thuật này giúp cải thiện 5% độ chính xác</li>
-<li>Fine-grained Features: concatenate feature map có độ phân giải cao hơn ở layer trước đó với feature map của layer cuối cùng để tạo thành output layer. Kỹ thuật này giúp cải thiện 1% độ chính xác</li>
-<li>Multi-Scale training: Do kiến trúc mới của Network không sử dụng FC layers nên có thể thay đổi input size tuỳ ý. Trong khi training, tác giả thay đổi input size với kích thước ngẫu nhiên sau mỗi 10 batches. Kỹ thuật này giúp Network có thể predict tốt với input ở những kích thước, độ phân giải khác nhau. Bên dưới là kết quả độ chính xác và hiệu năng của YOLOv2 ứng với các input size khác nhau:</li>
-</ul>
+<div class="text-center my-3">
+<img src="https://hungvm2.github.io/images/yolov2/better.png" class="img-fluid" alt="New techniques in YOLOv2">
+</div>
+So với YOLOv1, model detection YOLOv2 đạt độ chính xác cao hơn đáng kể nhờ sử dụng những kỹ thuật mới sau:
++ Batch Normalization: Tác giả thêm layer Batch Normalization vào tất cả các lớp Conv Layer trong Network và không sử dụng layer Drop out như ở YOLOv1. Kỹ thuật này giúp regularize model, giúp model cải thiện 2% mAP.
++ High Resolution Classifier: giống như YOLOv1, YOLOv2 cũng train trước các lớp Conv layer trong một mạng classification, tuy nhiên sử dụng input size $448 \times 448$ thay vì $224 \times 224$ như YOLOv1. Việc train trước các lớp Conv Layer với input độ phân giải cao đã giúp cho Network trích xuất đặc trưng tốt hơn, cải thiện thêm 4% mAP.
++ Sử dụng Anchor Boxes: Thay vì chỉ quy định số lượng Bounding box và để model tự predict ra coordinates của các Bounding boxes như ở YOLOv1, YOLOv2 sử dụng một tập 5 Boxes có sẵn với các kích thước cố định gọi là các Anchor boxes và predict offset của bounding box so với các Anchor boxes. Kỹ thuật này giúp model cải thiện 7% recall.
++ Dimension Clusters: Thay vì tự chọn kích thước các Anchor boxes, tác giả sử dụng K-means clustering trên tập dữ liệu training bounding box để tự động tìm ra các kích thước và tỉ lệ phù hợp nhất.
++ Direct location prediction: predict toạ độ tâm của bounding box gắn với vị trí của grid cell tương ứng. Kỹ thuật này giúp cải thiện 5% độ chính xác
++ Fine-grained Features: concatenate feature map có độ phân giải cao hơn ở layer trước đó với feature map của layer cuối cùng để tạo thành output layer. Kỹ thuật này giúp cải thiện 1% độ chính xác
++ Multi-Scale training: Do kiến trúc mới của Network không sử dụng FC layers nên có thể thay đổi input size tuỳ ý. Trong khi training, tác giả thay đổi input size với kích thước ngẫu nhiên sau mỗi 10 batches. Kỹ thuật này giúp Network có thể predict tốt với input ở những kích thước, độ phân giải khác nhau. Bên dưới là kết quả độ chính xác và hiệu năng của YOLOv2 ứng với các input size khác nhau:
+<div class="text-center my-3">
+<img src="https://hungvm2.github.io/images/yolov2/comparison.png" class="img-fluid" alt="Comparing with other Object detection System">
+</div>
 <h5 id="22-faster">2.2. Faster</h5>
 <p>YOLOv2 cũng nhanh hơn nhờ cải tiến sau:</p>
 <ul>
@@ -135,16 +139,35 @@
 </ul>
 </li>
 <li>Training Conv layers ở classification Network: gồm 2 bước
-Bước 1: Training với
+Bước 1:
 <ul>
 <li>Input: 224x224</li>
 <li>Dataset: ImageNet 1000 class</li>
 <li>Số epoch: 160</li>
 <li>Optimization algorithm: SGD</li>
-<li></li>
+<li>Learning rate: start với rate 0.1, schedule với polynomial rate decay mũ 4</li>
+<li>Weight decay</li>
+<li>Momentum</li>
+<li>Data augmentation
+Bước 2:</li>
+<li>Input: 448x448</li>
+<li>Epoch: 10</li>
+<li>Learning rate: start với rate $10^{-3}$</li>
 </ul>
 </li>
-<li>Training detection Network</li>
+<li>Training detection Network
+<ul>
+<li>Giữ lại toàn bộ phần Conv layers của Network trên, trừ Conv layer cuối</li>
+<li>Thêm 3 $3 \times 3 \times 1024$ Conv layers</li>
+<li>Thêm $1 \times 1$ Conv layer với số filter bằng kích thước output (125 filters)</li>
+<li>Thêm passthrough layer để model có thể sử dụng fine grain features của các layer trước đó</li>
+<li>Epoch: 160</li>
+<li>Learning rate schedule</li>
+<li>Weight decay</li>
+<li>Momentum</li>
+<li>Data augmentation</li>
+</ul>
+</li>
 </ul>
 <h5 id="23-stronger">2.3. Stronger</h5>
 <p>Các kỹ thuật sau được sử dụng giúp hệ thống có thể detect được hơn 9000 lớp đối tượng</p>
@@ -153,7 +176,11 @@ Bước 1: Training với
 <li>Dataset combination with WordTree</li>
 <li>Joint classification and detection</li>
 </ul>
+<blockquote>
+<p>Mình xin phép không đi vào chi tiết các kỹ thuật này</p>
+</blockquote>
 <h4 id="3-so-sánh-độ-chính-xác-và-hiệu-năng-với-các-mô-hình-khác">3. So sánh độ chính xác và hiệu năng với các mô hình khác</h4>
+<p>YOLOv2</p>
 <h3 id="ii-hiểu-paper">II. Hiểu Paper</h3>
 <blockquote>
 <p>Trong phần &ldquo;Hiểu Paper&rdquo; này, mình sẽ đi vào phân tích cũng như dẫn lại các giải thích của tác giả về các lý do tại sao tác giả chọn hướng tiếp cận đó, cũng như các thuật ngữ, công thức trong paper&hellip;</p>
