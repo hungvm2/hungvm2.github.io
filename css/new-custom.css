@@ -9,7 +9,8 @@
 }
 .header ul.nav {
     border-bottom: 2px solid black;
-    max-width: 400px;
+    max-width: 350px;
+    width: 100%;
     justify-content: center;
     border-top: 2px solid black;
     margin-top: 1rem;
@@ -17,8 +18,10 @@
 }
 .header ul li:first-child {
     border-right: 1px solid black;
+    text-align: right;
 }
 .header ul li.nav-item {
+    width: 50%;
     margin: 10px 0;
 }
 .header ul li a.nav-link {
