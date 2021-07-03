@@ -12,7 +12,7 @@
     <meta property="og:site_name" content="HungVM2&#39;s Notes" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://hungvm2.github.io/blog/grasping-yolov2-content/" />
+    <meta property="og:url" content="https://hungvm2.github.io/grasping-yolov2-content/" />
     <meta property="og:title" content="Đọc và phân tích Paper &#34;YOLO9000: Better, Faster, Stronger&#34;" />
     <meta property="og:image" content="https://hungvm2.github.io" />
     <meta property="og:description" content="" />
@@ -23,7 +23,7 @@
     <meta name="twitter:description" content="" />
     <meta name="twitter:image" content="https://hungvm2.github.io" />
 
-    <link rel="canonical" href="https://hungvm2.github.io/blog/grasping-yolov2-content/">
+    <link rel="canonical" href="https://hungvm2.github.io/grasping-yolov2-content/">
 
     <link rel="stylesheet" href="https://hungvm2.github.io/css/bootstrap.min.css" />
 
@@ -54,7 +54,7 @@
 
 <body>
     
-<div class="mt-xl header">
+    <div class="mt-xl header">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-auto">
@@ -86,38 +86,13 @@
     </div>
 </div>
 
-<div class="content">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-sm-12 col-lg-8">
-                <h1 class="mx-0 mx-md-4 blog-post-title">Đọc và phân tích Paper &#34;YOLO9000: Better, Faster, Stronger&#34;</h1>
-
-                <div class="mb-md-4 meta">
-                    
-                    
-                    <span class="author" title="Vũ Minh Hưng">
-                        Vũ Minh Hưng
-                    </span>
-                    
-                    
-
-                    <span class="date middot" title='Wed Jun 30 2021 22:28:49 &#43;07'>
-                        2021-06-30
-                    </span>
-
-                    <span class="reading-time middot">
-                        5 min read
-                    </span>
-
-                    <div class="d-none d-md-inline tags">
-                        <ul class="list-unstyled d-inline">
-                            
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="markdown blog-post-content">
-                    
+    <div class="content">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-sm-12 col-lg-8">
+                    <h1 class="mx-0 mx-md-4">Đọc và phân tích Paper &#34;YOLO9000: Better, Faster, Stronger&#34;</h1>
+                    <div class="markdown">
+                        
     <p>Tiếp theo trong series YOLO, ở bài viết này, chúng ta hãy cùng đọc và phân tích nội dung của paper &ldquo;<strong>YOLO9000: Better, Faster, Stronger</strong>&rdquo; published tháng 12 năm 2016 nhé!</p>
 <p>Vì mục đích của series này là muốn đi sâu hơn vào sự tiến hoá của YOLO qua từng version, nên mình sẽ chỉ tập trung vào kiến trúc của mô hình, cũng như các phương pháp tối ưu mới được sử dụng so với version trước.</p>
 <h3 id="i-đọc-paper">I. Đọc Paper</h3>
@@ -154,9 +129,6 @@
 <li>Fine-grained Features: concatenate feature map có độ phân giải cao hơn ở layer trước đó với feature map của layer cuối cùng để tạo thành output layer. Kỹ thuật này giúp cải thiện 1% độ chính xác</li>
 <li>Multi-Scale training: Do kiến trúc mới của Network không sử dụng FC layers nên có thể thay đổi input size tuỳ ý. Trong khi training, tác giả thay đổi input size với kích thước ngẫu nhiên sau mỗi 10 batches. Kỹ thuật này giúp Network có thể predict tốt với input ở những kích thước, độ phân giải khác nhau. Bên dưới là kết quả độ chính xác và hiệu năng của YOLOv2 ứng với các input size khác nhau:</li>
 </ul>
-<div class="text-center my-3">
-<img src="https://hungvm2.github.io/images/yolov2/comparison.png" class="img-fluid" alt="Comparing with other Object detection System">
-</div>
 <h5 id="22-faster">2.2. Faster</h5>
 <p>YOLOv2 cũng nhanh hơn nhờ cải tiến sau:</p>
 <ul>
@@ -235,16 +207,14 @@ Bước 2:</li>
 
 
 
+                    </div>
                 </div>
-
-                
             </div>
         </div>
     </div>
-</div>
 
 
-
+    
 
 
     

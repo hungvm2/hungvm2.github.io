@@ -6,13 +6,13 @@
     <description>Recent content on HungVM2&#39;s Notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 30 Jun 2021 22:28:49 +0700</lastBuildDate><atom:link href="https://hungvm2.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 21 Jun 2021 22:44:24 +0700</lastBuildDate><atom:link href="https://hungvm2.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Đọc và phân tích Paper &#34;YOLO9000: Better, Faster, Stronger&#34;</title>
-      <link>https://hungvm2.github.io/blog/grasping-yolov2-content/</link>
+      <link>https://hungvm2.github.io/grasping-yolov2-content/</link>
       <pubDate>Wed, 30 Jun 2021 22:28:49 +0700</pubDate>
       
-      <guid>https://hungvm2.github.io/blog/grasping-yolov2-content/</guid>
+      <guid>https://hungvm2.github.io/grasping-yolov2-content/</guid>
       <description>Tiếp theo trong series YOLO, ở bài viết này, chúng ta hãy cùng đọc và phân tích nội dung của paper &amp;ldquo;YOLO9000: Better, Faster, Stronger&amp;rdquo; published tháng 12 năm 2016 nhé!
 Vì mục đích của series này là muốn đi sâu hơn vào sự tiến hoá của YOLO qua từng version, nên mình sẽ chỉ tập trung vào kiến trúc của mô hình, cũng như các phương pháp tối ưu mới được sử dụng so với version trước.</description>
     </item>
