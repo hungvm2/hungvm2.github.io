@@ -226,12 +226,13 @@ Mỗi layer đều có input và output, output của layer này là input của
 <p>Sự thay đổi về distribution của input được gọi là &ldquo;<strong>Covariance Shift</strong>&rdquo;</p>
 <p>Nếu sự thay đổi về distribution của input diễn ra ở các hidden layer, thì nó được gọi là &ldquo;<strong>Internal Covariance Shift</strong>&rdquo;</p>
 <p>Sự thay đổi của distribution khiến cho các layers phải liên tục adapt với distribution mới của input. Điều này khiến cho quá trình training bị kém ổn định, khiến cho mất nhiều thời gian hơn để model hội tụ.</p>
-<p>Batch normalization là kỹ thuật giúp giảm Internal covariance shift từ đó giúp quá trình training ổn định và nhanh hội tụ hơn.</p>
+<p>Batch normalization là kỹ thuật giúp giảm Internal covariance shift từ đó giúp quá trình training ổn định và nhanh hội tụ hơn. [<a href="#bn_paper" style="color:red;">?</a>]<a name="bn_paper_b"></a></p>
 <hr>
 <h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
 <ul>
 <li><a href="https://arxiv.org/abs/1506.02640">You Only Look Once: Unified, Real-Time Object Detection</a></li>
 <li><a href="https://github.com/pjreddie/darknet">Darknet</a></li>
+<li>[<a href="#bn_paper_b" style="color:red;">$ \triangleleft $</a>]<a name="bn_paper"></a>: <a href="https://arxiv.org/pdf/1502.03167.pdf">Batch Normalization</a></li>
 </ul>
 
 
