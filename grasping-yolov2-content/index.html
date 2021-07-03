@@ -123,7 +123,7 @@
 </div>
 <p>So với YOLOv1, model detection YOLOv2 đạt độ chính xác cao hơn đáng kể nhờ sử dụng những kỹ thuật mới sau:</p>
 <ul>
-<li><em>Batch Normalization</em>: Tác giả thêm layer Batch Normalization vào tất cả các lớp Conv Layer trong Network và không sử dụng layer Drop out như ở YOLOv1. Kỹ thuật này giúp regularize model, giúp model cải thiện 2% mAP. [<a href="#batch_norm" style="color:red;">?</a>]<a name="batch_norm_b"></a></li>
+<li><em>Batch Normalization</em>: Tác giả thêm layer Batch Normalization vào tất cả các lớp Conv Layer trong Network và không sử dụng layer Drop out như ở YOLOv1. Kỹ thuật này giúp regularize model, giúp model cải thiện 2% mAP. [<a href="#batch_normalization" style="color:red;">?</a>]<a name="batch_normalization_b"></a></li>
 <li><em>High Resolution Classifier</em>: giống như YOLOv1, YOLOv2 cũng train trước các lớp Conv layer trong một mạng classification, tuy nhiên sử dụng input size $448 \times 448$ thay vì $224 \times 224$ như YOLOv1. Việc train trước các lớp Conv Layer với input độ phân giải cao đã giúp cho Network trích xuất đặc trưng tốt hơn, cải thiện thêm 4% mAP.</li>
 <li>Sử dụng <em>Anchor Boxes</em>: Thay vì chỉ quy định số lượng Bounding box và để model tự predict ra coordinates của các Bounding boxes như ở YOLOv1, YOLOv2 sử dụng một tập 5 Boxes có sẵn với các kích thước cố định gọi là các Anchor boxes và predict offset của bounding box so với các Anchor boxes. Kỹ thuật này giúp model cải thiện 7% recall.</li>
 <li><em>Dimension Clusters</em>: Thay vì tự chọn kích thước các Anchor boxes, tác giả sử dụng K-means clustering trên tập dữ liệu training bounding box để tự động tìm ra các kích thước và tỉ lệ phù hợp nhất.</li>
