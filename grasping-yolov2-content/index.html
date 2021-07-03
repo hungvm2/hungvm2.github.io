@@ -156,16 +156,19 @@
 <h4 id="3-training">3. Training:</h4>
 <h5 id="31-train-trước-các-lớp-conv-layer-trong-mạng-classifier">3.1. Train trước các lớp Conv layer trong mạng classifier:</h5>
 <div class="text-center my-3">
-<img src="https://hungvm2.github.io/images/yolov2/classification_network.png" class="img-fluid" alt="Error Analysis">
+<figure class="figure">
+  <img src="https://hungvm2.github.io/images/yolov2/classification_network.png" alt="Error Analysis" class="figure-img">
+  <figcaption class="figure-caption">Kiến trúc mạng classifier</figcaption>
+</figure>
 </div>
 <p>Sử dụng Dataset Imagenet 1000 class, gồm 2 bước:</p>
-<p>Bước 1: traing trước 160 epoch với input size $224 \times 224$</p>
+<p><strong><em>Bước 1:</em></strong> traing trước 160 epoch với input size $224 \times 224$</p>
 <ul>
 <li>Optimization algorithm: SGD</li>
 <li>Learning rate schedule: polynomial rate decay</li>
 <li>Regularization techniques: Weight decay, Momentum, Data augmentation</li>
 </ul>
-<p>Bước 2: traing tiếp 10 epochs với input size $448 \times 448$</p>
+<p><strong><em>Bước 2:</em></strong> traing tiếp 10 epochs với input size $448 \times 448$</p>
 <ul>
 <li>Learning rate: start với rate $10^{-3}$</li>
 <li>Regularization techniques: Weight decay, Momentum, Data augmentation</li>
@@ -173,10 +176,13 @@
 <h5 id="32-train-mạng-detection">3.2. Train mạng detection:</h5>
 <h5 id="321-set-up-kiến-trúc-mạng">3.2.1. Set up kiến trúc mạng:</h5>
 <ul>
-<li>Giữ lại toàn bộ phần Conv layers của Network trên, trừ Conv layer cuối</li>
+<li>Giữ lại toàn bộ phần Conv layers của mạng clasisfier bên trên, trừ layer $1 \times 1 \times 1000$ cuối cùng</li>
 </ul>
 <div class="text-center my-3">
-<img src="https://hungvm2.github.io/images/yolov2/conv_layers.png" class="img-fluid" alt="Error Analysis">
+<figure class="figure">
+  <img src="https://hungvm2.github.io/images/yolov2/conv_layers.png" alt="Conv layers" class="figure-img">
+  <figcaption class="figure-caption">Các Conv layers được giữ lại từ mạng classifier để đặt vào mạng detection</figcaption>
+</figure>
 </div>
 <ul>
 <li>Thêm 3 Conv layers $3 \times 3 \times 1024$</li>
