@@ -30,3 +30,7 @@
 .content h1 {
     font-size: 33px;
 }
+figure.figure {
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+}
