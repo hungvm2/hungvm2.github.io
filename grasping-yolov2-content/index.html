@@ -218,6 +218,15 @@
 <blockquote>
 <p>Trong phần &ldquo;Hiểu Paper&rdquo; này, mình sẽ đi vào phân tích cũng như dẫn lại các giải thích của tác giả về các lý do tại sao tác giả chọn hướng tiếp cận đó, cũng như các thuật ngữ, công thức trong paper&hellip;</p>
 </blockquote>
+<hr class="half-line">
+<p>[<a href="#batch_normalization_b" style="color:red;">$ \triangleleft $</a>]<a name="batch_normalization"></a>:<strong>Batch normalization là gì?</strong><br>
+Mỗi layer đều có input và output, output của layer này là input của layer tiếp sau đó.</p>
+<p>Mỗi khi weight (parameters) được update trong khi training, input ở mỗi layer sẽ bị ảnh hưởng bởi tất cả các params ở các layer trước đó.</p>
+<p>Vì vậy một sự thay đổi nhỏ của params sẽ khiến cho input của layer thay đổi càng lớn khi layer càng sâu hơn.</p>
+<p>Sự thay đổi về distribution của input được gọi là &ldquo;<strong>Covariance Shift</strong>&rdquo;</p>
+<p>Nếu sự thay đổi về distribution của input diễn ra ở các hidden layer, thì nó được gọi là &ldquo;<strong>Internal Covariance Shift</strong>&rdquo;</p>
+<p>Sự thay đổi của distribution khiến cho các layers phải liên tục adapt với distribution mới của input. Điều này khiến cho quá trình training bị kém ổn định, khiến cho mất nhiều thời gian hơn để model hội tụ.</p>
+<p>Batch normalization là kỹ thuật giúp giảm Internal covariance shift từ đó giúp quá trình training ổn định và nhanh hội tụ hơn.</p>
 <hr>
 <h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
 <ul>
