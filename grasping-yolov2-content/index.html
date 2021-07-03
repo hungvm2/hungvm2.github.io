@@ -132,6 +132,7 @@
 <li><em>Multi-Scale training</em>: Do kiến trúc mới của Network không sử dụng FC layers nên có thể thay đổi input size tuỳ ý. Trong khi training, tác giả thay đổi input size với kích thước ngẫu nhiên sau mỗi 10 batches. Kỹ thuật này giúp Network có thể predict tốt với input ở những kích thước, độ phân giải khác nhau. Bên dưới là kết quả độ chính xác và hiệu năng của YOLOv2 ứng với các input size khác nhau:</li>
 <li>Thêm <em>passthrough layer</em>: để model có thể sử dụng fine grain features của các layer trước đó</li>
 </ul>
+<hr class="half-line">
 <h5 id="22-faster">2.2 Faster</h5>
 <p>YOLOv2 cũng nhanh hơn nhờ cải tiến sau:</p>
 <ul>
@@ -144,6 +145,7 @@
 </ul>
 </li>
 </ul>
+<hr class="half-line">
 <h5 id="23-stronger">2.3. Stronger</h5>
 <p>Các kỹ thuật được sử dụng giúp hệ thống có thể detect được hơn 9000 lớp đối tượng:</p>
 <ul>
@@ -173,6 +175,7 @@
 <li>Learning rate: start với rate $10^{-3}$</li>
 <li>Regularization techniques: Weight decay, Momentum, Data augmentation</li>
 </ul>
+<hr class="half-line">
 <h5 id="32-train-mạng-detection">3.2. Train mạng detection:</h5>
 <h5 id="321-set-up-kiến-trúc-mạng">3.2.1. Set up kiến trúc mạng:</h5>
 <ul>
