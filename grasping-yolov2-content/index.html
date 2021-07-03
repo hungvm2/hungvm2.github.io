@@ -94,7 +94,7 @@
                     <div class="markdown">
                         
     <p>Tiếp theo trong series YOLO, ở bài viết này, chúng ta hãy cùng đọc và phân tích nội dung của paper &ldquo;<strong>YOLO9000: Better, Faster, Stronger</strong>&rdquo; published tháng 12 năm 2016 nhé!</p>
-<p>Vì mục đích của series này là muốn đi sâu hơn vào sự tiến hoá của YOLO qua từng version, nên mình sẽ chỉ tập trung vào kiến trúc của mô hình, cũng như các phương pháp tối ưu mới được sử dụng so với version trước.</p>
+<p>Vì mục đích của series này là muốn đi sâu hơn vào sự tiến hoá của YOLO qua từng version, nên mình sẽ chỉ <strong>tập trung vào kiến trúc</strong> của mô hình, cũng như các <strong>phương pháp tối ưu hiệu năng và độ chính xác (FPS/mAP) mới</strong> được sử dụng so với version trước.</p>
 <h3 id="i-đọc-paper">I. Đọc Paper</h3>
 <blockquote>
 <p>Trong phần &ldquo;Đọc Paper&rdquo; này, mình sẽ tóm lược lại những ý chính của tác giả, có bỏ qua một số nội dung&hellip; Khi đọc sẽ có các reference (có dạng [<a style="color:red;">?</a>]). Bạn có thể click vào các dấu hỏi đó để dẫn xuống phần &ldquo;Hiểu Paper&rdquo; bên dưới để đọc sâu hơn về vấn đề được đề cập.</p>
@@ -102,16 +102,16 @@
 <h4 id="1-giới-thiệu-chung-về-model">1. Giới thiệu chung về model</h4>
 <p>Tác giả giới thiệu hệ thống detect objection mới, tên là: <strong>YOLO9000</strong>. So với hệ thống trước, hệ thống này có các điểm mới:</p>
 <ul>
-<li>Phần detection của hệ thống có tên là YOLOv2 (Better và Faster)
+<li>Phần detection của hệ thống có tên là <strong>YOLOv2</strong> (Better và Faster)
 <ul>
 <li>Vẫn xử lý được real-time</li>
-<li>Xử lý được input với kích thước khác nhau</li>
-<li>Trade-off giữa độ chính xác và hiệu năng: Đạt 76.8 mAP/67 FPS hoặc 78.6 mAP/40 FPS trên VOC 2007</li>
+<li>Xử lý được <strong>input với kích thước khác nhau</strong></li>
+<li><strong>Trade-off giữa độ chính xác và hiệu năng</strong>: Đạt 76.8 mAP/67 FPS hoặc 78.6 mAP/40 FPS trên VOC 2007</li>
 </ul>
 </li>
-<li>Cơ chế training cùng nhau trên cả dữ liệu object detection và classification (Stronger), giúp hệ thống có thể detect được trên 9000 lớp đối tượng khác nhau</li>
+<li>Kỹ thuật training cùng nhau trên cả dữ liệu object detection và classification, giúp hệ thống có thể detect được trên 9000 lớp đối tượng khác nhau (Stronger)</li>
 </ul>
-<h4 id="2-kiến-trúc-của-yolov2">2. Kiến trúc của YOLOv2</h4>
+<h4 id="2-các-cải-tiến-so-với-yolov1">2. Các cải tiến so với YOLOv1</h4>
 <h5 id="21-better">2.1. Better</h5>
 <div class="text-center my-3">
 <figure class="figure">
@@ -121,65 +121,70 @@
 </div>
 <p>So với YOLOv1, model detection YOLOv2 đạt độ chính xác cao hơn đáng kể nhờ sử dụng những kỹ thuật mới sau:</p>
 <ul>
-<li>Batch Normalization: Tác giả thêm layer Batch Normalization vào tất cả các lớp Conv Layer trong Network và không sử dụng layer Drop out như ở YOLOv1. Kỹ thuật này giúp regularize model, giúp model cải thiện 2% mAP.</li>
-<li>High Resolution Classifier: giống như YOLOv1, YOLOv2 cũng train trước các lớp Conv layer trong một mạng classification, tuy nhiên sử dụng input size $448 \times 448$ thay vì $224 \times 224$ như YOLOv1. Việc train trước các lớp Conv Layer với input độ phân giải cao đã giúp cho Network trích xuất đặc trưng tốt hơn, cải thiện thêm 4% mAP.</li>
-<li>Sử dụng Anchor Boxes: Thay vì chỉ quy định số lượng Bounding box và để model tự predict ra coordinates của các Bounding boxes như ở YOLOv1, YOLOv2 sử dụng một tập 5 Boxes có sẵn với các kích thước cố định gọi là các Anchor boxes và predict offset của bounding box so với các Anchor boxes. Kỹ thuật này giúp model cải thiện 7% recall.</li>
-<li>Dimension Clusters: Thay vì tự chọn kích thước các Anchor boxes, tác giả sử dụng K-means clustering trên tập dữ liệu training bounding box để tự động tìm ra các kích thước và tỉ lệ phù hợp nhất.</li>
-<li>Direct location prediction: predict toạ độ tâm của bounding box gắn với vị trí của grid cell tương ứng. Kỹ thuật này giúp cải thiện 5% độ chính xác</li>
-<li>Fine-grained Features: concatenate feature map có độ phân giải cao hơn ở layer trước đó với feature map của layer cuối cùng để tạo thành output layer. Kỹ thuật này giúp cải thiện 1% độ chính xác</li>
-<li>Multi-Scale training: Do kiến trúc mới của Network không sử dụng FC layers nên có thể thay đổi input size tuỳ ý. Trong khi training, tác giả thay đổi input size với kích thước ngẫu nhiên sau mỗi 10 batches. Kỹ thuật này giúp Network có thể predict tốt với input ở những kích thước, độ phân giải khác nhau. Bên dưới là kết quả độ chính xác và hiệu năng của YOLOv2 ứng với các input size khác nhau:</li>
+<li><em>Batch Normalization</em>: Tác giả thêm layer Batch Normalization vào tất cả các lớp Conv Layer trong Network và không sử dụng layer Drop out như ở YOLOv1. Kỹ thuật này giúp regularize model, giúp model cải thiện 2% mAP. [<a href="#batch_norm" style="color:red;">?</a>]<a name="batch_norm_b"></a></li>
+<li><em>High Resolution Classifier</em>: giống như YOLOv1, YOLOv2 cũng train trước các lớp Conv layer trong một mạng classification, tuy nhiên sử dụng input size $448 \times 448$ thay vì $224 \times 224$ như YOLOv1. Việc train trước các lớp Conv Layer với input độ phân giải cao đã giúp cho Network trích xuất đặc trưng tốt hơn, cải thiện thêm 4% mAP.</li>
+<li>Sử dụng <em>Anchor Boxes</em>: Thay vì chỉ quy định số lượng Bounding box và để model tự predict ra coordinates của các Bounding boxes như ở YOLOv1, YOLOv2 sử dụng một tập 5 Boxes có sẵn với các kích thước cố định gọi là các Anchor boxes và predict offset của bounding box so với các Anchor boxes. Kỹ thuật này giúp model cải thiện 7% recall.</li>
+<li><em>Dimension Clusters</em>: Thay vì tự chọn kích thước các Anchor boxes, tác giả sử dụng K-means clustering trên tập dữ liệu training bounding box để tự động tìm ra các kích thước và tỉ lệ phù hợp nhất.</li>
+<li><em>Direct location prediction</em>: predict toạ độ tâm của bounding box gắn với vị trí của grid cell tương ứng. Kỹ thuật này giúp cải thiện 5% độ chính xác</li>
+<li><em>Fine-grained Features</em>: concatenate feature map có độ phân giải cao hơn ở layer trước đó với feature map của layer cuối cùng để tạo thành output layer. Kỹ thuật này giúp cải thiện 1% độ chính xác</li>
+<li><em>Multi-Scale training</em>: Do kiến trúc mới của Network không sử dụng FC layers nên có thể thay đổi input size tuỳ ý. Trong khi training, tác giả thay đổi input size với kích thước ngẫu nhiên sau mỗi 10 batches. Kỹ thuật này giúp Network có thể predict tốt với input ở những kích thước, độ phân giải khác nhau. Bên dưới là kết quả độ chính xác và hiệu năng của YOLOv2 ứng với các input size khác nhau:</li>
+<li>Thêm <em>passthrough layer</em>: để model có thể sử dụng fine grain features của các layer trước đó</li>
 </ul>
-<h5 id="22-faster">2.2. Faster</h5>
+<h5 id="22-faster">2.2 Faster</h5>
 <p>YOLOv2 cũng nhanh hơn nhờ cải tiến sau:</p>
 <ul>
 <li>Kiến trúc của Network với tên gọi là Darknet-19:
 <ul>
 <li>Gồm 29 Conv layers và 5 Max pooling layers</li>
 <li>Sử dụng Batch normalization để ổn định quá trình training, tăng tốc hội tụ và regularize model</li>
-<li>Global average pooling ở bước prediction</li>
+<li><strong>Global average pooling</strong> ở bước prediction</li>
 <li>$1 \times 1$ filters để compress feature presentation giữa các $3 \times 3$ Conv layers.</li>
-</ul>
-</li>
-<li>Training Conv layers ở classification Network: gồm 2 bước
-Bước 1:
-<ul>
-<li>Input: 224x224</li>
-<li>Dataset: ImageNet 1000 class</li>
-<li>Số epoch: 160</li>
-<li>Optimization algorithm: SGD</li>
-<li>Learning rate: start với rate 0.1, schedule với polynomial rate decay mũ 4</li>
-<li>Weight decay</li>
-<li>Momentum</li>
-<li>Data augmentation
-Bước 2:</li>
-<li>Input: 448x448</li>
-<li>Epoch: 10</li>
-<li>Learning rate: start với rate $10^{-3}$</li>
-</ul>
-</li>
-<li>Training detection Network
-<ul>
-<li>Giữ lại toàn bộ phần Conv layers của Network trên, trừ Conv layer cuối</li>
-<li>Thêm 3 $3 \times 3 \times 1024$ Conv layers</li>
-<li>Thêm $1 \times 1$ Conv layer với số filter bằng kích thước output (125 filters)</li>
-<li>Thêm passthrough layer để model có thể sử dụng fine grain features của các layer trước đó</li>
-<li>Epoch: 160</li>
-<li>Learning rate schedule</li>
-<li>Weight decay</li>
-<li>Momentum</li>
-<li>Data augmentation</li>
 </ul>
 </li>
 </ul>
 <h5 id="23-stronger">2.3. Stronger</h5>
-<blockquote>
-<p>Mình xin phép không đi vào chi tiết các kỹ thuật được tác giả giới thiệu ở phần này</p>
-</blockquote>
-<p>Các kỹ thuật sau được sử dụng giúp hệ thống có thể detect được hơn 9000 lớp đối tượng</p>
+<p>Các kỹ thuật được sử dụng giúp hệ thống có thể detect được hơn 9000 lớp đối tượng:</p>
 <ul>
 <li>Hierarchical classification</li>
 <li>Dataset combination with WordTree</li>
 <li>Joint classification and detection</li>
+</ul>
+<p>Vì đây không phải là các kỹ thuật giúp tối ưu FPS và mAP của hệ thống nên mình xin phép không đi vào chi tiết các kỹ thuật được tác giả giới thiệu ở phần này.</p>
+<h4 id="3-training">3. Training:</h4>
+<h5 id="31-train-trước-các-lớp-conv-layer-trong-mạng-classifier">3.1. Train trước các lớp Conv layer trong mạng classifier:</h5>
+<div class="text-center my-3">
+<img src="https://hungvm2.github.io/images/yolov2/classification_network.png" class="img-fluid" alt="Error Analysis">
+</div>
+<p>Sử dụng Dataset Imagenet 1000 class, gồm 2 bước:</p>
+<p>Bước 1: traing trước 160 epoch với input size $224 \times 224$</p>
+<ul>
+<li>Optimization algorithm: SGD</li>
+<li>Learning rate schedule: polynomial rate decay</li>
+<li>Regularization techniques: Weight decay, Momentum, Data augmentation</li>
+</ul>
+<p>Bước 2: traing tiếp 10 epochs với input size $448 \times 448$</p>
+<ul>
+<li>Learning rate: start với rate $10^{-3}$</li>
+<li>Regularization techniques: Weight decay, Momentum, Data augmentation</li>
+</ul>
+<h5 id="32-train-mạng-detection">3.2. Train mạng detection:</h5>
+<h5 id="321-set-up-kiến-trúc-mạng">3.2.1. Set up kiến trúc mạng:</h5>
+<ul>
+<li>Giữ lại toàn bộ phần Conv layers của Network trên, trừ Conv layer cuối</li>
+</ul>
+<div class="text-center my-3">
+<img src="https://hungvm2.github.io/images/yolov2/conv_layers.png" class="img-fluid" alt="Error Analysis">
+</div>
+<ul>
+<li>Thêm 3 $3 \times 3 \times 1024$ Conv layers</li>
+<li>Thêm $1 \times 1$ Conv layer với số filter bằng kích thước output (125 filters)</li>
+<li>Thêm <em>passthrough layer</em></li>
+</ul>
+<h5 id="322-hàm-loss">3.2.2. Hàm loss:</h5>
+<h4 id="333-các-kỹ-thuật-khi-training">3.3.3. Các kỹ thuật khi training:</h4>
+<ul>
+<li>Learning rate schedule</li>
+<li>Regularization techniques: Weight decay, Momentum, Data augmentation</li>
 </ul>
 <h4 id="3-so-sánh-độ-chính-xác-và-hiệu-năng-với-các-mô-hình-khác">3. So sánh độ chính xác và hiệu năng với các mô hình khác</h4>
 <p>YOLOv2 đạt độ chính xác tương đương hoặc nhỉnh hơn so với các thuật toán khác cùng thời điểm, trong khi nhanh hơn nhiều lần</p>

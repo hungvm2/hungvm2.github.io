@@ -14,7 +14,7 @@
       
       <guid>https://hungvm2.github.io/grasping-yolov2-content/</guid>
       <description>Tiếp theo trong series YOLO, ở bài viết này, chúng ta hãy cùng đọc và phân tích nội dung của paper &amp;ldquo;YOLO9000: Better, Faster, Stronger&amp;rdquo; published tháng 12 năm 2016 nhé!
-Vì mục đích của series này là muốn đi sâu hơn vào sự tiến hoá của YOLO qua từng version, nên mình sẽ chỉ tập trung vào kiến trúc của mô hình, cũng như các phương pháp tối ưu mới được sử dụng so với version trước.</description>
+Vì mục đích của series này là muốn đi sâu hơn vào sự tiến hoá của YOLO qua từng version, nên mình sẽ chỉ tập trung vào kiến trúc của mô hình, cũng như các phương pháp tối ưu hiệu năng và độ chính xác (FPS/mAP) mới được sử dụng so với version trước.</description>
     </item>
     
     <item>
