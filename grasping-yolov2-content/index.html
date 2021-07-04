@@ -125,7 +125,7 @@
 <ul>
 <li><em>Batch Normalization</em>: Tác giả thêm layer Batch Normalization vào tất cả các lớp Conv Layer trong Network và không sử dụng layer Drop out như ở YOLOv1. Kỹ thuật này giúp regularize model, giúp model cải thiện 2% mAP. [<a href="#batch_normalization" style="color:red;">?</a>]<a name="batch_normalization_b"></a></li>
 <li><em>High Resolution Classifier</em>: giống như YOLOv1, YOLOv2 cũng train trước các lớp Conv layer trong một mạng classification, tuy nhiên sử dụng input size $448 \times 448$ thay vì $224 \times 224$ như YOLOv1. Việc train trước các lớp Conv Layer với input độ phân giải cao đã giúp cho Network trích xuất đặc trưng tốt hơn, cải thiện thêm 4% mAP.</li>
-<li>Sử dụng <em>Anchor Boxes</em>: Thay vì chỉ quy định số lượng Bounding box và để model tự predict ra coordinates của các Bounding boxes như ở YOLOv1, YOLOv2 sử dụng một tập 5 Boxes có sẵn với các kích thước cố định gọi là các Anchor boxes và predict offset của bounding box so với các Anchor boxes. Kỹ thuật này giúp model cải thiện 7% recall.</li>
+<li>Sử dụng <em>Anchor Boxes</em>: Thay vì chỉ quy định số lượng Bounding box và để model tự predict ra coordinates của các Bounding boxes như ở YOLOv1, YOLOv2 sử dụng một tập 5 Boxes có sẵn với các kích thước cố định gọi là các Anchor boxes và predict offset của bounding box so với các Anchor boxes. Kỹ thuật này giúp model cải thiện 7% recall. [<a href="#anchor_box" style="color:red;">?</a>]<a name="anchor_box_b"></a></li>
 <li><em>Dimension Clusters</em>: Thay vì tự chọn kích thước các Anchor boxes, tác giả sử dụng K-means clustering trên tập dữ liệu training bounding box để tự động tìm ra các kích thước và tỉ lệ phù hợp nhất.</li>
 <li><em>Direct location prediction</em>: predict toạ độ tâm của bounding box gắn với vị trí của grid cell tương ứng. Kỹ thuật này giúp cải thiện 5% độ chính xác</li>
 <li><em>Fine-grained Features</em>: concatenate feature map có độ phân giải cao hơn ở layer trước đó với feature map của layer cuối cùng để tạo thành output layer. Kỹ thuật này giúp cải thiện 1% độ chính xác</li>
@@ -226,7 +226,9 @@ Mỗi layer đều có input và output, output của layer này là input của
 <p>Sự thay đổi về distribution của input được gọi là &ldquo;<strong>Covariance Shift</strong>&rdquo;</p>
 <p>Nếu sự thay đổi về distribution của input diễn ra ở các hidden layer, thì nó được gọi là &ldquo;<strong>Internal Covariance Shift</strong>&rdquo;</p>
 <p>Sự thay đổi của distribution khiến cho các layers phải liên tục adapt với distribution mới của input. Điều này khiến cho quá trình training bị kém ổn định, khiến cho mất nhiều thời gian hơn để model hội tụ.</p>
-<p>Batch normalization là kỹ thuật giúp giảm Internal covariance shift từ đó giúp quá trình training ổn định và nhanh hội tụ hơn. [<a href="#bn_paper" style="color:red;">?</a>]<a name="bn_paper_b"></a></p>
+<p>Batch normalization là kỹ thuật giúp giảm Internal covariance shift từ đó giúp quá trình training ổn định và cho phép sử dụng learning rate lớn hơn, nên nhanh hội tụ hơn. [<a href="#bn_paper" style="color:red;">?</a>]<a name="bn_paper_b"></a></p>
+<hr class="half-line">
+<p>[<a href="#anchor_box_b" style="color:red;">$ \triangleleft $</a>]<a name="anchor_box"></a>:<strong>Chi tiết về cách tính offset của Bounding box so với Anchor Boxes</strong></p>
 <hr>
 <h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
 <ul>
