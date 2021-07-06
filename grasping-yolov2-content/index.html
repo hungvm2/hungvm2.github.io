@@ -114,14 +114,14 @@
 </ul>
 <hr>
 <h4 id="2-các-cải-tiến-so-với-yolov1">2. Các cải tiến so với YOLOv1</h4>
-<h5 id="21-better">2.1. Better</h5>
+<h5 id="21-better-and-faster">2.1 Better and Faster</h5>
 <div class="text-center my-3">
 <figure class="figure">
   <img src="https://hungvm2.github.io/images/yolov2/better.png" alt="Improvement in every technique" class="figure-img">
   <figcaption class="figure-caption">Ảnh 1: Sử cải thiện mAP cho từng kỹ thuật mới được sử dụng ở YOLOv2 so với YOLOv1</figcaption>
 </figure>
 </div>
-<p>So với YOLOv1, model detection YOLOv2 đạt độ chính xác cao hơn đáng kể nhờ sử dụng những kỹ thuật mới sau:</p>
+<p>So với YOLOv1, YOLOv2 đạt độ chính xác cao hơn và nhanh hơn đáng kể nhờ sử dụng những kỹ thuật mới sau:</p>
 <ul>
 <li><em>Batch Normalization</em>: Tác giả thêm layer Batch Normalization vào tất cả các lớp Conv Layer trong Network và không sử dụng layer Drop out như ở YOLOv1. Kỹ thuật này giúp regularize model, giúp model cải thiện 2% mAP. [<a href="#batch_normalization" style="color:red;">?</a>]<a name="batch_normalization_b"></a></li>
 <li><em>High Resolution Classifier</em>: giống như YOLOv1, YOLOv2 cũng train trước các lớp Conv layer trong một mạng classification, tuy nhiên sử dụng input size $448 \times 448$ thay vì $224 \times 224$ như YOLOv1. Việc train trước các lớp Conv Layer với input độ phân giải cao đã giúp cho Network trích xuất đặc trưng tốt hơn, cải thiện thêm 4% mAP.</li>
@@ -132,20 +132,7 @@
 <li><em>Multi-Scale training</em>: Do kiến trúc mới của Network không sử dụng FC layers nên có thể thay đổi input size tuỳ ý. Trong khi training, tác giả thay đổi input size với kích thước ngẫu nhiên sau mỗi 10 batches. Kỹ thuật này giúp Network có thể predict tốt với input ở những kích thước, độ phân giải khác nhau.</li>
 </ul>
 <hr class="half-line">
-<h5 id="22-faster">2.2 Faster</h5>
-<p>YOLOv2 cũng nhanh hơn nhờ cải tiến sau:</p>
-<ul>
-<li>Kiến trúc của Network với tên gọi là Darknet-19:
-<ul>
-<li>Gồm 29 Conv layers và 5 Max pooling layers</li>
-<li>Sử dụng Batch normalization để ổn định quá trình training, tăng tốc hội tụ và regularize model</li>
-<li><strong>Global average pooling</strong> ở bước prediction</li>
-<li>$1 \times 1$ filters để compress feature presentation giữa các $3 \times 3$ Conv layers.</li>
-</ul>
-</li>
-</ul>
-<hr class="half-line">
-<h5 id="23-stronger">2.3. Stronger</h5>
+<h5 id="22-stronger">2.2. Stronger</h5>
 <p>Các kỹ thuật được sử dụng giúp hệ thống có thể detect được hơn 9000 lớp đối tượng:</p>
 <ul>
 <li>Hierarchical classification</li>
@@ -155,13 +142,14 @@
 <p>Vì đây không phải là các kỹ thuật giúp tối ưu FPS và mAP của hệ thống nên mình xin phép không đi vào chi tiết các kỹ thuật được tác giả giới thiệu ở phần này.</p>
 <hr>
 <h4 id="3-training">3. Training:</h4>
-<h5 id="31-train-trước-các-lớp-conv-layer-trong-mạng-classifier">3.1. Train trước các lớp Conv layer trong mạng classifier:</h5>
+<h5 id="31-train-trước-các-lớp-conv-layer-trong-mạng-classifier-với-tên-gọi-darknet-19">3.1. Train trước các lớp Conv layer trong mạng classifier với tên gọi Darknet-19:</h5>
 <div class="text-center my-3">
 <figure class="figure">
   <img src="https://hungvm2.github.io/images/yolov2/classification_network.png" alt="Error Analysis" class="figure-img">
-  <figcaption class="figure-caption">Kiến trúc mạng classifier</figcaption>
+  <figcaption class="figure-caption">Kiến trúc mạng Darknet-19</figcaption>
 </figure>
 </div>
++ $1 \times 1$ filters để compress feature presentation giữa các $3 \times 3$ Conv layers.
 <p>Sử dụng Dataset Imagenet 1000 class, gồm 2 bước:</p>
 <p><strong><em>Bước 1:</em></strong> traing trước 160 epoch với input size $224 \times 224$</p>
 <ul>
@@ -178,7 +166,7 @@
 <h5 id="32-train-mạng-detection">3.2. Train mạng detection:</h5>
 <h5 id="321-set-up-kiến-trúc-mạng">3.2.1. Set up kiến trúc mạng:</h5>
 <ul>
-<li>Giữ lại toàn bộ phần Conv layers của mạng clasisfier bên trên, trừ layer $1 \times 1 \times 1000$ cuối cùng</li>
+<li>Giữ lại toàn bộ phần Conv layers của mạng Darknet-19 bên trên, trừ layer $1 \times 1 \times 1000$ cuối cùng</li>
 </ul>
 <div class="text-center my-3">
 <figure class="figure">
@@ -188,6 +176,7 @@
 </div>
 <ul>
 <li>Thêm 3 Conv layers $3 \times 3 \times 1024$</li>
+<li>Thêm 1 layer <strong>Global average pooling</strong></li>
 <li>Thêm $1 \times 1$ Conv layer với số filter bằng kích thước output (125 filters)</li>
 <li>Thêm <em>passthrough layer</em></li>
 </ul>
