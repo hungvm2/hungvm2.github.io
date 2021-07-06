@@ -139,7 +139,7 @@
 </ul>
 <hr>
 <h4 id="2-kiến-trúc-của-hệ-thống-yolo">2. Kiến trúc của hệ thống YOLO</h4>
-<p>Hệ thống YOLO <strong>chia</strong> ảnh đầu vào thành <strong>một lưới</strong> $S\times S$ các ô vuông (grid cell). Nếu trung tâm (center) của vật thể rơi vào cell nào, thì cell đó sẽ chịu trách nhiệm phát hiện vật thể đó. [<a href="#grid_cell" style="color:red;">?</a>]<a name="grid_cell_b" style="color:red;"></a></p>
+<p>Hệ thống YOLO <strong>chia</strong> ảnh đầu vào thành <strong>một lưới</strong> $S\times S$ các ô vuông (grid cell). Nếu trung tâm (center) của vật thể rơi vào cell nào, thì cell đó sẽ chịu trách nhiệm phát hiện vật thể đó, và một grid cell chỉ có thể <strong>chứa tối đa 1 object</strong>. [<a href="#grid_cell" style="color:red;">?</a>]<a name="grid_cell_b" style="color:red;"></a></p>
 <div class="text-center my-3">
 <img class="img-fluid" src="https://hungvm2.github.io/images/yolov1/grid_cell.png" alt="Grid Cell">
 </div>
@@ -153,7 +153,7 @@
 </li>
 <li>
 <p>1 <strong>confidence score</strong> $C$, tính theo công thức:
-\begin{equation}C_{z} = Pr(Object) * IOU_{pred_{z}}^{truth}, \quad z = (1,&hellip;,B) \label{ref_c}\end{equation}</p>
+\begin{equation}C = Pr(Object) * IOU_{pred}^{truth} \label{ref_c}\end{equation}</p>
   <span style="display:inline-block">
   $Pr(Object) = 
   \begin{cases}
@@ -161,7 +161,7 @@
   1 & \quad \text{nếu có Object trong cell}
   \end{cases}$
   </span>
-  $IOU_{pred_{z}}^{truth}$: Giá trị IOU giữa ground truth và predicted bounding box. [<a href="#iou" style="color:red;">?</a>]<a name="iou_b" style="color:red;"></a>
+  $IOU_{pred}^{truth}$: Giá trị IOU giữa ground truth và predicted bounding box. [<a href="#iou" style="color:red;">?</a>]<a name="iou_b" style="color:red;"></a>
 </li>
 </ul>
 </li>
@@ -288,7 +288,7 @@ $Pr(Class_{c}|Object)$: Là xác suất với điều kiện có Object xuất h
 <p>Ta có thể thấy số lượng Weights đã giảm gần 1/2 cho tình huống trên, dù không thay đổi shape của Input và Output.</p>
 <hr class="half-line">
 <p>[<a href="#loss_formular_b" style="color:red;">$ \triangleleft $</a>]<a name="loss_formular"></a>: <strong>Hàm Loss dùng cho pretrained model của tác giả?</strong></p>
-<p>Để đánh giá YOLO trên tập PASCAL POC, $S = 7, B = 2, C = 20$, hàm Loss vì thế sẽ có dạng:</p>
+<p>Để đánh giá YOLO trên tập PASCAL POC, $S = 7, B = 2 [<a href="#why_b" style="color:red;">?</a>]<a name="why_b"></a>, C = 20$, hàm Loss vì thế sẽ có dạng:</p>
 <div>
 \begin{multline}
 \lambda_{coord} \displaystyle \sum_{i=0}^{49} \displaystyle \sum_{j=0}^{2} \mathbb{1}_{ij}^{obj}[(x_{i} - \hat{x}\_{i})^{2} + (y_{i} - \hat{y}_{i})^{2}]\\ 
@@ -300,7 +300,10 @@ $Pr(Class_{c}|Object)$: Là xác suất với điều kiện có Object xuất h
 </div>
 <p>Shape của output tensor, sau khi reshape sẽ là:</p>
 <p>\begin{equation}Ouput\quad Shape = (S , S , B * 5 + C) = (7 , 7 , 2 * 5 + 20) = (7 , 7 , 30)\end{equation}</p>
-<p>Tại sao tác giả chọn B = 2 cho mỗi grid cell?</p>
+<hr class="half-line">
+<p>[<a href="#why_b_b" style="color:red;">$ \triangleleft $</a>]<a name="why_b"></a>:<strong>sao tác giả chọn B = 2 cho mỗi grid cell?</strong></p>
+<p>YOLO predict 2 bounding box cho mỗi grid cell, tuỳ vào IOU của mỗi bounding box này so với ground truth, IOU lớn hơn sẽ giúp box được chọn làm Predictor.</p>
+<p>Điều này sẽ dẫn tới sự chuyên môn hoá giữa 2 bounding box. Bounding box thứ nhất sẽ chuyên được chọn để detect các object có chiều dài lớn hơn chiều rộng (person), bounding box thứ 2 sẽ chuyên được chọn để detect các object có chiều rộng lớn hơn chiều dài (car).</p>
 <hr class="half-line">
 <p>[<a href="#feature_scaling_b" style="color:red;">$ \triangleleft $</a>]<a name="feature_scaling"></a>: <strong>Tại sao phải có bước xử lý này?</strong></p>
 <p>Đây là bước <strong>Scaling Features</strong>: đưa khoảng giá trị của các feature về cùng một scale trước khi vào hàm loss để giúp mô hình hội tụ nhanh và ổn định hơn khi training.</p>

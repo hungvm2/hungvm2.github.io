@@ -125,12 +125,11 @@
 <ul>
 <li><em>Batch Normalization</em>: Tác giả thêm layer Batch Normalization vào tất cả các lớp Conv Layer trong Network và không sử dụng layer Drop out như ở YOLOv1. Kỹ thuật này giúp regularize model, giúp model cải thiện 2% mAP. [<a href="#batch_normalization" style="color:red;">?</a>]<a name="batch_normalization_b"></a></li>
 <li><em>High Resolution Classifier</em>: giống như YOLOv1, YOLOv2 cũng train trước các lớp Conv layer trong một mạng classification, tuy nhiên sử dụng input size $448 \times 448$ thay vì $224 \times 224$ như YOLOv1. Việc train trước các lớp Conv Layer với input độ phân giải cao đã giúp cho Network trích xuất đặc trưng tốt hơn, cải thiện thêm 4% mAP.</li>
-<li>Sử dụng <em>Anchor Boxes</em>: Thay vì chỉ quy định số lượng Bounding box và để model tự predict ra coordinates của các Bounding boxes như ở YOLOv1, YOLOv2 sử dụng một tập 5 Boxes có sẵn với các kích thước cố định gọi là các Anchor boxes và predict offset của bounding box so với các Anchor boxes. Kỹ thuật này giúp model cải thiện 7% recall. [<a href="#anchor_box" style="color:red;">?</a>]<a name="anchor_box_b"></a></li>
-<li><em>Dimension Clusters</em>: Thay vì tự chọn kích thước các Anchor boxes, tác giả sử dụng K-means clustering trên tập dữ liệu training bounding box để tự động tìm ra các kích thước và tỉ lệ phù hợp nhất.</li>
+<li>Sử dụng <em>Anchor Boxes</em>: Thay vì chỉ quy định số lượng Bounding box và để model tự predict hoàn toàn coordinates của các Bounding boxes như ở YOLOv1, YOLOv2 chỉ predict toạ độ tâm trực tiếp từ model, còn kích thước w,h của bounding box được predict theo offset của nó so với một tập 5 Anchor Boxes với các kích thước cố định cho trước. Kỹ thuật này giúp model cải thiện 7% recall. [<a href="#anchor_box" style="color:red;">?</a>]<a name="anchor_box_b"></a></li>
+<li><em>Dimension Clusters</em>: Thay vì tự chọn kích thước các Anchor boxes, tác giả sử dụng K-means clustering trên tập dữ liệu training bounding box để tự động tìm ra các kích thước và tỉ lệ phù hợp nhất. [<a href="#k_means" style="color:red;">?</a>]<a name="k_means_b"></a></li>
 <li><em>Direct location prediction</em>: predict toạ độ tâm của bounding box gắn với vị trí của grid cell tương ứng. Kỹ thuật này giúp cải thiện 5% độ chính xác</li>
-<li><em>Fine-grained Features</em>: concatenate feature map có độ phân giải cao hơn ở layer trước đó với feature map của layer cuối cùng để tạo thành output layer. Kỹ thuật này giúp cải thiện 1% độ chính xác</li>
-<li><em>Multi-Scale training</em>: Do kiến trúc mới của Network không sử dụng FC layers nên có thể thay đổi input size tuỳ ý. Trong khi training, tác giả thay đổi input size với kích thước ngẫu nhiên sau mỗi 10 batches. Kỹ thuật này giúp Network có thể predict tốt với input ở những kích thước, độ phân giải khác nhau. Bên dưới là kết quả độ chính xác và hiệu năng của YOLOv2 ứng với các input size khác nhau:</li>
-<li>Thêm <em>passthrough layer</em>: để model có thể sử dụng fine grain features của các layer trước đó</li>
+<li><em>Fine-grained Features</em>/ <em>passthrough layer</em>: concatenate feature map có độ phân giải cao hơn ở layer trước đó với feature map của layer cuối cùng để tạo thành output layer. Kỹ thuật này giúp cải thiện 1% độ chính xác</li>
+<li><em>Multi-Scale training</em>: Do kiến trúc mới của Network không sử dụng FC layers nên có thể thay đổi input size tuỳ ý. Trong khi training, tác giả thay đổi input size với kích thước ngẫu nhiên sau mỗi 10 batches. Kỹ thuật này giúp Network có thể predict tốt với input ở những kích thước, độ phân giải khác nhau.</li>
 </ul>
 <hr class="half-line">
 <h5 id="22-faster">2.2 Faster</h5>
@@ -229,6 +228,65 @@ Mỗi layer đều có input và output, output của layer này là input của
 <p>Batch normalization là kỹ thuật giúp giảm Internal covariance shift từ đó giúp quá trình training ổn định và cho phép sử dụng learning rate lớn hơn, nên nhanh hội tụ hơn. [<a href="#bn_paper" style="color:red;">?</a>]<a name="bn_paper_b"></a></p>
 <hr class="half-line">
 <p>[<a href="#anchor_box_b" style="color:red;">$ \triangleleft $</a>]<a name="anchor_box"></a>:<strong>Chi tiết về cách tính offset của Bounding box so với Anchor Boxes</strong></p>
+<p>Gọi $t_{x}, t_{y}, t_{w}, t_{h}, t_{o}$ lần lượt là các giá trị toạ độ tâm, rộng, dài và confidence score được predict ra từ network ứng với mỗi predicted Bounding box trên 1 grid cell. Đây là các giá trị được regression từ network nên có thể to nhỏ, âm, dương tuỳ ý.</p>
+<p>Gọi $p_{w}, p_{h}$ là kích thước chiều rộng, dài của 1 Anchor box. Đây là giá trị kích thước theo pixel của Anchor box.</p>
+<p>Gọi $C_{x}, C_{y}$ là offset từ góc top-left của input image. 2 giá trị này sẽ bằng gía trị index hàng và cột (i và j) của grid cell trên image.</p>
+<p>Gọi $b_{x}, b_{y}, b_{w}, b_{h}, C$ lần lượt là toạ độ tâm, kích thước rộng, dài và confidence score của 1 predicted bounding box (trong số 5 Bounding box/ 1 grid cell). Các giá trị này sẽ được tính như sau:</p>
+<p>\begin{multline*}
+b_{x} = \sigma{t_{x}} + C_{x} \<br>
+b_{y} = \sigma{t_{y}} + C_{y} \<br>
+b_{w} = p_{w} * e^{t_{w}} \<br>
+b_{h} = p_{h} * e^{t_{h}} \<br>
+C = Pr(object) * IOU(b,object) = \sigma{t_{o}}
+\end{multline*}</p>
+<p>Giá trị $b_{x}, b_{y}$ sử dụng hàm **sigmoid**. $\sigma{t_{x}}, \sigma{t_{y}}$ sẽ nằm trong đoạn [0;1].</p>
+<p>Giá trị C là giá trị IOU nên nằm trong đoạn [0;1]</p>
+<p>Giá trị $b_{w}, b_{h} sử dụng luỹ thừa cơ số e (số Euler). $e^{t_{w}}, e^{t_{h}}$ sẽ nằm trong khoảng $[0; \infty]$, là giá trị tỉ lệ offset của bounding box so với anchor box</p>
+<div class="text-center my-3">
+<img src="https://hungvm2.github.io/images/yolov2/bounding_box_n_anchor_box.png" class="img-fluid" alt="Bounding box coordinates">
+</div>
+<hr class="half-line">
+<p>[<a href="#k_means_b" style="color:red;">$ \triangleleft $</a>]<a name="k_means"></a>:<strong>Anchor boxes được tìm bằng K-means như thế nào?</strong></p>
+<p><strong><em>Nhắc lại 1 chút về K-means:</em></strong></p>
+<p>K-means là thuật toán phân cụm (clustering). Thuật toán sẽ nhóm các điểm dữ liệu có cùng một tính chất vào thành 1 nhóm. Số lượng chọn do mình chọn trước (hyperparams)</p>
+<p>Ý tưởng của thuật toán K-means:</p>
+<ul>
+<li>Bước 1: Có X data point, giả sử ta chọn phân làm K cụm</li>
+<li>Bước 2: <strong>Chọn ngẫu nhiên K data point</strong> trong X làm các <strong>centeroid</strong> của mỗi cụm</li>
+<li>Bước 3: Tính toán <strong>khoảng cách Euclid</strong> (Euclidean distance) từ <strong>mỗi data point đến các centeroid</strong> này,  nếu khoảng cách đến center của cụm $K_{i}$ ngắn nhất thì phân data point đó về cụm $K_{i}$</li>
+<li>Bước 4: Sau khi phân hết các data point về các cụm, tính toán lại centeroid ở mỗi cụm bằng cách lấy <strong>trung bình (mean)</strong> vị trí của các data point trong mỗi cụm đó</li>
+<li>Bước 5: Lặp lại từ bước 2, nếu vị trí các center không thay đổi nữa thì dừng</li>
+</ul>
+<p>Tìm hiểu sâu hơn về K-means các bạn có thể đọc ở <a href="https://machinelearningcoban.com/2017/01/01/kmeans/#tom-tat-thuat-toan">trang Machine leanring cơ bản</a>)</p>
+<p><strong><em>Phân cụm anchor boxes:</em></strong></p>
+<ul>
+<li>
+<p>Mỗi data point sẽ chính là các ground truth box trong các image ở các tập VOC và COCO data set.</p>
+</li>
+<li>
+<p>Chọn ngẫu nhiên K ground truth box trong dataset làm center của mỗi cụm</p>
+</li>
+<li>
+<p>Khoảng cách từ mỗi box trong dataset đến center sẽ không được tính bằng Euclidean distance như thuật toán K-means gốc, mà sẽ tính bằng công thức sau:
+\begin{equation*}
+d(box,centroid) = 1 - IOU(box, centroid)
+\end{equation}
+Tác giả không lấy theo khoảng cách Euclid giữa các tâm của box vì nó sẽ không đánh giá đúng bản chất khoảng cách giữa các box (2 box lớn overlap nhau vẫn sẽ có euclid distance của tâm lớn hơn 2 box nhỏ không overlap).
+Từ công thức ta có thể thấy giá trị khoảng cách $d$ sẽ nằm trong đoạn [0;1].</p>
+</li>
+<li>
+<p>Sau khi phân hết data point về các cụm, centroid của mỗi cụm sẽ được tính bằng cách lấy trung bình (dài, rộng, tâm) của các box trong cụm đó</p>
+</li>
+<li>
+<p>Tác giả thử với các lựa chọn K khác nhau và đi đến kết luận K = 5 sẽ là lựa chọn tối ưu nhất giữa model complexity và high recall</p>
+</li>
+</ul>
+<div class="text-center my-3">
+<img src="https://hungvm2.github.io/images/yolov2/k-anchor-boxes.png" class="img-fluid" alt="K Anchor Boxes">
+</div>
+<ul>
+<li>Bức hình bên phải phía trên chỉ ra vị trí và kích thước centroid tương ứng của 5 cluster trên 2 tập COCO và VOC</li>
+</ul>
 <hr>
 <h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
 <ul>
