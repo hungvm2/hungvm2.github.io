@@ -223,16 +223,16 @@ Mỗi layer đều có input và output, output của layer này là input của
 <p>Gọi $p_{w}, p_{h}$ là kích thước chiều rộng, dài của 1 Anchor box. Đây là giá trị kích thước theo pixel của Anchor box.</p>
 <p>Gọi $C_{x}, C_{y}$ là offset từ góc top-left của input image. 2 giá trị này sẽ bằng gía trị index hàng và cột (i và j) của grid cell trên image.</p>
 <p>Gọi $b_{x}, b_{y}, b_{w}, b_{h}, C$ lần lượt là toạ độ tâm, kích thước rộng, dài và confidence score của 1 predicted bounding box (trong số 5 Bounding box/ 1 grid cell). Các giá trị này sẽ được tính như sau:</p>
-<p>\begin{multline*}
-b_{x} = \sigma{t_{x}} + C_{x} \<br>
-b_{y} = \sigma{t_{y}} + C_{y} \<br>
-b_{w} = p_{w} * e^{t_{w}} \<br>
-b_{h} = p_{h} * e^{t_{h}} \<br>
+<p>\begin{multline}
+b_{x} = \sigma{t_{x}} + C_{x}\<br>
+b_{y} = \sigma{t_{y}} + C_{y}\<br>
+b_{w} = p_{w} * e^{t_{w}}\<br>
+b_{h} = p_{h} * e^{t_{h}}\<br>
 C = Pr(object) * IOU(b,object) = \sigma{t_{o}}
-\end{multline*}</p>
+\end{multline}</p>
 <p>Giá trị $b_{x}, b_{y}$ sử dụng hàm **sigmoid**. $\sigma{t_{x}}, \sigma{t_{y}}$ sẽ nằm trong đoạn [0;1].</p>
 <p>Giá trị C là giá trị IOU nên nằm trong đoạn [0;1]</p>
-<p>Giá trị $b_{w}, b_{h} sử dụng luỹ thừa cơ số e (số Euler). $e^{t_{w}}, e^{t_{h}}$ sẽ nằm trong khoảng $[0; \infty]$, là giá trị tỉ lệ offset của bounding box so với anchor box</p>
+<p>Giá trị $b_{w}, b_{h}$ sử dụng luỹ thừa cơ số e (số Euler). $e^{t_{w}}, e^{t_{h}}$ sẽ nằm trong khoảng $[0; \infty]$, là giá trị tỉ lệ offset của bounding box so với anchor box</p>
 <div class="text-center my-3">
 <img src="https://hungvm2.github.io/images/yolov2/bounding_box_n_anchor_box.png" class="img-fluid" alt="Bounding box coordinates">
 </div>
