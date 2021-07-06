@@ -224,13 +224,13 @@ Mỗi layer đều có input và output, output của layer này là input của
 <p>Gọi $C_{x}, C_{y}$ là offset từ góc top-left của input image. 2 giá trị này sẽ bằng gía trị index hàng và cột (i và j) của grid cell trên image.</p>
 <p>Gọi $b_{x}, b_{y}, b_{w}, b_{h}, C$ lần lượt là toạ độ tâm, kích thước rộng, dài và confidence score của 1 predicted bounding box (trong số 5 Bounding box/ 1 grid cell). Các giá trị này sẽ được tính như sau:</p>
 <p>\begin{multline}
-b_{x} = \sigma{t_{x}} + C_{x}\<br>
-b_{y} = \sigma{t_{y}} + C_{y}\<br>
+b_{x} = \sigma{(t_{x})} + C_{x}\<br>
+b_{y} = \sigma{(t_{y})} + C_{y}\<br>
 b_{w} = p_{w} * e^{t_{w}}\<br>
 b_{h} = p_{h} * e^{t_{h}}\<br>
 C = Pr(object) * IOU(b,object) = \sigma{t_{o}}
 \end{multline}</p>
-<p>Giá trị $b_{x}, b_{y}$ sử dụng hàm **sigmoid**. $\sigma{t_{x}}, \sigma{t_{y}}$ sẽ nằm trong đoạn [0;1].</p>
+<p>Giá trị $b_{x}, b_{y}$ sử dụng hàm _sigmoid_ . $\sigma{(t_{x})}, \sigma{(t_{y})}$ sẽ nằm trong đoạn [0;1].</p>
 <p>Giá trị C là giá trị IOU nên nằm trong đoạn [0;1]</p>
 <p>Giá trị $b_{w}, b_{h}$ sử dụng luỹ thừa cơ số e (số Euler). $e^{t_{w}}, e^{t_{h}}$ sẽ nằm trong khoảng $[0; \infty]$, là giá trị tỉ lệ offset của bounding box so với anchor box</p>
 <div class="text-center my-3">
@@ -261,7 +261,7 @@ C = Pr(object) * IOU(b,object) = \sigma{t_{o}}
 <p>Khoảng cách từ mỗi box trong dataset đến center sẽ không được tính bằng Euclidean distance như thuật toán K-means gốc, mà sẽ tính bằng công thức sau:
 \begin{equation*}
 d(box,centroid) = 1 - IOU(box, centroid)
-\end{equation}
+\end{equation*}
 Tác giả không lấy theo khoảng cách Euclid giữa các tâm của box vì nó sẽ không đánh giá đúng bản chất khoảng cách giữa các box (2 box lớn overlap nhau vẫn sẽ có euclid distance của tâm lớn hơn 2 box nhỏ không overlap).
 Từ công thức ta có thể thấy giá trị khoảng cách $d$ sẽ nằm trong đoạn [0;1].</p>
 </li>
