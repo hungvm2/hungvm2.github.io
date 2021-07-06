@@ -123,12 +123,12 @@
 </div>
 <p>So với YOLOv1, YOLOv2 đạt độ chính xác cao hơn và nhanh hơn đáng kể nhờ sử dụng những kỹ thuật mới sau:</p>
 <ul>
-<li><em>Batch Normalization</em>: Tác giả thêm layer Batch Normalization vào tất cả các lớp Conv Layer trong Network và không sử dụng layer Drop out như ở YOLOv1. Kỹ thuật này giúp regularize model, giúp model cải thiện 2% mAP. [<a href="#batch_normalization" style="color:red;">?</a>]<a name="batch_normalization_b"></a></li>
+<li><em>Batch Normalization</em>: Tác giả thêm layer Batch Normalization vào tất cả các lớp Conv Layer trong Network. Kỹ thuật này giúp regularize model nên không sử dụng Drop out layer như ở YOLOv1 nữa, giúp model cải thiện 2% mAP. [<a href="#batch_normalization" style="color:red;">?</a>]<a name="batch_normalization_b"></a></li>
 <li><em>High Resolution Classifier</em>: giống như YOLOv1, YOLOv2 cũng train trước các lớp Conv layer trong một mạng classification, tuy nhiên sử dụng input size $448 \times 448$ thay vì $224 \times 224$ như YOLOv1. Việc train trước các lớp Conv Layer với input độ phân giải cao đã giúp cho Network trích xuất đặc trưng tốt hơn, cải thiện thêm 4% mAP.</li>
 <li>Sử dụng <em>Anchor Boxes</em>: Thay vì chỉ quy định số lượng Bounding box và để model tự predict hoàn toàn coordinates của các Bounding boxes như ở YOLOv1, YOLOv2 chỉ predict toạ độ tâm trực tiếp từ model, còn kích thước w,h của bounding box được predict theo offset của nó so với một tập 5 Anchor Boxes với các kích thước cố định cho trước. Kỹ thuật này giúp model cải thiện 7% recall. [<a href="#anchor_box" style="color:red;">?</a>]<a name="anchor_box_b"></a></li>
 <li><em>Dimension Clusters</em>: Thay vì tự chọn kích thước các Anchor boxes, tác giả sử dụng K-means clustering trên tập dữ liệu training bounding box để tự động tìm ra các kích thước và tỉ lệ phù hợp nhất. [<a href="#k_means" style="color:red;">?</a>]<a name="k_means_b"></a></li>
 <li><em>Direct location prediction</em>: predict toạ độ tâm của bounding box gắn với vị trí của grid cell tương ứng. Kỹ thuật này giúp cải thiện 5% độ chính xác</li>
-<li><em>Fine-grained Features</em>/ <em>passthrough layer</em>: concatenate feature map có độ phân giải cao hơn ở layer trước đó với feature map của layer cuối cùng để tạo thành output layer. Kỹ thuật này giúp cải thiện 1% độ chính xác</li>
+<li><em>Fine-grained Features</em>/ <em>passthrough layer</em>: sử dụng 1 layer tên là Reorg để xử lý feature maps có độ phân giải cao hơn ở layer trước đó rồi concatenate với feature maps của layer cuối cùng để tạo thành output layer. Kỹ thuật này giúp cải thiện 1% độ chính xác</li>
 <li><em>Multi-Scale training</em>: Do kiến trúc mới của Network không sử dụng FC layers nên có thể thay đổi input size tuỳ ý. Trong khi training, tác giả thay đổi input size với kích thước ngẫu nhiên sau mỗi 10 batches. Kỹ thuật này giúp Network có thể predict tốt với input ở những kích thước, độ phân giải khác nhau.</li>
 </ul>
 <hr class="half-line">
@@ -145,12 +145,14 @@
 <h5 id="31-train-trước-các-lớp-conv-layer-trong-mạng-classifier-với-tên-gọi-darknet-19">3.1. Train trước các lớp Conv layer trong mạng classifier với tên gọi Darknet-19:</h5>
 <div class="text-center my-3">
 <figure class="figure">
-  <img src="https://hungvm2.github.io/images/yolov2/classification_network.png" alt="Error Analysis" class="figure-img">
+  <img src="https://hungvm2.github.io/images/yolov2/classification_network.png" alt="Darknet-19" class="figure-img">
   <figcaption class="figure-caption">Kiến trúc mạng Darknet-19</figcaption>
 </figure>
 </div>
-+ $1 \times 1$ filters để compress feature presentation giữa các $3 \times 3$ Conv layers.
-<p>Sử dụng Dataset Imagenet 1000 class, gồm 2 bước:</p>
+<p>$1 \times 1$ filters để compress feature presentation giữa các $3 \times 3$ Conv layers.</p>
+<p><em>Global Average Pooling</em>: Layer này được thêm vào giúp loại bỏ các lớp FC layers nên loại bỏ được đáng kể parameters, giảm độ phức tạp của Network, giúp tăng tốc độ xử lý [<a href="global_average_pooling#" style="color:red;">?</a>]<a name="global_average_pooling_b"></a></p>
+<p>Sử dụng Dataset Imagenet 1000 class</p>
+<p>Quá trình training gồm 2 bước:</p>
 <p><strong><em>Bước 1:</em></strong> traing trước 160 epoch với input size $224 \times 224$</p>
 <ul>
 <li>Optimization algorithm: SGD</li>
@@ -166,7 +168,7 @@
 <h5 id="32-train-mạng-detection">3.2. Train mạng detection:</h5>
 <h5 id="321-set-up-kiến-trúc-mạng">3.2.1. Set up kiến trúc mạng:</h5>
 <ul>
-<li>Giữ lại toàn bộ phần Conv layers của mạng Darknet-19 bên trên, trừ layer $1 \times 1 \times 1000$ cuối cùng</li>
+<li>Giữ lại toàn bộ phần Conv layers của mạng Darknet-19 bên trên, trừ layer $1 \times 1 \times 1000$ cuối cùng.</li>
 </ul>
 <div class="text-center my-3">
 <figure class="figure">
@@ -176,11 +178,11 @@
 </div>
 <ul>
 <li>Thêm 3 Conv layers $3 \times 3 \times 1024$</li>
-<li>Thêm 1 layer <strong>Global average pooling</strong></li>
+<li>Thêm passthrough layer tên là <strong>Reorg</strong></li>
 <li>Thêm $1 \times 1$ Conv layer với số filter bằng kích thước output (125 filters)</li>
-<li>Thêm <em>passthrough layer</em></li>
 </ul>
 <h5 id="322-hàm-loss">3.2.2. Hàm loss:</h5>
+<p>Giữ nguyên như ở YOLOv1</p>
 <h5 id="323-các-kỹ-thuật-khi-training">3.2.3. Các kỹ thuật khi training:</h5>
 <ul>
 <li>Learning rate schedule</li>
@@ -246,7 +248,7 @@ C = Pr(object) * IOU(b,object) = \sigma{t_{o}}
 <li>Bước 4: Sau khi phân hết các data point về các cụm, tính toán lại centeroid ở mỗi cụm bằng cách lấy <strong>trung bình (mean)</strong> vị trí của các data point trong mỗi cụm đó</li>
 <li>Bước 5: Lặp lại từ bước 2, nếu vị trí các center không thay đổi nữa thì dừng</li>
 </ul>
-<p>Tìm hiểu sâu hơn về K-means các bạn có thể đọc ở <a href="https://machinelearningcoban.com/2017/01/01/kmeans/#tom-tat-thuat-toan">trang Machine leanring cơ bản</a>)</p>
+<p>Tìm hiểu sâu hơn về K-means các bạn có thể đọc ở <a href="https://machinelearningcoban.com/2017/01/01/kmeans/#tom-tat-thuat-toan">trang Machine leanring cơ bản</a></p>
 <p><strong><em>Phân cụm anchor boxes:</em></strong></p>
 <ul>
 <li>
@@ -274,14 +276,22 @@ Từ công thức ta có thể thấy giá trị khoảng cách $d$ sẽ nằm t
 <img src="https://hungvm2.github.io/images/yolov2/k-anchor-boxes.png" class="img-fluid" alt="K Anchor Boxes">
 </div>
 <ul>
-<li>Bức hình bên phải phía trên chỉ ra vị trí và kích thước centroid tương ứng của 5 cluster trên 2 tập COCO và VOC</li>
+<li>Bức hình bên phải phía trên chỉ ra vị trí và kích thước centroid tương ứng của 5 cluster trên 2 tập COCO và VOC. Có thể thấy kích thước centroid của 2 dataset khá là tương đồng, nhưng COCO biến thiên về kích thước nhiều hơn là VOC.</li>
 </ul>
+<p>[<a href="#global_average_pooling_b" style="color:red;">$ \triangleleft $</a>]<a name="global_average_pooling"></a>:<strong>Cách tính Global Average Pooling</strong></p>
+<div class="text-center my-3">
+<img src="https://hungvm2.github.io/images/yolov2/global_avg_pooling.png" class="img-fluid" alt="Global Average Pooling">
+</div>
+<p>Global average pooling cũng tương tự như Average Pooling, nhưng thay vì tính giá trị trung bình cho kích thước 1 filter (VD: 2x2) thì GAP tính giá trị trung bình cho toàn bộ feature map.</p>
+<p>Việc sử dụng Global Average Pooling chính là lí do giúp cho mạng Darknet-19 không yêu cầu cố định input size của image.</p>
 <hr>
 <h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
 <ul>
 <li><a href="https://arxiv.org/abs/1506.02640">You Only Look Once: Unified, Real-Time Object Detection</a></li>
 <li><a href="https://github.com/pjreddie/darknet">Darknet</a></li>
 <li>[<a href="#bn_paper_b" style="color:red;">$ \triangleleft $</a>]<a name="bn_paper"></a>: <a href="https://arxiv.org/pdf/1502.03167.pdf">Batch Normalization</a></li>
+<li><a href="https://github.com/longcw/yolo2-pytorch">YOLOv2-pytorch</a></li>
+<li><a href="https://machinelearningcoban.com/2017/01/01/kmeans">Machine leanring cơ bản</a></li>
 </ul>
 
 

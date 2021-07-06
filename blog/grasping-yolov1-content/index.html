@@ -277,7 +277,7 @@ $Pr(Class_{c}|Object)$: Là xác suất với điều kiện có Object xuất h
 <p>Không có bước chia grid cell, mà việc phân định toạ độ bounding box nằm ở grid cell nào sẽ được tính toán lúc đưa vào hàm Loss để training</p>
 <hr class="half-line">
 <p>[<a href="#1by1_conv_b" style="color:red;">$ \triangleleft $</a>]<a name="1by1_conv"></a>: <strong>Kiến trúc mạng được truyền cảm hứng bởi mạng GoogLeNet (Inception)?</strong></p>
-<p>Kiến trúc mạng của YOLO có sử dụng <strong>1x1 Conv Layer</strong>, lấy cảm hứng từ mạng Inception. 1x1 Conv layer được sử dụng để <strong>giảm</strong> (hoặc tăng) chiều sâu của feature maps mà vẫn giữ nguyên kích thước dài rộng của feature maps.</p>
+<p>Kiến trúc mạng của YOLO có sử dụng <strong>1x1 Conv Layer</strong>, lấy cảm hứng từ mạng Inception. 1x1 Conv layer được sử dụng để <strong>giảm</strong> (hoặc tăng) số lượng feature maps ở một layer trong khi vẫn giữ nguyên kích thước của feature maps.</p>
 <p>Thường 1x1 Conv layer sẽ sử dụng trước khi qua các Conv layer 3x3, 5x5&hellip; để giúp Network giảm khối lượng tính toán.</p>
 <p><strong><em>Ví dụ:</em></strong></p>
 <p>Kích thước Input Tensor A (Batch size, Channel, High, Width): $(1, 20, 64, 64)$.</p>
