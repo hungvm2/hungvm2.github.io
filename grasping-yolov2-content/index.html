@@ -98,7 +98,8 @@
 <hr>
 <h3 id="i-đọc-paper">I. Đọc Paper</h3>
 <blockquote>
-<p>Trong phần &ldquo;Đọc Paper&rdquo; này, mình sẽ tóm lược lại những ý chính của tác giả, có bỏ qua một số nội dung&hellip; Khi đọc sẽ có các reference (có dạng [<a style="color:red;">?</a>]). Bạn có thể click vào các dấu hỏi đó để dẫn xuống phần &ldquo;Hiểu Paper&rdquo; bên dưới để đọc sâu hơn về vấn đề được đề cập.</p>
+<p>Trong phần &ldquo;Đọc Paper&rdquo; này, mình sẽ tóm lược lại những ý chính của tác giả, có bỏ qua một số nội dung&hellip; Khi đọc sẽ có các reference (có dạng [<a style="color:red;">?</a>]). Bạn có thể click vào các dấu hỏi đó để dẫn xuống phần &ldquo;Hiểu Paper&rdquo; bên dưới để đọc sâu hơn về vấn đề được đề cập.
+Trong paper có một số phần không được đề cập tới (ví dụ: hàm loss, số grid cell&hellip;), chỉ có ở trong source code, mình tự đưa vào để dễ nắm bắt hơn nội dung của paper</p>
 </blockquote>
 <h4 id="1-giới-thiệu-chung-về-model">1. Giới thiệu chung về model</h4>
 <p>Tác giả giới thiệu hệ thống detect objection mới, tên là: <strong>YOLO9000</strong>. So với hệ thống trước, hệ thống này có các điểm mới:</p>
@@ -169,25 +170,28 @@
 <h5 id="321-set-up-kiến-trúc-mạng">3.2.1. Set up kiến trúc mạng:</h5>
 <ul>
 <li>Giữ lại toàn bộ phần Conv layers của mạng Darknet-19 bên trên, trừ layer $1 \times 1 \times 1000$ cuối cùng.</li>
-</ul>
-<div class="text-center my-3">
-<figure class="figure">
-  <img src="https://hungvm2.github.io/images/yolov2/conv_layers.png" alt="Conv layers" class="figure-img">
-  <figcaption class="figure-caption">Các Conv layers được giữ lại từ mạng classifier để đặt vào mạng detection</figcaption>
-</figure>
-</div>
-<ul>
 <li>Thêm 3 Conv layers $3 \times 3 \times 1024$</li>
 <li>Thêm passthrough layer tên là <strong>Reorg</strong></li>
 <li>Thêm $1 \times 1$ Conv layer với số filter bằng kích thước output (125 filters)</li>
 </ul>
+<div class="text-center my-3">
+<figure class="figure">
+  <img src="https://hungvm2.github.io/images/yolov2/yolov2_architecture_2.png" alt="YOLOv2 Architecture" class="figure-img">
+  <figcaption class="figure-caption">Kiến trúc mạng YOLOv2</figcaption>
+</figure>
+</div>
+<p><em>Tác giả không có hình vẽ chi tiết kiến trúc của YOLOv2 ở trong paper, tuy nhiên mình đã tìm được một researcher khác vẽ chi tiết YOLOv2 ở <a href="https://www.researchgate.net/publication/336177198_Determination_of_Vehicle_Trajectory_through_Optimization_of_Vehicle_Bounding_Boxes_Using_a_Convolutional_Neural_Network">paper</a> của họ (có sửa lại shape của output layer).</em></p>
 <h5 id="322-hàm-loss">3.2.2. Hàm loss:</h5>
-<p>Giữ nguyên như ở YOLOv1</p>
+<p>Vẫn sử dụng hàm Sum Squared Error như ở YOLOv1</p>
 <h5 id="323-các-kỹ-thuật-khi-training">3.2.3. Các kỹ thuật khi training:</h5>
 <ul>
 <li>Learning rate schedule</li>
 <li>Regularization techniques: Weight decay, Momentum, Data augmentation</li>
 </ul>
+<hr>
+<h4 id="4-inference-testing">4. Inference (Testing)</h4>
+<p><strong><em>Pipe line của hệ thống object detection YOLOv2:</em></strong></p>
+<p>Image w,h tuỳ ý, 3 channel \Rightarrow $ Network Prediction $\Rightarrow $ Output (đã reshape) $(13,13,125) \Rightarrow $ Tính lại coordinates box theo input size của image, tính lại class probabilities $Pr(c) \Rightarrow $ Bỏ qua các box có low probabilities $\Rightarrow $ Non-max suppression $\Rightarrow $ Final prediction.</p>
 <hr>
 <h4 id="4-so-sánh-độ-chính-xác-và-hiệu-năng-với-các-mô-hình-khác">4. So sánh độ chính xác và hiệu năng với các mô hình khác</h4>
 <p>YOLOv2 đạt độ chính xác tương đương hoặc nhỉnh hơn so với các thuật toán khác cùng thời điểm, trong khi nhanh hơn nhiều lần</p>
@@ -229,7 +233,7 @@ b_{x} = \sigma{(t_{x})} + C_{x}\\
 b_{y} = \sigma{(t_{y})} + C_{y}\\
 b_{w} = p_{w} * e^{t_{w}}\\
 b_{h} = p_{h} * e^{t_{h}}\\
-C = Pr(object) * IOU(b,object) = \sigma{t_{o}}
+C = Pr(object) * IOU(b,object) = \sigma{(t_{o})}
 \end{multline}
 </div>
 <p>Giá trị $b_{x}, b_{y}$ sử dụng hàm _sigmoid_ . $\sigma{(t_{x})}, \sigma{(t_{y})}$ sẽ nằm trong đoạn [0;1].</p>

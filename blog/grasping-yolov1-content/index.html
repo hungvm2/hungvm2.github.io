@@ -106,7 +106,7 @@
                     </span>
 
                     <span class="reading-time middot">
-                        15 min read
+                        16 min read
                     </span>
 
                     <div class="d-none d-md-inline tags">
@@ -271,7 +271,7 @@ $Pr(Class_{c}|Object)$: Là xác suất với điều kiện có Object xuất h
 </ul>
 <hr class="half-line">
 <p>[<a href="#network_detail_b" style="color:red;">$ \triangleleft $</a>]<a name="network_detail"></a>: <strong>Chi tiết về kiến trúc của network?</strong></p>
-<p>Bạn có thể xem trong <a href="https://github.com/pjreddie/darknet/blob/master/cfg/yolov1.cfg">file config</a> của YOLO, thứ tự các layer trong file config chính là thứ tự các layer của YOLO Network</p>
+<p>Bạn có thể xem trong <a href="https://github.com/thtrieu/darkflow/blob/master/cfg/v1/yolo-full.cfg">file config</a> [<a href="#cfg_v1" style="color:red;">?</a>]<a name="cfg_v1_b"></a> YOLO, thứ tự các layer trong file config chính là thứ tự các layer của YOLO Network</p>
 <hr class="half-line">
 <p>[<a href="#grid_cell_b" style="color:red;">$ \triangleleft $</a>]<a name="grid_cell"></a>: <strong>Chia grid cell ở bước nào?</strong></p>
 <p>Không có bước chia grid cell, mà việc phân định toạ độ bounding box nằm ở grid cell nào sẽ được tính toán lúc đưa vào hàm Loss để training</p>
@@ -304,6 +304,11 @@ $Pr(Class_{c}|Object)$: Là xác suất với điều kiện có Object xuất h
 <p>[<a href="#why_b_b" style="color:red;">$ \triangleleft $</a>]<a name="why_b"></a>:<strong>sao tác giả chọn B = 2 cho mỗi grid cell?</strong></p>
 <p>YOLO predict 2 bounding box cho mỗi grid cell, tuỳ vào IOU của mỗi bounding box này so với ground truth, IOU lớn hơn sẽ giúp box được chọn làm Predictor.</p>
 <p>Điều này sẽ dẫn tới sự chuyên môn hoá giữa 2 bounding box. Bounding box thứ nhất sẽ chuyên được chọn để detect các object có chiều dài lớn hơn chiều rộng (person), bounding box thứ 2 sẽ chuyên được chọn để detect các object có chiều rộng lớn hơn chiều dài (car).</p>
+<hr class="half-line">
+<p>[<a href="#cfg_v1_b" style="color:red;">$ \triangleleft $</a>]<a name="cfg_v1"></a>:<strong>Có sự khác nhau giữa file config này và file config yolov1 trên repository Darknet gốc?</strong></p>
+<p>Đúng vậy, đây chính là file config ban đầu của YOLOv1 được đề cập trong paper. Còn file <a href="https://github.com/pjreddie/darknet/blob/master/cfg/yolov1.cfg">cfg của YOLOv1 trên repository Darknet</a> là một version YOLOv1 đã được tác giả update lại nên có khác một chút so với paper</p>
+<p>Ở trong version YOLOv1 mới này, lớp Fully connected layer đầu tiên đã được thay thế bằng 1 lớp <strong>Locally connected layer</strong>, số lượng Bounding box trên mỗi grid cell là B = 3, nên Output của Network này không phải là $7 \times 7 \times 30$ mà là $7 \times 7 \times 35&amp;.</p>
+<p>Locally connected layer: Có thể hiểu là 1 biến thể trung gian giữa Fully connected layer và Convolutional Layer. Chi tiết hơn các bạn xem ở <a href="https://prateekvjoshi.com/2016/04/12/understanding-locally-connected-layers-in-convolutional-neural-networks/">đây</a> hoặc <a href="https://pennlio.wordpress.com/2014/04/11/fully-connected-locally-connected-and-shared-weights-layer-in-neural-networks/">đây</a> nhé.</p>
 <hr class="half-line">
 <p>[<a href="#feature_scaling_b" style="color:red;">$ \triangleleft $</a>]<a name="feature_scaling"></a>: <strong>Tại sao phải có bước xử lý này?</strong></p>
 <p>Đây là bước <strong>Scaling Features</strong>: đưa khoảng giá trị của các feature về cùng một scale trước khi vào hàm loss để giúp mô hình hội tụ nhanh và ổn định hơn khi training.</p>
