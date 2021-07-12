@@ -172,7 +172,7 @@
 <li>Giữ lại toàn bộ phần Conv layers của mạng Darknet-19 bên trên, trừ layer $1 \times 1 \times 1000$ cuối cùng.</li>
 <li>Thêm 3 Conv layers $3 \times 3 \times 1024$</li>
 <li>Thêm passthrough layers bao gồm <strong>Route</strong> và <strong>Reorg</strong> [<a href="#reorg" style="color:red;">?</a>]<a name="reorg_b"></a></li>
-<li>Thêm $1 \times 1$ Conv layer với số filter bằng kích thước output (125 filters)</li>
+<li>Thêm $1 \times 1$ Conv layer với số filter bằng kích thước output (= (B x (C + 5)) = 5 x (20 + 5) = 125 filters)</li>
 </ul>
 <div class="text-center my-3">
 <figure class="figure">
@@ -184,7 +184,8 @@
 <h5 id="322-hàm-loss">3.2.2. Hàm loss:</h5>
 <p>Vẫn sử dụng hàm Sum Squared Error như ở YOLOv1</p>
 <ul>
-<li>Số lượng grid cell SxS chính bằng kích thước của output feature map. Với input image (416x416) thì S = 416/32 = 13 [<a href="#grid_cell" style="color:red;">?</a>]<a name="grid_cell_b"></a></li>
+<li>Số lượng grid cell SxS chính bằng kích thước của output feature map. Các bạn có thể thấy kiến trúc của YOLOv2 sẽ cho ra output feature map có kích thước w,h luôn bằng 1/32 kích thước W,H của input.
+Với WxH = (416x416) =&gt; S = 416/32 = 13; WxH = (544x544) =&gt; S = 544/32 = 17&hellip; [<a href="#grid_cell" style="color:red;">?</a>]<a name="grid_cell_b"></a></li>
 </ul>
 <h5 id="323-các-kỹ-thuật-khi-training">3.2.3. Các kỹ thuật khi training:</h5>
 <ul>
@@ -193,9 +194,8 @@
 </ul>
 <hr>
 <h4 id="4-inference-testing">4. Inference (Testing)</h4>
-<p><strong><em>Pipe line của hệ thống object detection YOLOv2:</em></strong>
-Các bạn có thể thấy kiến trúc của YOLOv2 sẽ cho ra output feature map có kích thước w,h luôn bằng 1/32 kích thước W,H của input<br>
-Image $(416,416,3) \Rightarrow $ Network Prediction $\Rightarrow $ Output $(13,13,125) \Rightarrow $ Tính lại coordinates box theo input size của image, tính lại class probabilities $Pr(c) \Rightarrow $ Bỏ qua các box có low probabilities $\Rightarrow $ Non-max suppression $\Rightarrow $ Final prediction.</p>
+<p><strong><em>Pipe line của hệ thống object detection YOLOv2:</em></strong></p>
+<p>Image $(W,H,3) \Rightarrow $ Network Prediction $\Rightarrow $ Output $(W/32,H/32,125) \Rightarrow $ Tính lại coordinates box theo W,H ; tính lại class probabilities $Pr(c) \Rightarrow $ Bỏ qua các box có low probabilities $\Rightarrow $ Non-max suppression $\Rightarrow $ Final prediction.</p>
 <hr>
 <h4 id="4-so-sánh-độ-chính-xác-và-hiệu-năng-với-các-mô-hình-khác">4. So sánh độ chính xác và hiệu năng với các mô hình khác</h4>
 <p>YOLOv2 đạt độ chính xác tương đương hoặc nhỉnh hơn so với các thuật toán khác cùng thời điểm, trong khi nhanh hơn nhiều lần</p>
@@ -241,7 +241,7 @@ b_{h} = p_{h} \times e^{t_{h}}\\
 C = Pr(object) \times IOU(b,object) = \sigma{(t_{o})}
 \end{multline}
 </div>
-<p>Giá trị $b_{x}, b_{y}$ sử dụng hàm <span>_sigmoid_</span> . $\sigma{(t_{x})}, \sigma{(t_{y})}$ sẽ nằm trong đoạn [0;1].</p>
+<p>Giá trị $b_{x}, b_{y}$ sử dụng hàm <i>sigmoid</i>. $\sigma{(t_{x})}, \sigma{(t_{y})}$ sẽ nằm trong đoạn [0;1].</p>
 <p>Giá trị C là giá trị IOU nên nằm trong đoạn [0;1]</p>
 <p>Giá trị $b_{w}, b_{h}$ sử dụng luỹ thừa cơ số e (số Euler). $e^{t_{w}}, e^{t_{h}}$ sẽ nằm trong khoảng $[0; \infty]$, là giá trị tỉ lệ offset của bounding box so với anchor box</p>
 <div class="text-center my-3">
@@ -301,6 +301,14 @@ Từ công thức ta có thể thấy giá trị khoảng cách $d$ sẽ nằm t
 <p>Bản chất của Reorg layer là tổ chức, sắp xếp lại các pixel liền kề nhau trên 1 feature map thành các pixel nằm trên các channel khác nhau. Chi tiết các bạn xem ở <a href="https://leimao.github.io/blog/Reorg-Layer-Explained/">đây</a></p>
 <p>Reorg + Route được kết hợp với nhau để concatenate high-level features ở layer cuối với middle-level features ở layer trước đó, giúp model có thể xác định vị trí của các small object chính xác hơn.</p>
 <p>Vì ở output layer (xem <a href="#network_img_b" style="color:red;">Ảnh 1</a><a name="network_img"></a>), tác giả concatenate feature maps của 2 layer có kích thước khác nhau (26x26 và 13x13) . Reorg layer với stride = 2, sẽ làm kích thước của feature map 26x26 giảm 1/2 thành 13x13, nhờ đó có thể concatenate được với feature map 13x13 còn lại để tạo thành final output.</p>
+<p>[<a href="#grid_cell_b" style="color:red;">$ \triangleleft $</a>]<a name="grid_cell"></a>:<strong>Tại sao số grid cell (SxS) lại bằng kích thước output feature map (wxh)?</strong>
+Như bạn đã biết, ở YOLOv1, output của Network là 1 lớp FC layer với số nodes = (S x S x (B x 5 + C)) = (7 x 7 x (2 * 5 + 20)) = 1470.
+1470 Nodes này được reshape về dạng (7, 7, 30) = (S, S, B x 5 + C)</p>
+<p>Ở YOLOv2, output layer là Conv Layer nên ko cần sử dụng bước reshape nữa, vì output đã có sẵn dạng <em>(w, h, c)</em>. So sánh với output của YOLOv1, ta có thể thấy, <em>w</em> và <em>h</em> chính là <em>S</em>, còn <em>c</em> chính là <em>(B x 5 +C)</em> . Từ đây có thể rút ra 1 số hệ quả:</p>
+<ul>
+<li>Với mỗi input có <em>(W,H)</em> thì YOLOv2 sẽ cho ra output <em>(w,h)</em> =&gt; số lượng Grid cell <em>(SxS)</em> sẽ thay đổi phụ thuộc vào <em>(W,H)</em></li>
+<li>Do kiến trúc của YOLOv2, <em>w = W/32</em>, <em>h = H/32</em> =&gt; giá trị W, H luôn phải chia hết cho 32, và W không nhất thiết phải bằng H</li>
+</ul>
 <hr>
 <h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
 <ul>
