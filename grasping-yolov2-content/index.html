@@ -98,8 +98,8 @@
 <hr>
 <h3 id="i-đọc-paper">I. Đọc Paper</h3>
 <blockquote>
-<p>Trong phần &ldquo;Đọc Paper&rdquo; này, mình sẽ tóm lược lại những ý chính của tác giả, có bỏ qua một số nội dung&hellip; Khi đọc sẽ có các reference (có dạng [<a style="color:red;">?</a>]). Bạn có thể click vào các dấu hỏi đó để dẫn xuống phần &ldquo;Hiểu Paper&rdquo; bên dưới để đọc sâu hơn về vấn đề được đề cập.
-Trong paper có một số phần không được tác giả đề cập tới (ví dụ: hàm loss, số grid cell, Reorg layer&hellip;), chỉ có ở trong source code, mình tự đưa vào để dễ nắm bắt hơn nội dung của paper</p>
+<p>Trong phần &ldquo;Đọc Paper&rdquo; này, mình sẽ tóm lược lại những ý chính của tác giả, có bỏ qua một số nội dung&hellip; Khi đọc sẽ có các reference (có dạng [<a style="color:red;">?</a>]). Bạn có thể click vào các dấu hỏi đó để dẫn xuống phần &ldquo;Hiểu Paper&rdquo; bên dưới để đọc sâu hơn về vấn đề được đề cập.</p>
+<p>Trong paper có một số phần không được tác giả đề cập tới (ví dụ: hàm loss, số grid cell, Reorg layer&hellip;), chỉ có ở trong source code, mình tự đưa vào để dễ nắm bắt hơn nội dung của paper</p>
 </blockquote>
 <h4 id="1-giới-thiệu-chung-về-model">1. Giới thiệu chung về model</h4>
 <p>Tác giả giới thiệu hệ thống detect objection mới, tên là: <strong>YOLO9000</strong>. So với hệ thống trước, hệ thống này có các điểm mới:</p>
@@ -126,7 +126,7 @@ Trong paper có một số phần không được tác giả đề cập tới (
 <ul>
 <li><em>Batch Normalization</em>: Tác giả thêm layer Batch Normalization vào tất cả các lớp Conv Layer trong Network. Kỹ thuật này giúp regularize model nên không sử dụng Drop out layer như ở YOLOv1 nữa, giúp model cải thiện 2% mAP. [<a href="#batch_normalization" style="color:red;">?</a>]<a name="batch_normalization_b"></a></li>
 <li><em>High Resolution Classifier</em>: giống như YOLOv1, YOLOv2 cũng train trước các lớp Conv layer trong một mạng classification, tuy nhiên sử dụng input size $448 \times 448$ thay vì $224 \times 224$ như YOLOv1. Việc train trước các lớp Conv Layer với input độ phân giải cao đã giúp cho Network trích xuất đặc trưng tốt hơn, cải thiện thêm 4% mAP.</li>
-<li>Sử dụng <em>Anchor Boxes</em>: Thay vì chỉ quy định số lượng Bounding box và để model tự predict hoàn toàn coordinates của các Bounding boxes như ở YOLOv1, YOLOv2 chỉ predict toạ độ tâm trực tiếp từ model, còn kích thước w,h của bounding box được predict theo offset của nó so với một tập 5 Anchor Boxes với các kích thước cố định cho trước. Kỹ thuật này giúp model cải thiện 7% recall. [<a href="#anchor_box" style="color:red;">?</a>]<a name="anchor_box_b"></a></li>
+<li>Sử dụng <em>Anchor Boxes</em>: Thay vì chỉ quy định số lượng Bounding box và để model tự predict hoàn toàn coordinates của các Bounding boxes như ở YOLOv1, YOLOv2 predict toạ độ tâm trực tiếp từ model, còn kích thước w,h của bounding box được predict theo offset của nó so với một tập 5 Anchor Boxes với các kích thước cố định cho trước. Kỹ thuật này giúp model cải thiện 7% recall. [<a href="#anchor_box" style="color:red;">?</a>]<a name="anchor_box_b"></a></li>
 <li><em>Dimension Clusters</em>: Thay vì tự chọn kích thước các Anchor boxes, tác giả sử dụng K-means clustering trên tập dữ liệu training bounding box để tự động tìm ra các kích thước và tỉ lệ phù hợp nhất. [<a href="#k_means" style="color:red;">?</a>]<a name="k_means_b"></a></li>
 <li><em>Direct location prediction</em>: predict toạ độ tâm của bounding box gắn với vị trí của grid cell tương ứng. Kỹ thuật này giúp cải thiện 5% độ chính xác</li>
 <li><em>Fine-grained Features</em>/ <em>passthrough layer</em>: sử dụng 1 layer tên là Reorg để xử lý feature maps có độ phân giải cao hơn ở layer trước đó rồi concatenate với feature maps của layer cuối cùng để tạo thành output layer. Kỹ thuật này giúp cải thiện 1% độ chính xác</li>
@@ -171,7 +171,7 @@ Trong paper có một số phần không được tác giả đề cập tới (
 <ul>
 <li>Giữ lại toàn bộ phần Conv layers của mạng Darknet-19 bên trên, trừ layer $1 \times 1 \times 1000$ cuối cùng.</li>
 <li>Thêm 3 Conv layers $3 \times 3 \times 1024$</li>
-<li>Thêm passthrough layer tên là <strong>Reorg</strong> [<a href="#reorg" style="color:red;">?</a>]<a name="reorg_b"></a></li>
+<li>Thêm passthrough layers bao gồm <strong>Route</strong> và <strong>Reorg</strong> [<a href="#reorg" style="color:red;">?</a>]<a name="reorg_b"></a></li>
 <li>Thêm $1 \times 1$ Conv layer với số filter bằng kích thước output (125 filters)</li>
 </ul>
 <div class="text-center my-3">
@@ -233,14 +233,14 @@ Mỗi layer đều có input và output, output của layer này là input của
 <p>Gọi $b_{x}, b_{y}, b_{w}, b_{h}, C$ lần lượt là toạ độ tâm, kích thước rộng, dài và confidence score của 1 predicted bounding box (trong số 5 Bounding box/ 1 grid cell). Các giá trị này sẽ được tính như sau:</p>
 <div>
 \begin{multline}
-b_{x} = \sigma{(t_{x})} + C_{x}\\
+\quad b_{x} = \sigma{(t_{x})} + C_{x}\\
 b_{y} = \sigma{(t_{y})} + C_{y}\\
 b_{w} = p_{w} * e^{t_{w}}\\
 b_{h} = p_{h} * e^{t_{h}}\\
 C = Pr(object) * IOU(b,object) = \sigma{(t_{o})}
 \end{multline}
 </div>
-<p>Giá trị $b_{x}, b_{y}$ sử dụng hàm _sigmoid_ . $\sigma{(t_{x})}, \sigma{(t_{y})}$ sẽ nằm trong đoạn [0;1].</p>
+<p>Giá trị $b_{x}, b_{y}$ sử dụng hàm <span>_sigmoid_</span> . $\sigma{(t_{x})}, \sigma{(t_{y})}$ sẽ nằm trong đoạn [0;1].</p>
 <p>Giá trị C là giá trị IOU nên nằm trong đoạn [0;1]</p>
 <p>Giá trị $b_{w}, b_{h}$ sử dụng luỹ thừa cơ số e (số Euler). $e^{t_{w}}, e^{t_{h}}$ sẽ nằm trong khoảng $[0; \infty]$, là giá trị tỉ lệ offset của bounding box so với anchor box</p>
 <div class="text-center my-3">
@@ -295,8 +295,11 @@ Từ công thức ta có thể thấy giá trị khoảng cách $d$ sẽ nằm t
 <p>Global average pooling cũng tương tự như Average Pooling, nhưng thay vì tính giá trị trung bình cho kích thước 1 filter (VD: 2x2) thì GAP tính giá trị trung bình cho toàn bộ feature map.</p>
 <p>Việc sử dụng Global Average Pooling chính là lí do giúp cho mạng Darknet-19 không yêu cầu cố định input size của image.</p>
 <hr class="half-line">
-<p>[<a href="#reorg_b" style="color:red;">$ \triangleleft $</a>]<a name="reorg"></a>:<strong>Reorg layer để làm gì và được tính như nào</strong>
-Vì ở output layer, tác giả concat feature maps của 2 layer có kích thước khác nhau (26x26 và 13x13) (xem <a href="#network_img_b" style="color:red;">Ảnh 1</a><a name="network_img"></a>)</p>
+<p>[<a href="#reorg_b" style="color:red;">$ \triangleleft $</a>]<a name="reorg"></a>:<strong>Route layer, Reorg layer để làm gì và được tính như nào</strong>
+Route layer lấy ý tưởng tượng tự như skip connection của ResNet, layer này sẽ nhận đầu vào là 2 layer trong Network và làm nhiệm vụ concatenate chúng với nhau.</p>
+<p>Bản chất của Reorg layer là tổ chức, sắp xếp lại các pixel liền kề nhau trên 1 feature map thành các pixel nằm trên các channel khác nhau. Chi tiết các bạn xem ở <a href="https://leimao.github.io/blog/Reorg-Layer-Explained/">đây</a></p>
+<p>Reorg + Route được kết hợp với nhau để concatenate high-level features ở layer cuối với middle-level features ở layer trước đó, giúp model có thể xác định vị trí của các small object chính xác hơn.</p>
+<p>Vì ở output layer (xem <a href="#network_img_b" style="color:red;">Ảnh 1</a><a name="network_img"></a>), tác giả concatenate feature maps của 2 layer có kích thước khác nhau (26x26 và 13x13) . Reorg layer với $stride = 2$, sẽ làm kích thước của feature map 26x26 giảm 1/2 thành 13x13, nhờ đó có thể concatenate được với feature map 13x13 còn lại để tạo thành final output.</p>
 <hr>
 <h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
 <ul>
