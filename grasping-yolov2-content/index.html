@@ -172,7 +172,7 @@
 <li>Giữ lại toàn bộ phần Conv layers của mạng Darknet-19 bên trên, trừ layer $1 \times 1 \times 1000$ cuối cùng.</li>
 <li>Thêm 3 Conv layers $3 \times 3 \times 1024$</li>
 <li>Thêm passthrough layers bao gồm <strong>Route</strong> và <strong>Reorg</strong> [<a href="#reorg" style="color:red;">?</a>]<a name="reorg_b"></a></li>
-<li>Thêm $1 \times 1$ Conv layer với số filter bằng kích thước output (= (B x (C + 5)) = 5 x (20 + 5) = 125 filters)</li>
+<li>Thêm $1 \times 1$ Conv layer với số filter bằng kích thước output (số filters = B x (C + 5) = 5 x (20 + 5) = 125).</li>
 </ul>
 <div class="text-center my-3">
 <img src="https://hungvm2.github.io/images/yolov2/yolov2_architecture.png" class="img-fluid" alt="YOLOv2 Architecture">
@@ -188,7 +188,7 @@
 <p>Vẫn sử dụng hàm Sum Squared Error như ở YOLOv1</p>
 <ul>
 <li>Số lượng grid cell SxS chính bằng kích thước của output feature map. Các bạn có thể thấy kiến trúc của YOLOv2 sẽ cho ra output feature map có kích thước w,h luôn bằng 1/32 kích thước W,H của input.
-Với WxH = (416x416) =&gt; S = 416/32 = 13; WxH = (544x544) =&gt; S = 544/32 = 17&hellip; [<a href="#grid_cell" style="color:red;">?</a>]<a name="grid_cell_b"></a></li>
+Với WxH = (416x416) =&gt; S = 416/32 = 13; với WxH = (544x544) =&gt; S = 544/32 = 17&hellip; [<a href="#grid_cell" style="color:red;">?</a>]<a name="grid_cell_b"></a></li>
 </ul>
 <h5 id="323-các-kỹ-thuật-khi-training">3.2.3. Các kỹ thuật khi training:</h5>
 <ul>
