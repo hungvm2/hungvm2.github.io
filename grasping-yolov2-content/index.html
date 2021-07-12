@@ -233,11 +233,12 @@ Mỗi layer đều có input và output, output của layer này là input của
 <p>Gọi $b_{x}, b_{y}, b_{w}, b_{h}, C$ lần lượt là toạ độ tâm, kích thước rộng, dài và confidence score của 1 predicted bounding box (trong số 5 Bounding box/ 1 grid cell). Các giá trị này sẽ được tính như sau:</p>
 <div>
 \begin{multline}
-\quad b_{x} = \sigma{(t_{x})} + C_{x}\\
+\\
+b_{x} = \sigma{(t_{x})} + C_{x}\\
 b_{y} = \sigma{(t_{y})} + C_{y}\\
-b_{w} = p_{w} * e^{t_{w}}\\
-b_{h} = p_{h} * e^{t_{h}}\\
-C = Pr(object) * IOU(b,object) = \sigma{(t_{o})}
+b_{w} = p_{w} \times e^{t_{w}}\\
+b_{h} = p_{h} \times e^{t_{h}}\\
+C = Pr(object) \times IOU(b,object) = \sigma{(t_{o})}
 \end{multline}
 </div>
 <p>Giá trị $b_{x}, b_{y}$ sử dụng hàm <span>_sigmoid_</span> . $\sigma{(t_{x})}, \sigma{(t_{y})}$ sẽ nằm trong đoạn [0;1].</p>
@@ -295,11 +296,11 @@ Từ công thức ta có thể thấy giá trị khoảng cách $d$ sẽ nằm t
 <p>Global average pooling cũng tương tự như Average Pooling, nhưng thay vì tính giá trị trung bình cho kích thước 1 filter (VD: 2x2) thì GAP tính giá trị trung bình cho toàn bộ feature map.</p>
 <p>Việc sử dụng Global Average Pooling chính là lí do giúp cho mạng Darknet-19 không yêu cầu cố định input size của image.</p>
 <hr class="half-line">
-<p>[<a href="#reorg_b" style="color:red;">$ \triangleleft $</a>]<a name="reorg"></a>:<strong>Route layer, Reorg layer để làm gì và được tính như nào</strong>
-Route layer lấy ý tưởng tượng tự như skip connection của ResNet, layer này sẽ nhận đầu vào là 2 layer trong Network và làm nhiệm vụ concatenate chúng với nhau.</p>
+<p>[<a href="#reorg_b" style="color:red;">$ \triangleleft $</a>]<a name="reorg"></a>:<strong>Route layer, Reorg layer để làm gì và được tính như nào</strong></p>
+<p>Route layer lấy ý tưởng tượng tự như skip connection của ResNet, layer này sẽ nhận đầu vào là 2 layer trong Network và làm nhiệm vụ concatenate chúng với nhau.</p>
 <p>Bản chất của Reorg layer là tổ chức, sắp xếp lại các pixel liền kề nhau trên 1 feature map thành các pixel nằm trên các channel khác nhau. Chi tiết các bạn xem ở <a href="https://leimao.github.io/blog/Reorg-Layer-Explained/">đây</a></p>
 <p>Reorg + Route được kết hợp với nhau để concatenate high-level features ở layer cuối với middle-level features ở layer trước đó, giúp model có thể xác định vị trí của các small object chính xác hơn.</p>
-<p>Vì ở output layer (xem <a href="#network_img_b" style="color:red;">Ảnh 1</a><a name="network_img"></a>), tác giả concatenate feature maps của 2 layer có kích thước khác nhau (26x26 và 13x13) . Reorg layer với $stride = 2$, sẽ làm kích thước của feature map 26x26 giảm 1/2 thành 13x13, nhờ đó có thể concatenate được với feature map 13x13 còn lại để tạo thành final output.</p>
+<p>Vì ở output layer (xem <a href="#network_img_b" style="color:red;">Ảnh 1</a><a name="network_img"></a>), tác giả concatenate feature maps của 2 layer có kích thước khác nhau (26x26 và 13x13) . Reorg layer với stride = 2, sẽ làm kích thước của feature map 26x26 giảm 1/2 thành 13x13, nhờ đó có thể concatenate được với feature map 13x13 còn lại để tạo thành final output.</p>
 <hr>
 <h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
 <ul>
