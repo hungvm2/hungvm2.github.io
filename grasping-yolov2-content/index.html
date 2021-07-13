@@ -49,7 +49,7 @@
         }
       };
     </script>
-    <script id="MathJax-script" async src="https://hungvm2.github.io/js/tex-chtml.js"></script>
+
 </head>
 
 <body>
@@ -187,9 +187,10 @@
 <h5 id="322-hàm-loss">3.2.2. Hàm loss:</h5>
 <p>Vẫn sử dụng hàm Sum Squared Error như ở YOLOv1</p>
 <ul>
-<li>Số lượng grid cell SxS chính bằng kích thước của output feature map. Các bạn có thể thấy kiến trúc của YOLOv2 sẽ cho ra output feature map có kích thước w,h luôn bằng $1/32$ kích thước W,H của input.
-Với $W \times H = (416x416) \Rightarrow S = 416/32 = 13$; với $W \times H = (544x544) \Rightarrow S = 544/32 = 17$&hellip; [<a href="#grid_cell" style="color:red;">?</a>]<a name="grid_cell_b"></a></li>
+<li>Số lượng grid cell SxS chính bằng kích thước của output feature map. Các bạn có thể thấy kiến trúc của YOLOv2 sẽ cho ra output feature map có kích thước w,h luôn bằng $1/32$ kích thước W,H của input.</li>
 </ul>
+<p>Với $W \times H = (416x416) \Rightarrow S = 416/32 = 13$;</p>
+<p>Với $W \times H = (544x544) \Rightarrow S = 544/32 = 17$&hellip; [<a href="#grid_cell" style="color:red;">?</a>]<a name="grid_cell_b"></a></p>
 <h5 id="323-các-kỹ-thuật-khi-training">3.2.3. Các kỹ thuật khi training:</h5>
 <ul>
 <li>Learning rate schedule</li>
@@ -355,8 +356,12 @@ Như bạn đã biết, ở YOLOv1, output của Network là 1 lớp FC layer v�
     
 
     
+    
+        
+<script src="https://hungvm2.github.io/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 
 
-
+    
 </body>
 </html>

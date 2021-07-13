@@ -49,7 +49,7 @@
         }
       };
     </script>
-    <script id="MathJax-script" async src="https://hungvm2.github.io/js/tex-chtml.js"></script>
+
 </head>
 
 <body>
@@ -153,14 +153,14 @@
 </li>
 <li>
 <p>1 <strong>confidence score</strong> $C$, tính theo công thức:
-\begin{equation}C = Pr(Object) * IOU_{pred}^{truth} \label{ref_c}\end{equation}</p>
+\begin{equation}C = Pr(Object) \times IOU_{pred}^{truth} \label{ref_c}\end{equation}</p>
   <span style="display:inline-block">
   $Pr(Object) = 
   \begin{cases}
   0 & \quad \text{nếu không có Object trong cell}\\
   1 & \quad \text{nếu có Object trong cell}
   \end{cases}$
-  </span>
+  </span><br>
   $IOU_{pred}^{truth}$: Giá trị IOU giữa ground truth và predicted bounding box. [<a href="#iou" style="color:red;">?</a>]<a name="iou_b" style="color:red;"></a>
 </li>
 </ul>
@@ -181,7 +181,7 @@ $Pr(Class_{c}|Object)$: Là xác suất với điều kiện có Object xuất h
 </figure>
 </div>
 <p><em>Kích thước Output của Network:</em></p>
-<p>\begin{equation}Ouput\quad Shape = (S , S , B * 4 + B + C) = (S, S , B * 5+ C)\end{equation}</p>
+<p>\begin{equation}Ouput\quad Shape = (S , S , B \times 4 + B + C) = (S, S , B \times 5 + C)\end{equation}</p>
 <h5 id="22-các-bước-khi-huấn-luyện-mô-hình-training">2.2. Các bước khi huấn luyện mô hình (training):</h5>
 <p><strong>Bước 1</strong>: Đặt 20 lớp Conv Layers đầu tiên của mạng detection (<a href="#anh_1_b" style="color:red;">Ảnh 1</a><a name="anh_1"></a>) trong 1 kiến trúc mạng Classification [<a href="#classification_network" style="color:red;">?</a>]<a name="classification_network_b"></a> , và train trên tập ImageNet 1000 classes.</p>
 <p><strong>Bước 2</strong>: Sử dụng Transfer Learning, đặt lại Weights của 20 lớp Conv Layers đã được train ở bước 1 trở lại mạng detection (Ảnh 1). Do <strong>Weights</strong> của phần <strong>Conv Layers không phụ thuộc</strong> vào <strong>Input size</strong> nên train mạng detection với Input size tăng lên $448\times 448$ để mạng học được những đặc trưng chi tiết hơn của ảnh.</p>
@@ -448,8 +448,12 @@ $Pr(Class_{c}|Object)$: Là xác suất với điều kiện có Object xuất h
     
 
     
+    
+        
+<script src="https://hungvm2.github.io/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 
 
-
+    
 </body>
 </html>
