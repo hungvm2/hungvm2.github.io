@@ -206,7 +206,7 @@ $Pr(Class_{c}|Object)$: Là xác suất với điều kiện có Object xuất h
 <p><strong>Trong đó:</strong></p>
 <p><em>Gọi &ldquo;Box Predictor&rdquo; là Bounding box có IOU lớn nhất trong grid cell với ground truth box</em></p>
 <ul>
-<li><code>\lambda_{coord} = 5</code> , $\lambda_{noobj} = 0.5$ [<a href="#lambda" style="color:red;">?</a>]<a name="lambda_b"></a></li>
+<li>$ \lambda_{coord} = 5 $ , $\lambda_{noobj} = 0.5$ [<a href="#lambda" style="color:red;">?</a>]<a name="lambda_b"></a></li>
 <li>$\mathbb{1}_{i}^{obj}$ nhận giá trị 1 nếu object xuất hiện ở cell thứ $i$ ; 0 nếu ngược lại</li>
 <li>$\mathbb{1}_{ij}^{obj}$ nhận giá trị 1 nếu bounding box là &ldquo;Box Predictor&rdquo; ; 0 nếu ngược lại</li>
 <li>$x_{i},y_{i}$: Toạ độ tâm (đã biến đổi) của ground truth box ở grid cell thứ $i$</li>
