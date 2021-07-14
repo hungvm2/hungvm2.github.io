@@ -174,7 +174,7 @@
 <li>Giữ lại toàn bộ phần Conv layers của mạng Darknet-19 bên trên, trừ layer $1 \times 1 \times 1000$ cuối cùng.</li>
 <li>Thêm 3 Conv layers $3 \times 3 \times 1024$</li>
 <li>Thêm passthrough layers bao gồm <strong>Route</strong> và <strong>Reorg</strong> [<a href="#reorg" style="color:red;">?</a>]<a name="reorg_b"></a></li>
-<li>Thêm $1 \times 1$ Conv layer với số filter bằng kích thước output (số filters = B x (C + 5) = 5 x (20 + 5) = 125).</li>
+<li>Thêm $1 \times 1$ Conv layer với số filter bằng kích thước output (số filters = B x (N + 5) = 5 x (20 + 5) = 125; N: Số class trong dataset).</li>
 </ul>
 <div class="text-center my-3">
 <img src="https://hungvm2.github.io/images/yolov2/yolov2_architecture.png" class="img-fluid" alt="YOLOv2 Architecture">

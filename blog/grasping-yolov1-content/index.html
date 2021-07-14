@@ -301,7 +301,7 @@ $Pr(Class_{c}|Object)$: Là xác suất với điều kiện có Object xuất h
 \end{multline}
 </div>
 <p>Shape của output tensor, sau khi reshape sẽ là:</p>
-<p>\begin{equation}Ouput\quad Shape = (S , S , B * 5 + C) = (7 , 7 , 2 * 5 + 20) = (7 , 7 , 30)\end{equation}</p>
+<p>\begin{equation}Ouput\quad Shape = (S , S , B * 5 + N) = (7 , 7 , 2 * 5 + 20) = (7 , 7 , 30)\end{equation}</p>
 <hr class="half-line">
 <p>[<a href="#why_b_b" style="color:red;">$ \triangleleft $</a>]<a name="why_b"></a>:<strong>sao tác giả chọn B = 2 cho mỗi grid cell?</strong></p>
 <p>YOLO predict 2 bounding box cho mỗi grid cell, tuỳ vào IOU của mỗi bounding box này so với ground truth, IOU lớn hơn sẽ giúp box được chọn làm Predictor.</p>
