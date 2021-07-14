@@ -215,10 +215,10 @@
 <p>Vẫn sử dụng hàm Sum Squared Error như ở YOLOv1, tuy nhiên class probabilities ở YOLOv2 không gắn với grid cell nữa mà gắn với Anchor boxes (B). Vì vậy một grid cell có thể chứa tối đa B object khác nhau thay vì chỉ 1 object như ở YOLOv1.</p>
 <div>
 \begin{multline*}
-Loss = Loss_{coordinates} + Loss_{class_prob} + Loss_{IOU} 
-= \lambda_{coord} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} [(x_{i} - \hat{x}_{i})^{2} + (y_{i} - \hat{y}_{i})^{2}]\\ 
+Loss = (Loss_{coordinates} + Loss_{class_prob}) + Loss_{IOU}\\
+= (\lambda_{coord} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} [(x_{i} - \hat{x}_{i})^{2} + (y_{i} - \hat{y}_{i})^{2}]\\ 
 + \lambda_{coord} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj}[(\sqrt{w_{i}} - \sqrt{\hat{w}_{i}})^{2} + (\sqrt{h_{i}} - \sqrt{\hat{h}_{i}})^{2}]\\
-+ \lambda_{coord} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{i}^{obj} \displaystyle \sum_{c \in classes}(p_{i}(c) - \hat{p_{i}}(c))^{2}
++ \lambda_{coord} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} \displaystyle \sum_{c \in classes}(p_{i}(c) - \hat{p_{i}}(c))^{2})
 + \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} (C_{i} - \hat{C}_{i})^{2}\\
 + \lambda_{noobj} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{noobj} (C_{i} - \hat{C}_{i})^2\\
 \end{multline*}
