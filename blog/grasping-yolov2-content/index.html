@@ -12,7 +12,7 @@
     <meta property="og:site_name" content="HungVM2&#39;s Notes" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://hungvm2.github.io/grasping-yolov2-content/" />
+    <meta property="og:url" content="https://hungvm2.github.io/blog/grasping-yolov2-content/" />
     <meta property="og:title" content="Đọc và phân tích Paper &#34;YOLO9000: Better, Faster, Stronger&#34;" />
     <meta property="og:image" content="https://hungvm2.github.io" />
     <meta property="og:description" content="" />
@@ -23,7 +23,7 @@
     <meta name="twitter:description" content="" />
     <meta name="twitter:image" content="https://hungvm2.github.io" />
 
-    <link rel="canonical" href="https://hungvm2.github.io/grasping-yolov2-content/">
+    <link rel="canonical" href="https://hungvm2.github.io/blog/grasping-yolov2-content/">
 
     <link rel="stylesheet" href="https://hungvm2.github.io/css/bootstrap.min.css" />
 
@@ -56,7 +56,7 @@
 
 <body>
     
-    <div class="mt-xl header">
+<div class="mt-xl header">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-auto">
@@ -88,13 +88,38 @@
     </div>
 </div>
 
-    <div class="content">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-sm-12 col-lg-8">
-                    <h1 class="mx-0 mx-md-4">Đọc và phân tích Paper &#34;YOLO9000: Better, Faster, Stronger&#34;</h1>
-                    <div class="markdown">
-                        
+<div class="content">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-sm-12 col-lg-8">
+                <h1 class="mx-0 mx-md-4 blog-post-title">Đọc và phân tích Paper &#34;YOLO9000: Better, Faster, Stronger&#34;</h1>
+
+                <div class="mb-md-4 meta">
+                    
+                    
+                    <span class="author" title="Vũ Minh Hưng">
+                        Vũ Minh Hưng
+                    </span>
+                    
+                    
+
+                    <span class="date middot" title='Wed Jun 30 2021 22:28:49 &#43;07'>
+                        2021-06-30
+                    </span>
+
+                    <span class="reading-time middot">
+                        13 min read
+                    </span>
+
+                    <div class="d-none d-md-inline tags">
+                        <ul class="list-unstyled d-inline">
+                            
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="markdown blog-post-content">
+                    
     <p>Tiếp theo trong series YOLO, ở bài viết này, chúng ta hãy cùng đọc và phân tích nội dung của paper &ldquo;<strong>YOLO9000: Better, Faster, Stronger</strong>&rdquo; published tháng 12 năm 2016 nhé!</p>
 <p>Vì mục đích của series này là muốn đi sâu hơn vào sự tiến hoá của YOLO qua từng version, nên mình sẽ chỉ <strong>tập trung vào kiến trúc</strong> của mô hình, cũng như các <strong>phương pháp tối ưu hiệu năng và độ chính xác (FPS/mAP) mới</strong> được sử dụng so với version trước.</p>
 <hr>
@@ -191,8 +216,8 @@
 <ul>
 <li>Số lượng grid cell SxS chính bằng kích thước của output feature map. Các bạn có thể thấy kiến trúc của YOLOv2 sẽ cho ra output feature map có kích thước w,h luôn bằng $1/32$ kích thước W,H của input.</li>
 </ul>
-<p>Với $W \times H = (416x416) \Rightarrow S = 416/32 = 13$;</p>
-<p>Với $W \times H = (544x544) \Rightarrow S = 544/32 = 17$&hellip; [<a href="#grid_cell" style="color:red;">?</a>]<a name="grid_cell_b"></a></p>
+<p>Với $W \times H = (416 \times 416) \Rightarrow S = 416/32 = 13$;</p>
+<p>Với $W \times H = (544 \times 544) \Rightarrow S = 544/32 = 17$&hellip; [<a href="#grid_cell" style="color:red;">?</a>]<a name="grid_cell_b"></a></p>
 <h5 id="323-các-kỹ-thuật-khi-training">3.2.3. Các kỹ thuật khi training:</h5>
 <ul>
 <li>Learning rate schedule</li>
@@ -327,14 +352,16 @@ Như bạn đã biết, ở YOLOv1, output của Network là 1 lớp FC layer v�
 
 
 
-                    </div>
                 </div>
+
+                
             </div>
         </div>
     </div>
+</div>
 
 
-    
+
 
 
     
