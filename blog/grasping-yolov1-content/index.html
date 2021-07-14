@@ -198,10 +198,10 @@ $Pr(Class_{c}|Object)$: Là xác suất với điều kiện có Object xuất h
 <div>
 \begin{multline*}
 Loss = Loss_{coordinates} + Loss_{IOU} + Loss_{class\_prob}\\
-= \lambda_{coord} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} [(x_{i} - \hat{x}_{i})^{2} + (y_{i} - \hat{y}_{i})^{2}]\\ 
-+ \lambda_{coord}\displaystyle\sum_{i=0}^{S^{2}}\displaystyle\sum_{j=0}^{B}\mathbb{1}_{ij}^{obj}[(\sqrt{w_{i}} - \sqrt{\hat{w}_{i}})^{2} + (\sqrt{h_{i}} - \sqrt{\hat{h}_{i}})^{2}]\\
-+ \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} (C_{i} - \hat{C}_{i})^{2}\\
-+ \lambda_{noobj} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{noobj} (C_{i} - \hat{C}_{i})^2\\
+= (\lambda_{coord} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} [(x_{i} - \hat{x}_{i})^{2} + (y_{i} - \hat{y}_{i})^{2}]\\ 
++ \lambda_{coord}\displaystyle\sum_{i=0}^{S^{2}}\displaystyle\sum_{j=0}^{B}\mathbb{1}_{ij}^{obj}[(\sqrt{w_{i}} - \sqrt{\hat{w}_{i}})^{2} + (\sqrt{h_{i}} - \sqrt{\hat{h}_{i}})^{2}])\\
++ [\displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} (C_{i} - \hat{C}_{i})^{2}\\
++ \lambda_{noobj} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{noobj} (C_{i} - \hat{C}_{i})^2]\\
 + \displaystyle \sum_{i=0}^{S^{2}} \mathbb{1}_{i}^{obj} \displaystyle \sum_{c \in classes}(p_{i}(c) - \hat{p_{i}}(c))^{2}
 \end{multline*}
 </div>
