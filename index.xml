@@ -23,8 +23,8 @@ Vì mục đích của series này là muốn đi sâu hơn vào sự tiến ho�
       <pubDate>Mon, 21 Jun 2021 22:44:24 +0700</pubDate>
       
       <guid>https://hungvm2.github.io/blog/grasping-yolov1-content/</guid>
-      <description>Trong bài viết này, chúng ta hãy cùng đọc và phân tích nội dung của paper &amp;ldquo;You Only Look One: Unified, Real-Time Object Detection&amp;rdquo; published tháng 5 năm 2016 nhé!
- I. Đọc Paper  Trong phần &amp;ldquo;Đọc Paper&amp;rdquo; này, mình sẽ tóm lược lại những ý chính của tác giả, có bỏ qua một số nội dung: Fast YOLO&amp;hellip; Khi đọc sẽ có các reference (có dạng [?]). Bạn có thể click vào các dấu hỏi đó để dẫn xuống phần &amp;ldquo;Hiểu Paper&amp;rdquo; bên dưới để đọc sâu hơn về vấn đề được đề cập.</description>
+      <description>Trong bài viết này, chúng ta hãy cùng đọc và phân tích nội dung của paper &amp;ldquo;You Only Look One: Unified, Real-Time Object Detection&amp;rdquo; cập nhật lần cuối vào tháng 5 năm 2016 nhé!
+ I. Đọc Paper  Trong phần &amp;ldquo;Đọc Paper&amp;rdquo; này, mình sẽ tóm lược lại những ý chính của tác giả, có bỏ qua một số nội dung: Fast YOLO&amp;hellip; Khi đọc sẽ có các reference (có dạng [?</description>
     </item>
     
     <item>
