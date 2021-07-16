@@ -247,9 +247,9 @@ Loss = (Loss_{coordinates} + Loss_{class\_prob}) + Loss_{IOU}\\
 <li>$\hat{p}_{c}$: giá trị xác suất nhận diện của N class cho ground truth box (20 classes). Có dạng $[0,0,..1,&hellip;0,0,0]$. Vị trí của số $1$ là index của class trong N class.</li>
 <li>$P_{c}$: vector N chiều, giá trị xác suất của predicted box (20 classes)</li>
 <li>C: confident score, là giá trị IOU max của ground truth box với các anchor box trên 1 grid cell. (trường hợp grid cell có 2 ground truth box trở nên thì sẽ có 2 IOU max trở lên)</li>
-<li>\hat{C}: confident score của ground truth box, giá trị = 1</li>
-<li>\hat{x}, \hat{y}, \hat{w}, \hat{h}: là các giá trị coordinates của ground truth đã được biến đổi.</li>
-<li>x, y, w, h: là các giá trị của predicted box đã được biến đổi.</li>
+<li>$\hat{C}$: confident score của ground truth box, giá trị = 1</li>
+<li>$\hat{x}, \hat{y}, \hat{w}, \hat{h}$: là các giá trị coordinates của ground truth đã được biến đổi.</li>
+<li>$x, y, w, h$: là các giá trị của predicted box đã được biến đổi.</li>
 </ul>
 <p>Các giá trị đưa vào hàm loss là các giá trị của Predicted Box/Ground truth box đã được transform/normalize để nằm trong đoạn $[0;1]$. Các giá trị sẽ được biến đổi như bên dưới:
 \begin{multline*}
