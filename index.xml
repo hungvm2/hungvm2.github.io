@@ -6,7 +6,17 @@
     <description>Recent content on HungVM2&#39;s Notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 30 Jun 2021 22:28:49 +0700</lastBuildDate><atom:link href="https://hungvm2.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 16 Jul 2021 11:28:01 +0700</lastBuildDate><atom:link href="https://hungvm2.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Đọc và phân tích Paper &#34;YOLOv3: An Incremental Improment&#34; (YOLOv3)</title>
+      <link>https://hungvm2.github.io/blog/grasping-yolov3-content/</link>
+      <pubDate>Fri, 16 Jul 2021 11:28:01 +0700</pubDate>
+      
+      <guid>https://hungvm2.github.io/blog/grasping-yolov3-content/</guid>
+      <description>Tiếp theo trong series YOLO, ở bài viết này, chúng ta hãy cùng đọc và phân tích nội dung của paper &amp;ldquo;YOLOv3: An Incremental Improment&amp;rdquo; published tháng 4 năm 2018 nhé!
+Vì mục đích của series này là muốn đi sâu hơn vào sự tiến hoá của YOLO qua từng version, nên mình sẽ chỉ tập trung vào kiến trúc của mô hình, cũng như các phương pháp tối ưu hiệu năng và độ chính xác (FPS/mAP) mới được sử dụng so với version trước.</description>
+    </item>
+    
     <item>
       <title>Đọc và phân tích Paper &#34;YOLO9000: Better, Faster, Stronger&#34; (YOLOv2)</title>
       <link>https://hungvm2.github.io/blog/grasping-yolov2-content/</link>

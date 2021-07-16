@@ -2,10 +2,9 @@
 <html lang="en">
 
 <head>
-	<meta name="generator" content="Hugo 0.84.0-DEV" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title> HungVM2&#39;s Notes </title>
+    <title> Đọc và phân tích Paper &#34;YOLOv3: An Incremental Improment&#34; (YOLOv3) - HungVM2&#39;s Notes </title>
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
     <meta name="referrer" content="no-referrer">
@@ -13,18 +12,18 @@
     <meta property="og:site_name" content="HungVM2&#39;s Notes" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://hungvm2.github.io/" />
-    <meta property="og:title" content="HungVM2&#39;s Notes" />
+    <meta property="og:url" content="https://hungvm2.github.io/blog/grasping-yolov3-content/" />
+    <meta property="og:title" content="Đọc và phân tích Paper &#34;YOLOv3: An Incremental Improment&#34; (YOLOv3)" />
     <meta property="og:image" content="https://hungvm2.github.io" />
     <meta property="og:description" content="" />
 
     <meta name="twitter:card" content="summary_large_image" />
     
-    <meta name="twitter:title" content="HungVM2&#39;s Notes" />
+    <meta name="twitter:title" content="Đọc và phân tích Paper &#34;YOLOv3: An Incremental Improment&#34; (YOLOv3)" />
     <meta name="twitter:description" content="" />
     <meta name="twitter:image" content="https://hungvm2.github.io" />
 
-    <link rel="canonical" href="https://hungvm2.github.io/">
+    <link rel="canonical" href="https://hungvm2.github.io/blog/grasping-yolov3-content/">
 
     <link rel="stylesheet" href="https://hungvm2.github.io/css/bootstrap.min.css" />
 
@@ -93,46 +92,54 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-sm-12 col-lg-8">
+                <h1 class="mx-0 mx-md-4 blog-post-title">Đọc và phân tích Paper &#34;YOLOv3: An Incremental Improment&#34; (YOLOv3)</h1>
 
-                <div class="mx-0 mx-md-4 posts">
+                <div class="mb-md-4 meta">
                     
                     
-                    <ul class="list-unstyled">
-    
-    <li>
-        <h2 class="meta-title"><a href="https://hungvm2.github.io/blog/grasping-yolov3-content/">Đọc và phân tích Paper &#34;YOLOv3: An Incremental Improment&#34; (YOLOv3)</a></h2>
-        <div class="meta-date">
-            <time>2021/07/16</time>
-        </div>
-    </li>
-    
-    <li>
-        <h2 class="meta-title"><a href="https://hungvm2.github.io/blog/grasping-yolov2-content/">Đọc và phân tích Paper &#34;YOLO9000: Better, Faster, Stronger&#34; (YOLOv2)</a></h2>
-        <div class="meta-date">
-            <time>2021/06/30</time>
-        </div>
-    </li>
-    
-    <li>
-        <h2 class="meta-title"><a href="https://hungvm2.github.io/blog/grasping-yolov1-content/">Đọc và phân tích Paper &#34;You Only Look One: Unified, Real-Time Object Detection&#34;(YOLOv1)</a></h2>
-        <div class="meta-date">
-            <time>2021/06/21</time>
-        </div>
-    </li>
-    
-</ul>
-                    
-                    <ul class="list-unstyled">
-    
-</ul>
+                    <span class="author" title="Vũ Minh Hưng">
+                        Vũ Minh Hưng
+                    </span>
                     
                     
+
+                    <span class="date middot" title='Fri Jul 16 2021 11:28:01 &#43;07'>
+                        2021-07-16
+                    </span>
+
+                    <span class="reading-time middot">
+                        1 min read
+                    </span>
+
+                    <div class="d-none d-md-inline tags">
+                        <ul class="list-unstyled d-inline">
+                            
+                        </ul>
+                    </div>
                 </div>
 
+                <div class="markdown blog-post-content">
+                    
+    <p>Tiếp theo trong series YOLO, ở bài viết này, chúng ta hãy cùng đọc và phân tích nội dung của paper &ldquo;<strong>YOLOv3: An Incremental Improment</strong>&rdquo; published tháng 4 năm 2018 nhé!</p>
+<p>Vì mục đích của series này là muốn đi sâu hơn vào sự tiến hoá của YOLO qua từng version, nên mình sẽ chỉ <strong>tập trung vào kiến trúc</strong> của mô hình, cũng như các <strong>phương pháp tối ưu hiệu năng và độ chính xác (FPS/mAP) mới</strong> được sử dụng so với version trước.</p>
+<hr>
+<h3 id="i-đọc-paper">I. Đọc Paper</h3>
+<blockquote>
+<p>Trong phần &ldquo;Đọc Paper&rdquo; này, mình sẽ tóm lược lại những ý chính của tác giả, có bỏ qua một số nội dung không quá quan trọng&hellip; Khi đọc sẽ có các reference (có dạng [<a style="color:red;">?</a>]). Bạn có thể click vào các dấu hỏi đó để dẫn xuống phần &ldquo;Hiểu Paper&rdquo; bên dưới để đọc sâu hơn về vấn đề được đề cập.</p>
+<p>Trong paper có một số phần không được tác giả đề cập tới (ví dụ: hàm loss, số grid cell, Reorg layer&hellip;), chỉ có ở trong source code, mình tự đưa vào để dễ nắm bắt hơn nội dung của paper</p>
+</blockquote>
+<h4 id="1-giới-thiệu-chung-về-model">1. Giới thiệu chung về model</h4>
+
+
+
+                </div>
+
+                
             </div>
         </div>
     </div>
 </div>
+
 
 
 
