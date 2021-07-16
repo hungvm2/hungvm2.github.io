@@ -373,7 +373,7 @@ Như bạn đã biết, ở YOLOv1, output của Network là 1 lớp FC layer v�
 <li>$\hat{p}_{c}$: giá trị xác suất nhận diện của N class cho ground truth box (20 classes). Có dạng $[0,0,..1,&hellip;0,0,0]$. Vị trí của số $1$ là index của class trong N class.</li>
 <li>$P_{c}$: vector N chiều, giá trị xác suất của predicted box (20 classes)</li>
 <li>C: confident score, là giá trị IOU max của ground truth box với các anchor box trên 1 grid cell. (trường hợp grid cell có 2 ground truth box trở nên thì sẽ có 2 IOU max trở lên)</li>
-<li>$\hat{C}$: confident score của ground truth box, giá trị = 1</li>
+<li>$\hat{C}$: confident score của ground truth box</li>
 <li>$\hat{x}, \hat{y}, \hat{w}, \hat{h}$: là các giá trị coordinates của ground truth đã được biến đổi.</li>
 <li>$x, y, w, h$: là các giá trị của predicted box đã được biến đổi.</li>
 </ul>
@@ -383,7 +383,15 @@ Như bạn đã biết, ở YOLOv1, output của Network là 1 lớp FC layer v�
 \hat{y} = (y_{g} %  S_{y}) / cell_{y}\<br>
 \hat{w} = w_{g} / W\<br>
 \hat{h} = h_{g} / H\<br>
-p(c) = softmax(P_{c})
+\hat{p}(c) = [0,0,1,&hellip;.,0]\<br>
+\hat{C} = 1\<br>
+\<br>
+x = \sigma{(t_{x})}\<br>
+y = \sigma{(t_{y})}\<br>
+w = p_{w} \times e^{t_{w}}\<br>
+h = p_{h} \times e^{t_{h}}\<br>
+p(c) = Softmax(P_{c})\<br>
+C = IOU_{max}
 \end{multline*}</p>
 <hr>
 <h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
