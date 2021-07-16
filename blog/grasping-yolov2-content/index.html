@@ -225,40 +225,17 @@ Loss = (Loss_{coordinates} + Loss_{class\_prob}) + Loss_{IOU}\\
 </div>
 <ul>
 <li>
-<p>Số lượng grid cell SxS chính bằng kích thước của output feature map. Các bạn có thể thấy kiến trúc của YOLOv2 sẽ cho ra output feature map có kích thước w,h luôn bằng $1/32$ kích thước W,H của input.</p>
+<p>Số lượng grid cell $S_{x}xS_{y}$ chính bằng kích thước của output feature map. Các bạn có thể thấy kiến trúc của YOLOv2 sẽ cho ra output feature map có kích thước w,h luôn bằng $1/32$ kích thước W,H của input.</p>
 <p>Với $W \times H = (416 \times 416) \Rightarrow S_{x} = S_{y} = 416/32 = 13$;</p>
 <p>Với $W \times H = (544 \times 544) \Rightarrow S_{x} = S_{y} = 544/32 = 17$&hellip; [<a href="#grid_cell" style="color:red;">?</a>]<a name="grid_cell_b"></a></p>
+</li>
+<li>
+<p>Các giá trị đưa vào hàm loss là các giá trị của Predicted Box/Ground truth box đã được transform/normalize để nằm trong đoạn $[0;1]$. [<a href="#normalize" style="color:red;">?</a>]<a name="normalize_b"></a></p>
 </li>
 <li>
 <p>Trong paper cũng như source code Darknet, tác giả không đề cập chi tiết về hàm Loss. Công thức trên là mình dựa vào paper và một số YOLOv2 implementation khác (<a href="https://github.com/thtrieu/darkflow">Darkflow</a>, <a href="https://github.com/longcw/yolo2-pytorch">Yolov2-pytorch</a>)</p>
 </li>
 </ul>
-<p>Gọi:</p>
-<ul>
-<li>$W, H$ là kích thước của input (pixel)</li>
-<li>$S_{x}, S_{y}$ là số grid cell theo phương x, y</li>
-<li>$cell_{x}, cell_{y}$: kích thước của grid cell (= W/S_{x} = H/S_{y} = 32pixel)</li>
-<li>$w_{g},h_{g}$ là kích thước ground truth box (pixel)</li>
-<li>$w_{p}, h_{p}$ là kích thước predicted box (pixel)</li>
-<li>$x_{g}, y_{g}$ là vị trí tâm của ground truth box (pixel)</li>
-<li>$x_{p}, y_{p}$ là vị trí tâm của predicted box (pixel)</li>
-<li>i: là thứ tự của grid cell thứ i trong S_{x} x S_{y} cells</li>
-<li>j: là thứ tự của Anchor box thứ J trong B Achors</li>
-<li>$\hat{p}_{c}$: giá trị xác suất nhận diện của N class cho ground truth box (20 classes). Có dạng $[0,0,..1,&hellip;0,0,0]$. Vị trí của số $1$ là index của class trong N class.</li>
-<li>$P_{c}$: vector N chiều, giá trị xác suất của predicted box (20 classes)</li>
-<li>C: confident score, là giá trị IOU max của ground truth box với các anchor box trên 1 grid cell. (trường hợp grid cell có 2 ground truth box trở nên thì sẽ có 2 IOU max trở lên)</li>
-<li>$\hat{C}$: confident score của ground truth box, giá trị = 1</li>
-<li>$\hat{x}, \hat{y}, \hat{w}, \hat{h}$: là các giá trị coordinates của ground truth đã được biến đổi.</li>
-<li>$x, y, w, h$: là các giá trị của predicted box đã được biến đổi.</li>
-</ul>
-<p>Các giá trị đưa vào hàm loss là các giá trị của Predicted Box/Ground truth box đã được transform/normalize để nằm trong đoạn $[0;1]$. Các giá trị sẽ được biến đổi như bên dưới:
-\begin{multline*}
-\hat{x} = (x_{g} %  S_{x}) / cell_{x}\<br>
-\hat{y} = (y_{g} %  S_{y}) / cell_{y}\<br>
-\hat{w} = w_{g} / W\<br>
-\hat{h} = h_{g} / H\<br>
-p(c) = softmax(P_{c})
-\end{multline*}</p>
 <h5 id="323-các-kỹ-thuật-khi-training">3.2.3. Các kỹ thuật khi training:</h5>
 <ul>
 <li>Learning rate schedule</li>
@@ -381,6 +358,33 @@ Như bạn đã biết, ở YOLOv1, output của Network là 1 lớp FC layer v�
 <li>Với mỗi input có <em>(W,H)</em> thì YOLOv2 sẽ cho ra output <em>(w,h)</em> =&gt; số lượng Grid cell <em>(SxS)</em> sẽ thay đổi phụ thuộc vào <em>(W,H)</em></li>
 <li>Do kiến trúc của YOLOv2, <em>w = W/32</em>, <em>h = H/32</em> =&gt; giá trị W, H luôn phải chia hết cho 32, và W không nhất thiết phải bằng H</li>
 </ul>
+<p>[<a href="#normalize_b" style="color:red;">$ \triangleleft $</a>]<a name="normalize"></a>:<strong>Chi tiết cách normalize/transform giá trí trước khi đưa vào hàm Loss:</strong></p>
+<p>Gọi:</p>
+<ul>
+<li>$W, H$ là kích thước của input (pixel)</li>
+<li>$S_{x}, S_{y}$ là số grid cell theo phương x, y</li>
+<li>$cell_{x}, cell_{y}$: kích thước của grid cell (= W/S_{x} = H/S_{y} = 32pixel)</li>
+<li>$w_{g},h_{g}$ là kích thước ground truth box (pixel)</li>
+<li>$w_{p}, h_{p}$ là kích thước predicted box (pixel)</li>
+<li>$x_{g}, y_{g}$ là vị trí tâm của ground truth box (pixel)</li>
+<li>$x_{p}, y_{p}$ là vị trí tâm của predicted box (pixel)</li>
+<li>i: là thứ tự của grid cell thứ i trong S_{x} x S_{y} cells</li>
+<li>j: là thứ tự của Anchor box thứ J trong B Achors</li>
+<li>$\hat{p}_{c}$: giá trị xác suất nhận diện của N class cho ground truth box (20 classes). Có dạng $[0,0,..1,&hellip;0,0,0]$. Vị trí của số $1$ là index của class trong N class.</li>
+<li>$P_{c}$: vector N chiều, giá trị xác suất của predicted box (20 classes)</li>
+<li>C: confident score, là giá trị IOU max của ground truth box với các anchor box trên 1 grid cell. (trường hợp grid cell có 2 ground truth box trở nên thì sẽ có 2 IOU max trở lên)</li>
+<li>$\hat{C}$: confident score của ground truth box, giá trị = 1</li>
+<li>$\hat{x}, \hat{y}, \hat{w}, \hat{h}$: là các giá trị coordinates của ground truth đã được biến đổi.</li>
+<li>$x, y, w, h$: là các giá trị của predicted box đã được biến đổi.</li>
+</ul>
+<p>Các giá trị sẽ được biến đổi như bên dưới:
+\begin{multline*}
+\hat{x} = (x_{g} %  S_{x}) / cell_{x}\<br>
+\hat{y} = (y_{g} %  S_{y}) / cell_{y}\<br>
+\hat{w} = w_{g} / W\<br>
+\hat{h} = h_{g} / H\<br>
+p(c) = softmax(P_{c})
+\end{multline*}</p>
 <hr>
 <h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
 <ul>
