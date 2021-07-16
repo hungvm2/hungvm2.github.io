@@ -339,6 +339,7 @@ Từ công thức ta có thể thấy giá trị khoảng cách $d$ sẽ nằm t
 <ul>
 <li>Bức hình bên phải phía trên chỉ ra vị trí và kích thước centroid tương ứng của 5 cluster trên 2 tập COCO và VOC. Có thể thấy kích thước centroid của 2 dataset khá là tương đồng, nhưng COCO biến thiên về kích thước nhiều hơn là VOC.</li>
 </ul>
+<hr class="half-line">
 <p>[<a href="#global_average_pooling_b" style="color:red;">$ \triangleleft $</a>]<a name="global_average_pooling"></a>:<strong>Cách tính Global Average Pooling</strong></p>
 <div class="text-center my-3">
 <img src="https://hungvm2.github.io/images/yolov2/global_avg_pooling.png" class="img-fluid" alt="Global Average Pooling">
@@ -346,11 +347,13 @@ Từ công thức ta có thể thấy giá trị khoảng cách $d$ sẽ nằm t
 <p>Global average pooling cũng tương tự như Average Pooling, nhưng thay vì tính giá trị trung bình cho kích thước 1 filter (VD: 2x2) thì GAP tính giá trị trung bình cho toàn bộ feature map.</p>
 <p>Việc sử dụng Global Average Pooling chính là lí do giúp cho mạng Darknet-19 không yêu cầu cố định input size của image.</p>
 <hr class="half-line">
+<hr class="half-line">
 <p>[<a href="#reorg_b" style="color:red;">$ \triangleleft $</a>]<a name="reorg"></a>:<strong>Route layer, Reorg layer để làm gì và được tính như nào</strong></p>
 <p>Route layer lấy ý tưởng tượng tự như skip connection của ResNet, layer này sẽ nhận đầu vào là 2 layer trong Network và làm nhiệm vụ concatenate chúng với nhau.</p>
 <p>Bản chất của Reorg layer là tổ chức, sắp xếp lại các pixel liền kề nhau trên 1 feature map thành các pixel nằm trên các channel khác nhau. Chi tiết các bạn xem ở <a href="https://leimao.github.io/blog/Reorg-Layer-Explained/">đây</a></p>
 <p>Reorg + Route được kết hợp với nhau để concatenate high-level features ở layer cuối với middle-level features ở layer trước đó, giúp model có thể xác định vị trí của các small object chính xác hơn.</p>
 <p>Vì ở output layer (xem <a href="#network_img_b" style="color:red;">Ảnh 1</a><a name="network_img"></a>), tác giả concatenate feature maps của 2 layer có kích thước khác nhau (26x26 và 13x13) . Reorg layer với stride = 2, sẽ làm kích thước của feature map 26x26 giảm 1/2 thành 13x13, nhờ đó có thể concatenate được với feature map 13x13 còn lại để tạo thành final output.</p>
+<hr class="half-line">
 <p>[<a href="#grid_cell_b" style="color:red;">$ \triangleleft $</a>]<a name="grid_cell"></a>:<strong>Tại sao số grid cell (SxS) lại bằng kích thước output feature map (wxh)?</strong></p>
 <p>Như bạn đã biết, ở YOLOv1, output của Network là 1 lớp FC layer với số nodes = (S x S x (B x 5 + C)) = (7 x 7 x (2 * 5 + 20)) = 1470.
 1470 Nodes này được reshape về dạng (7, 7, 30) = (S, S, B x 5 + C)</p>
@@ -359,6 +362,7 @@ Từ công thức ta có thể thấy giá trị khoảng cách $d$ sẽ nằm t
 <li>Với mỗi input có <em>(W,H)</em> thì YOLOv2 sẽ cho ra output <em>(w,h)</em> =&gt; số lượng Grid cell <em>(SxS)</em> sẽ thay đổi phụ thuộc vào <em>(W,H)</em></li>
 <li>Do kiến trúc của YOLOv2, <em>w = W/32</em>, <em>h = H/32</em> =&gt; giá trị W, H luôn phải chia hết cho 32, và W không nhất thiết phải bằng H</li>
 </ul>
+<hr class="half-line">
 <p>[<a href="#normalize_b" style="color:red;">$ \triangleleft $</a>]<a name="normalize"></a>:<strong>Chi tiết cách normalize/transform giá trí trước khi đưa vào hàm Loss:</strong></p>
 <p><strong><em>Gọi:</em></strong></p>
 <ul>
@@ -378,6 +382,7 @@ Từ công thức ta có thể thấy giá trị khoảng cách $d$ sẽ nằm t
 <li>$\hat{x}, \hat{y}, \hat{w}, \hat{h}$: là các giá trị coordinates của ground truth đã được biến đổi.</li>
 <li>$x, y, w, h$: là các giá trị của predicted box đã được biến đổi. Tính theo công thức <a style="color:red;">(\ref{ref_b})</a></li>
 </ul>
+<hr class="half-line">
 <p><strong><em>Các giá trị sẽ được biến đổi như bên dưới:</em></strong></p>
 <div>
 \begin{multline*}
@@ -394,7 +399,7 @@ y = \sigma{(t_{y})}\\
 w = p_{w} \times e^{t_{w}}\\
 h = p_{h} \times e^{t_{h}}\\
 p(c) = Softmax(P_{c})\\
-C = IOU_{max}\\
+C = IOU_{max}
 \end{multline*}
 </div>
 <hr>
