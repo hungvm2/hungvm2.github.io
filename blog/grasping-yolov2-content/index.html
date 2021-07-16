@@ -378,22 +378,24 @@ Từ công thức ta có thể thấy giá trị khoảng cách $d$ sẽ nằm t
 <li>$\hat{x}, \hat{y}, \hat{w}, \hat{h}$: là các giá trị coordinates của ground truth đã được biến đổi.</li>
 <li>$x, y, w, h$: là các giá trị của predicted box đã được biến đổi. Tính theo công thức <a style="color:red;">(\ref{ref_b})</a></li>
 </ul>
-<p>Các giá trị sẽ được biến đổi như bên dưới:
+<p>Các giá trị sẽ được biến đổi như bên dưới:</p>
+<div>
 \begin{multline*}
-\hat{x} = (x_{g} \text{%}  S_{x}) / cell_{x}\<br>
-\hat{y} = (y_{g} \text{%}  S_{y}) / cell_{y}\<br>
-\hat{w} = w_{g} / W\<br>
-\hat{h} = h_{g} / H\<br>
-\hat{p}(c) = [0,0,1,&hellip;.,0]\<br>
-\hat{C} = 1\<br>
-\<br>
-x = \sigma{(t_{x})}\<br>
-y = \sigma{(t_{y})}\<br>
-w = p_{w} \times e^{t_{w}}\<br>
-h = p_{h} \times e^{t_{h}}\<br>
-p(c) = Softmax(P_{c})\<br>
+\hat{x} = (x_{g} \text{\%}  S_{x}) / cell_{x}\\
+\hat{y} = (y_{g} \text{\%}  S_{y}) / cell_{y}\\
+\hat{w} = w_{g} / W\\
+\hat{h} = h_{g} / H\\
+\hat{p}(c) = [0,0,1,....,0]\\
+\hat{C} = 1\\
+\\
+x = \sigma{(t_{x})}\\
+y = \sigma{(t_{y})}\\
+w = p_{w} \times e^{t_{w}}\\
+h = p_{h} \times e^{t_{h}}\\
+p(c) = Softmax(P_{c})\\
 C = IOU_{max}
-\end{multline*}</p>
+\end{multline*}
+</div>
 <hr>
 <h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
 <ul>
