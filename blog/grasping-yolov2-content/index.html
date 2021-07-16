@@ -324,11 +324,11 @@ C = Pr(object) \times IOU(b,object) = \sigma{(t_{o})}\\
 \begin{equation*}
 d(box,centroid) = 1 - IOU(box, centroid)
 \end{equation*}
-Tác giả **không lấy theo khoảng cách Euclid** giữa các tâm của box vì nó sẽ không đánh giá đúng bản chất khoảng cách giữa các box (2 box lớn overlap nhau vẫn sẽ có euclid distance của tâm lớn hơn 2 box nhỏ không overlap).
+Tác giả <b>không lấy theo khoảng cách Euclid</b> giữa các tâm của box vì nó sẽ không đánh giá đúng bản chất khoảng cách giữa các box (2 box lớn overlap nhau vẫn sẽ có euclid distance của tâm lớn hơn 2 box nhỏ không overlap).
 Từ công thức ta có thể thấy giá trị khoảng cách $d$ sẽ nằm trong đoạn [0;1].</p>
 </li>
 <li>
-<p>Sau khi phân hết data point về các cụm, centroid của mỗi cụm sẽ được tính bằng cách lấy trung bình (dài, rộng, tâm) của các box trong cụm đó</p>
+<p>Sau khi phân hết data point về các cụm, centroid của mỗi cụm sẽ được tính bằng cách <b>lấy trung bình (dài, rộng, tâm)</b> của các box trong cụm đó</p>
 </li>
 <li>
 <p>Tác giả thử với các lựa chọn K khác nhau và đi đến kết luận K = 5 sẽ là lựa chọn tối ưu nhất giữa model complexity và high recall</p>
