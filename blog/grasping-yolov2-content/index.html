@@ -108,7 +108,7 @@
                     </span>
 
                     <span class="reading-time middot">
-                        14 min read
+                        15 min read
                     </span>
 
                     <div class="d-none d-md-inline tags">
@@ -218,7 +218,7 @@
 Loss = (Loss_{coordinates} + Loss_{class\_prob}) + Loss_{IOU}\\
 = \Big[ \lambda_{coord} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} [(x_{ij} - \hat{x}_{ij})^{2} + (y_{ij} - \hat{y}_{ij})^{2}]\\ 
 + \lambda_{coord} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj}[(\sqrt{w_{ij}} - \sqrt{\hat{w}_{ij}})^{2} + (\sqrt{h_{ij}} - \sqrt{\hat{h}_{ij}})^{2}]\\
-+ \lambda_{coord} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} \displaystyle \sum_{c \in classes}(p_{ij}(c) - \hat{p_{ij}}(c))^{2} \Big]\\
++ \lambda_{coord} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} \displaystyle \sum_{c \in classes}(p_{ij}(c) - \hat{p}_{ij}(c))^{2} \Big]\\
 + \Big[ \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} (C_{ij} - \hat{C}_{ij})^{2}\\
 + \lambda_{noobj} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{noobj} (C_{ij} - \hat{C}_{ij})^2 \Big]
 \end{multline*}
@@ -237,23 +237,27 @@ Loss = (Loss_{coordinates} + Loss_{class\_prob}) + Loss_{IOU}\\
 <ul>
 <li>$W, H$ là kích thước của input (pixel)</li>
 <li>$S_{x}, S_{y}$ là số grid cell theo phương x, y</li>
+<li>$cell_{x}, cell_{y}$: kích thước của grid cell (= W/S_{x} = H/S_{y} = 32pixel)</li>
 <li>$w_{g},h_{g}$ là kích thước ground truth box (pixel)</li>
 <li>$w_{p}, h_{p}$ là kích thước predicted box (pixel)</li>
 <li>$x_{g}, y_{g}$ là vị trí tâm của ground truth box (pixel)</li>
 <li>$x_{p}, y_{p}$ là vị trí tâm của predicted box (pixel)</li>
 <li>i: là thứ tự của grid cell thứ i trong S_{x} x S_{y} cells</li>
 <li>j: là thứ tự của Anchor box thứ J trong B Achors</li>
-<li>$\hat{P}_{c}$: giá trị xác suất nhận diện của N class cho ground truth box (20 classes)</li>
+<li>$\hat{p}_{c}$: giá trị xác suất nhận diện của N class cho ground truth box (20 classes). Có dạng $[0,0,..1,&hellip;0,0,0]$. Vị trí của số $1$ là index của class trong N class.</li>
 <li>$P_{c}$: vector N chiều, giá trị xác suất của predicted box (20 classes)</li>
-<li>$cell_{x}, cell_{y}$: kích thước của grid cell (= W/S_{x} = H/S_{y} = 32pixel)
-Các giá trị đưa vào hàm loss là các giá trị của Predicted Box/Ground truth box đã được transform/normalize để nằm trong đoạn $[0;1]$ như sau:</li>
+<li>C: confident score, là giá trị IOU max của ground truth box với các anchor box trên 1 grid cell. (trường hợp grid cell có 2 ground truth box trở nên thì sẽ có 2 IOU max trở lên)</li>
+<li>\hat{C}: confident score của ground truth box, giá trị = 1</li>
+<li>\hat{x}, \hat{y}, \hat{w}, \hat{h}: là các giá trị coordinates của ground truth đã được biến đổi.</li>
+<li>x, y, w, h: là các giá trị của predicted box đã được biến đổi.</li>
 </ul>
-<p>\begin{multline*}
+<p>Các giá trị đưa vào hàm loss là các giá trị của Predicted Box/Ground truth box đã được transform/normalize để nằm trong đoạn $[0;1]$. Các giá trị sẽ được biến đổi như bên dưới:
+\begin{multline*}
 \hat{x} = (x_{g} %  S_{x}) / cell_{x}\<br>
 \hat{y} = (y_{g} %  S_{y}) / cell_{y}\<br>
 \hat{w} = w_{g} / W\<br>
 \hat{h} = h_{g} / H\<br>
-<br>
+p(c) = softmax(P_{c})
 \end{multline*}</p>
 <h5 id="323-các-kỹ-thuật-khi-training">3.2.3. Các kỹ thuật khi training:</h5>
 <ul>
