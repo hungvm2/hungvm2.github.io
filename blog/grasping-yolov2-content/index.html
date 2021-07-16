@@ -381,11 +381,12 @@ Từ công thức ta có thể thấy giá trị khoảng cách $d$ sẽ nằm t
 <p><strong><em>Các giá trị sẽ được biến đổi như bên dưới:</em></strong></p>
 <div>
 \begin{multline*}
-\hat{x} = (x_{g} \text{\%}  S_{x}) / cell_{x}\\
-\hat{y} = (y_{g} \text{\%}  S_{y}) / cell_{y}\\
+\\
+\hat{x} = (x_{g} \% S_{x}) / cell_{x}\\
+\hat{y} = (y_{g} \%  S_{y}) / cell_{y}\\
 \hat{w} = w_{g} / W\\
 \hat{h} = h_{g} / H\\
-\hat{p}(c) = [0,0,1,....,0]\\
+\hat{p}(c) \text{có dạng} [0,0,1,....,0]\\
 \hat{C} = 1\\
 \\
 x = \sigma{(t_{x})}\\
@@ -393,7 +394,7 @@ y = \sigma{(t_{y})}\\
 w = p_{w} \times e^{t_{w}}\\
 h = p_{h} \times e^{t_{h}}\\
 p(c) = Softmax(P_{c})\\
-C = IOU_{max}
+C = IOU_{max}\\
 \end{multline*}
 </div>
 <hr>
