@@ -212,7 +212,7 @@
 </div>
 <p><em>(Tác giả không có hình vẽ chi tiết kiến trúc của YOLOv2 ở trong paper, tuy nhiên mình đã tìm được một researcher khác vẽ chi tiết YOLOv2 ở <a href="https://www.researchgate.net/publication/336177198_Determination_of_Vehicle_Trajectory_through_Optimization_of_Vehicle_Bounding_Boxes_Using_a_Convolutional_Neural_Network">paper</a> của họ và sửa lại shape của output layer như bên trên)</em></p>
 <h5 id="322-hàm-loss">3.2.2. Hàm loss:</h5>
-<p>Vẫn sử dụng hàm Sum Squared Error như ở YOLOv1, tuy nhiên class probabilities ở YOLOv2 không gắn với grid cell nữa mà gắn với B Anchor boxes. Vì vậy một grid cell có thể chứa tối đa B object khác nhau thay vì chỉ 1 object như ở YOLOv1.</p>
+<p>Vẫn sử dụng hàm Sum Squared Error như ở YOLOv1, tuy nhiên class probabilities ở YOLOv2 không gắn với grid cell nữa mà gắn với B Anchor boxes. Vì vậy một grid cell có thể <strong>chứa tối đa B object</strong> khác nhau thay vì chỉ 1 object như ở YOLOv1.</p>
 <div>
 \begin{multline*}
 Loss = (Loss_{coordinates} + Loss_{class\_prob}) + Loss_{IOU}\\
@@ -225,12 +225,12 @@ Loss = (Loss_{coordinates} + Loss_{class\_prob}) + Loss_{IOU}\\
 </div>
 <ul>
 <li>
-<p>Số lượng grid cell $S_{x}xS_{y}$ chính bằng kích thước của output feature map. Các bạn có thể thấy kiến trúc của YOLOv2 sẽ cho ra output feature map có kích thước w,h luôn bằng $1/32$ kích thước W,H của input.</p>
+<p>Số lượng grid cell $S_{x} \times S_{y}$ chính **bằng kích thước của output** feature map. Các bạn có thể thấy kiến trúc của YOLOv2 sẽ cho ra output feature map có kích thước $w,h$ luôn bằng $1/32$ kích thước $W,H$ của input.</p>
 <p>Với $W \times H = (416 \times 416) \Rightarrow S_{x} = S_{y} = 416/32 = 13$;</p>
 <p>Với $W \times H = (544 \times 544) \Rightarrow S_{x} = S_{y} = 544/32 = 17$&hellip; [<a href="#grid_cell" style="color:red;">?</a>]<a name="grid_cell_b"></a></p>
 </li>
 <li>
-<p>Các giá trị đưa vào hàm loss là các giá trị của Predicted Box/Ground truth box đã được transform/normalize để nằm trong đoạn $[0;1]$. [<a href="#normalize" style="color:red;">?</a>]<a name="normalize_b"></a></p>
+<p>Các giá trị đưa vào hàm loss là các giá trị của Predicted Box/Ground truth box đã được <strong>transform/normalize</strong> để nằm trong đoạn $[0;1]$. [<a href="#normalize" style="color:red;">?</a>]<a name="normalize_b"></a></p>
 </li>
 <li>
 <p>Trong paper cũng như source code Darknet, tác giả không đề cập chi tiết về hàm Loss. Công thức trên là mình dựa vào paper và một số YOLOv2 implementation khác (<a href="https://github.com/thtrieu/darkflow">Darkflow</a>, <a href="https://github.com/longcw/yolo2-pytorch">Yolov2-pytorch</a>)</p>
@@ -276,10 +276,10 @@ Mỗi layer đều có input và output, output của layer này là input của
 <p>Batch normalization là kỹ thuật giúp giảm Internal covariance shift từ đó giúp quá trình training ổn định và cho phép sử dụng learning rate lớn hơn, nên nhanh hội tụ hơn. [<a href="#bn_paper" style="color:red;">?</a>]<a name="bn_paper_b"></a></p>
 <hr class="half-line">
 <p>[<a href="#anchor_box_b" style="color:red;">$ \triangleleft $</a>]<a name="anchor_box"></a>:<strong>Chi tiết về cách tính offset của Bounding box so với Anchor Boxes</strong></p>
-<p>Gọi $t_{x}, t_{y}, t_{w}, t_{h}, t_{o}$ lần lượt là các giá trị toạ độ tâm, rộng, dài và confidence score được predict ra từ network ứng với mỗi predicted Bounding box trên 1 grid cell. Đây là các giá trị được regression từ network nên có thể to nhỏ, âm, dương tuỳ ý.</p>
-<p>Gọi $p_{w}, p_{h}$ là kích thước chiều rộng, dài của 1 Anchor box. Đây là giá trị kích thước theo pixel của Anchor box.</p>
-<p>Gọi $C_{x}, C_{y}$ là offset từ góc top-left của input image. 2 giá trị này sẽ bằng gía trị index hàng và cột (i và j) của grid cell trên image.</p>
-<p>Gọi $b_{x}, b_{y}, b_{w}, b_{h}, C$ lần lượt là toạ độ tâm, kích thước rộng, dài và confidence score của 1 predicted bounding box (trong số 5 Bounding box/ 1 grid cell). Các giá trị này sẽ được tính như sau:</p>
+<p>Gọi $t_{x}, t_{y}, t_{w}, t_{h}, t_{o}$ lần lượt là các giá trị toạ độ tâm, rộng, dài và confidence score **được predict ra từ network** ứng với mỗi predicted Bounding box trên 1 grid cell. Đây là các giá trị được regression từ network nên có thể to nhỏ, âm, dương tuỳ ý.</p>
+<p>Gọi $p_{w}, p_{h}$ là kích thước chiều rộng, dài của 1 Anchor box. Đây là giá trị **kích thước theo pixel** của Anchor box.</p>
+<p>Gọi $C_{x}, C_{y}$ là offset từ góc top-left của input image. 2 giá trị này sẽ bằng gía trị **index** hàng và cột (i và j) của grid cell trên image.</p>
+<p>Gọi $b_{x}, b_{y}, b_{w}, b_{h}, C$ lần lượt là toạ độ tâm, kích thước rộng, dài và confidence score của 1 predicted bounding box (trong số 5 Bounding box ở 1 grid cell). Các giá trị này sẽ được tính như sau:</p>
 <div>
 \begin{multline}
 \\
@@ -292,9 +292,9 @@ C = Pr(object) \times IOU(b,object) = \sigma{(t_{o})}\\
 \\
 \end{multline}
 </div>
-<p>Giá trị $b_{x}, b_{y}$ sử dụng hàm <i>sigmoid</i>. $\sigma{(t_{x})}, \sigma{(t_{y})}$ sẽ nằm trong đoạn [0;1].</p>
+<p>Giá trị $b_{x}, b_{y}$ sử dụng hàm <i><b>sigmoid</b></i>. $\sigma{(t_{x})}, \sigma{(t_{y})}$ sẽ nằm trong đoạn [0;1].</p>
 <p>Giá trị C là giá trị IOU nên nằm trong đoạn [0;1]</p>
-<p>Giá trị $b_{w}, b_{h}$ sử dụng luỹ thừa cơ số e (số Euler). $e^{t_{w}}/e^{t_{h}}$ là giá trị tỉ lệ offset của bounding box so với anchor box. $b_{w}/b_{h}$ nằm trong đoạn $[0; W]/[0; H]$.</p>
+<p>Giá trị $b_{w}, b_{h}$ sử dụng luỹ thừa cơ số e (**số Euler**). $e^{t_{w}}/e^{t_{h}}$ là giá trị tỉ lệ offset của bounding box so với anchor box. $b_{w}/b_{h}$ nằm trong đoạn $[0; W]/[0; H]$.</p>
 <div class="text-center my-3">
 <img src="https://hungvm2.github.io/images/yolov2/bounding_box_n_anchor_box.png" class="img-fluid" alt="Bounding box coordinates">
 </div>
@@ -324,7 +324,7 @@ C = Pr(object) \times IOU(b,object) = \sigma{(t_{o})}\\
 \begin{equation*}
 d(box,centroid) = 1 - IOU(box, centroid)
 \end{equation*}
-Tác giả không lấy theo khoảng cách Euclid giữa các tâm của box vì nó sẽ không đánh giá đúng bản chất khoảng cách giữa các box (2 box lớn overlap nhau vẫn sẽ có euclid distance của tâm lớn hơn 2 box nhỏ không overlap).
+Tác giả **không lấy theo khoảng cách Euclid** giữa các tâm của box vì nó sẽ không đánh giá đúng bản chất khoảng cách giữa các box (2 box lớn overlap nhau vẫn sẽ có euclid distance của tâm lớn hơn 2 box nhỏ không overlap).
 Từ công thức ta có thể thấy giá trị khoảng cách $d$ sẽ nằm trong đoạn [0;1].</p>
 </li>
 <li>
@@ -348,9 +348,8 @@ Từ công thức ta có thể thấy giá trị khoảng cách $d$ sẽ nằm t
 <p>Global average pooling cũng tương tự như Average Pooling, nhưng thay vì tính giá trị trung bình cho kích thước 1 filter (VD: 2x2) thì GAP tính giá trị trung bình cho toàn bộ feature map.</p>
 <p>Việc sử dụng Global Average Pooling chính là lí do giúp cho mạng Darknet-19 không yêu cầu cố định input size của image.</p>
 <hr class="half-line">
-<hr class="half-line">
 <p>[<a href="#reorg_b" style="color:red;">$ \triangleleft $</a>]<a name="reorg"></a>:<strong>Route layer, Reorg layer để làm gì và được tính như nào</strong></p>
-<p>Route layer lấy ý tưởng tượng tự như skip connection của ResNet, layer này sẽ nhận đầu vào là 2 layer trong Network và làm nhiệm vụ concatenate chúng với nhau.</p>
+<p>Route layer lấy ý tưởng tượng tự như <strong>skip connection</strong> của ResNet, layer này sẽ nhận đầu vào là 2 layer trong Network và làm nhiệm vụ concatenate chúng với nhau.</p>
 <p>Bản chất của Reorg layer là tổ chức, sắp xếp lại các pixel liền kề nhau trên 1 feature map thành các pixel nằm trên các channel khác nhau. Chi tiết các bạn xem ở <a href="https://leimao.github.io/blog/Reorg-Layer-Explained/">đây</a></p>
 <p>Reorg + Route được kết hợp với nhau để concatenate high-level features ở layer cuối với middle-level features ở layer trước đó, giúp model có thể xác định vị trí của các small object chính xác hơn.</p>
 <p>Vì ở output layer (xem <a href="#network_img_b" style="color:red;">Ảnh 1</a><a name="network_img"></a>), tác giả concatenate feature maps của 2 layer có kích thước khác nhau (26x26 và 13x13) . Reorg layer với stride = 2, sẽ làm kích thước của feature map 26x26 giảm 1/2 thành 13x13, nhờ đó có thể concatenate được với feature map 13x13 còn lại để tạo thành final output.</p>
@@ -361,7 +360,7 @@ Từ công thức ta có thể thấy giá trị khoảng cách $d$ sẽ nằm t
 <p>Ở YOLOv2, output layer là Conv Layer nên ko cần sử dụng bước reshape nữa, vì output đã có sẵn dạng <em>(w, h, c)</em>. So sánh với output của YOLOv1, ta có thể thấy, <em>w</em> và <em>h</em> chính là <em>S</em>, còn <em>c</em> chính là <em>(B x 5 +C)</em> . Từ đây có thể rút ra 1 số hệ quả:</p>
 <ul>
 <li>Với mỗi input có <em>(W,H)</em> thì YOLOv2 sẽ cho ra output <em>(w,h)</em> =&gt; số lượng Grid cell <em>(SxS)</em> sẽ thay đổi phụ thuộc vào <em>(W,H)</em></li>
-<li>Do kiến trúc của YOLOv2, <em>w = W/32</em>, <em>h = H/32</em> =&gt; giá trị W, H luôn phải chia hết cho 32, và W không nhất thiết phải bằng H</li>
+<li>Do kiến trúc của YOLOv2, <em>w = W/32</em>, <em>h = H/32</em> =&gt; giá trị W, H <strong>luôn phải chia hết cho 32</strong>, và W không nhất thiết phải bằng H</li>
 </ul>
 <hr class="half-line">
 <p>[<a href="#normalize_b" style="color:red;">$ \triangleleft $</a>]<a name="normalize"></a>:<strong>Chi tiết cách normalize/transform giá trí trước khi đưa vào hàm Loss:</strong></p>
