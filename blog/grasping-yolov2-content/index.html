@@ -288,6 +288,7 @@ b_{y} = \sigma{(t_{y})} + C_{y}\\
 b_{w} = p_{w} \times e^{t_{w}}\\
 b_{h} = p_{h} \times e^{t_{h}}\\
 C = Pr(object) \times IOU(b,object) = \sigma{(t_{o})}
+\label{ref_b}
 \end{multline}
 </div>
 <p>Giá trị $b_{x}, b_{y}$ sử dụng hàm <i>sigmoid</i>. $\sigma{(t_{x})}, \sigma{(t_{y})}$ sẽ nằm trong đoạn [0;1].</p>
@@ -350,8 +351,8 @@ Từ công thức ta có thể thấy giá trị khoảng cách $d$ sẽ nằm t
 <p>Bản chất của Reorg layer là tổ chức, sắp xếp lại các pixel liền kề nhau trên 1 feature map thành các pixel nằm trên các channel khác nhau. Chi tiết các bạn xem ở <a href="https://leimao.github.io/blog/Reorg-Layer-Explained/">đây</a></p>
 <p>Reorg + Route được kết hợp với nhau để concatenate high-level features ở layer cuối với middle-level features ở layer trước đó, giúp model có thể xác định vị trí của các small object chính xác hơn.</p>
 <p>Vì ở output layer (xem <a href="#network_img_b" style="color:red;">Ảnh 1</a><a name="network_img"></a>), tác giả concatenate feature maps của 2 layer có kích thước khác nhau (26x26 và 13x13) . Reorg layer với stride = 2, sẽ làm kích thước của feature map 26x26 giảm 1/2 thành 13x13, nhờ đó có thể concatenate được với feature map 13x13 còn lại để tạo thành final output.</p>
-<p>[<a href="#grid_cell_b" style="color:red;">$ \triangleleft $</a>]<a name="grid_cell"></a>:<strong>Tại sao số grid cell (SxS) lại bằng kích thước output feature map (wxh)?</strong>
-Như bạn đã biết, ở YOLOv1, output của Network là 1 lớp FC layer với số nodes = (S x S x (B x 5 + C)) = (7 x 7 x (2 * 5 + 20)) = 1470.
+<p>[<a href="#grid_cell_b" style="color:red;">$ \triangleleft $</a>]<a name="grid_cell"></a>:<strong>Tại sao số grid cell (SxS) lại bằng kích thước output feature map (wxh)?</strong></p>
+<p>Như bạn đã biết, ở YOLOv1, output của Network là 1 lớp FC layer với số nodes = (S x S x (B x 5 + C)) = (7 x 7 x (2 * 5 + 20)) = 1470.
 1470 Nodes này được reshape về dạng (7, 7, 30) = (S, S, B x 5 + C)</p>
 <p>Ở YOLOv2, output layer là Conv Layer nên ko cần sử dụng bước reshape nữa, vì output đã có sẵn dạng <em>(w, h, c)</em>. So sánh với output của YOLOv1, ta có thể thấy, <em>w</em> và <em>h</em> chính là <em>S</em>, còn <em>c</em> chính là <em>(B x 5 +C)</em> . Từ đây có thể rút ra 1 số hệ quả:</p>
 <ul>
@@ -375,12 +376,12 @@ Như bạn đã biết, ở YOLOv1, output của Network là 1 lớp FC layer v�
 <li>C: confident score, là giá trị IOU max của ground truth box với các anchor box trên 1 grid cell. (trường hợp grid cell có 2 ground truth box trở nên thì sẽ có 2 IOU max trở lên)</li>
 <li>$\hat{C}$: confident score của ground truth box</li>
 <li>$\hat{x}, \hat{y}, \hat{w}, \hat{h}$: là các giá trị coordinates của ground truth đã được biến đổi.</li>
-<li>$x, y, w, h$: là các giá trị của predicted box đã được biến đổi.</li>
+<li>$x, y, w, h$: là các giá trị của predicted box đã được biến đổi. Tính theo công thức <a style="color:red;">(\ref{ref_b})</a></li>
 </ul>
 <p>Các giá trị sẽ được biến đổi như bên dưới:
 \begin{multline*}
-\hat{x} = (x_{g} %  S_{x}) / cell_{x}\<br>
-\hat{y} = (y_{g} %  S_{y}) / cell_{y}\<br>
+\hat{x} = (x_{g} \text{%}  S_{x}) / cell_{x}\<br>
+\hat{y} = (y_{g} \text{%}  S_{y}) / cell_{y}\<br>
 \hat{w} = w_{g} / W\<br>
 \hat{h} = h_{g} / H\<br>
 \hat{p}(c) = [0,0,1,&hellip;.,0]\<br>
