@@ -380,7 +380,7 @@ Từ công thức ta có thể thấy giá trị khoảng cách $d$ sẽ nằm t
 <li>C: confident score, là giá trị IOU max của ground truth box với các anchor box trên 1 grid cell. (trường hợp grid cell có 2 ground truth box trở nên thì sẽ có 2 IOU max trở lên)</li>
 <li>$\hat{C}$: confident score của ground truth box</li>
 <li>$\hat{x}, \hat{y}, \hat{w}, \hat{h}$: là các giá trị coordinates của ground truth đã được biến đổi.</li>
-<li>$x, y, w, h$: là các giá trị của predicted box đã được biến đổi. Tính theo công thức <a style="color:red;">(\ref{ref_b})</a></li>
+<li>$x, y, w, h$: là các giá trị của predicted box đã được biến đổi. Tính lại từ công thức <a style="color:red;">(\ref{ref_b})</a></li>
 </ul>
 <p><strong><em>Các giá trị sẽ được biến đổi như bên dưới:</em></strong></p>
 <div>
@@ -393,10 +393,10 @@ Từ công thức ta có thể thấy giá trị khoảng cách $d$ sẽ nằm t
 \hat{p}(c) \quad \text{có dạng} \quad [0,0,1,....,0]\\
 \hat{C} = 1\\
 \\
-x = \sigma{(t_{x})}\\
-y = \sigma{(t_{y})}\\
-w = p_{w} \times e^{t_{w}}\\
-h = p_{h} \times e^{t_{h}}\\
+x = \sigma{(t_{x})} / cell_x\\
+y = \sigma{(t_{y})} / cell_y\\
+w = (p_{w} \times e^{t_{w}}) / W\\
+h = (p_{h} \times e^{t_{h}}) / H\\
 p(c) = Softmax(P_{c})\\
 C = IOU_{max}\\
 \\
