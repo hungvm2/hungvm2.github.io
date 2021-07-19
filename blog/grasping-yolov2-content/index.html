@@ -230,7 +230,7 @@ Loss = (Loss_{coordinates} + Loss_{class\_prob}) + Loss_{IOU}\\
 <p>Với $W \times H = (544 \times 544) \Rightarrow S_{x} = S_{y} = 544/32 = 17$&hellip; [<a href="#grid_cell" style="color:red;">?</a>]<a name="grid_cell_b"></a></p>
 </li>
 <li>
-<p>Các giá trị đưa vào hàm loss là các giá trị của Predicted Box/Ground truth box đã được <strong>transform/normalize</strong> để nằm trong đoạn $[0;1]$. [<a href="#normalize" style="color:red;">?</a>]<a name="normalize_b"></a></p>
+<p>Các giá trị đưa vào hàm loss là các giá trị của Predicted Box/Ground truth box đã được <strong>transform/scale</strong> để nằm trong đoạn $[0;1]$. [<a href="#scale" style="color:red;">?</a>]<a name="scale_b"></a></p>
 </li>
 <li>
 <p>Trong paper cũng như source code Darknet, tác giả không đề cập chi tiết về hàm Loss. Công thức trên là mình dựa vào paper và một số YOLOv2 implementation khác (<a href="https://github.com/thtrieu/darkflow">Darkflow</a>, <a href="https://github.com/longcw/yolo2-pytorch">Yolov2-pytorch</a>)</p>
@@ -363,7 +363,7 @@ Từ công thức ta có thể thấy giá trị khoảng cách $d$ sẽ nằm t
 <li>Do kiến trúc của YOLOv2, <em>w = W/32</em>, <em>h = H/32</em> =&gt; giá trị W, H <strong>luôn phải chia hết cho 32</strong>, và W không nhất thiết phải bằng H</li>
 </ul>
 <hr class="half-line">
-<p>[<a href="#normalize_b" style="color:red;">$ \triangleleft $</a>]<a name="normalize"></a>:<strong>Chi tiết cách normalize/transform giá trí trước khi đưa vào hàm Loss:</strong></p>
+<p>[<a href="#scale_b" style="color:red;">$ \triangleleft $</a>]<a name="scale"></a>:<strong>Chi tiết cách scale/transform giá trí trước khi đưa vào hàm Loss:</strong></p>
 <p><strong><em>Gọi:</em></strong></p>
 <ul>
 <li>$W, H$ là kích thước của input (pixel)</li>
