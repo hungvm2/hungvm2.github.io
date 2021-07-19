@@ -108,7 +108,7 @@
                     </span>
 
                     <span class="reading-time middot">
-                        1 min read
+                        2 min read
                     </span>
 
                     <div class="d-none d-md-inline tags">
@@ -129,6 +129,23 @@
 <p>Trong paper có một số phần không được tác giả đề cập tới (ví dụ: hàm loss, số grid cell, Reorg layer&hellip;), chỉ có ở trong source code, mình tự đưa vào để dễ nắm bắt hơn nội dung của paper</p>
 </blockquote>
 <h4 id="1-giới-thiệu-chung-về-model">1. Giới thiệu chung về model</h4>
+<p>Model YOLOv3 lơn hơn model trước nhưng cũng chính xác hơn.</p>
+<p>Với input size $320 \times 320$, YOLOv2 có độ chính xác tương đương SSD nhưng nhanh hơn 3 lần (22ms, 28.2mAP).</p>
+<p>Với metric .5 IOU mAP trên Titan X, YOLOv3 có độ chính xác tương đương RetinaNet nhưng nhanh hơn 3.8 lần ($57.9 AP_{50}/51ms$ so với $57.5 AP{50}/198ms$).</p>
+<h4 id="2-các-thay-đổicải-tiến-so-với-yolov2">2. Các thay đổi/cải tiến so với YOLOv2</h4>
+<h5 id="21-bounding-box-prediction">2.1. Bounding box Prediction</h5>
+<p>Các giá trị $b_{x}, b_{y}, b_{w}, b_{y}$ tính tương tự như ở YOLOv2, còn Confident score $C$ sử dụng Logistic Regression</p>
+<h5 id="22-class-prediction">2.2. Class Prediction</h5>
+<p>Không sử dụng Softmax khi predict giá trị xác suất của các classes trên mỗi Bounding box như ở YOLOv2. Thay vào đó, sử dụng Binary Cross-entropy cho class prediction</p>
+<h5 id="23-predictions-across-scales">2.3. Predictions across Scales</h5>
+<p>Sử dụng ý tưởng tương tự như Feature Pyramid Networks, YOLOv3 sẽ predict các boxes ở 3 tỉ lệ khác nhau.</p>
+<p>Output tensor trên tập COCO dataset: $N \times N \times [3 * (4 + 1 +80)]$</p>
+<p>Sử dụng 9 Anchor boxes tương ứng với 3 scale</p>
+<h5 id="23-feature-extractor">2.3. Feature Extractor</h5>
+<p>Mạng classifer mới có tên là Darknet-53, kết hợp giữa Darknet-19 và ý tưởng của Residual Networks</p>
+<h4 id="3-training">3. Training</h4>
+<p>Dataset: COCO</p>
+<h4 id="4-inference-testing">4. Inference (Testing)</h4>
 
 
 

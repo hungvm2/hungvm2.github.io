@@ -276,9 +276,9 @@ Mỗi layer đều có input và output, output của layer này là input của
 <p>Batch normalization là kỹ thuật giúp giảm Internal covariance shift từ đó giúp quá trình training ổn định và cho phép sử dụng learning rate lớn hơn, nên nhanh hội tụ hơn. [<a href="#bn_paper" style="color:red;">?</a>]<a name="bn_paper_b"></a></p>
 <hr class="half-line">
 <p>[<a href="#anchor_box_b" style="color:red;">$ \triangleleft $</a>]<a name="anchor_box"></a>:<strong>Chi tiết về cách tính offset của Bounding box so với Anchor Boxes</strong></p>
-<p>Gọi $t_{x}, t_{y}, t_{w}, t_{h}, t_{o}$ lần lượt là các giá trị toạ độ tâm, rộng, dài và confidence score **được predict ra từ network** ứng với mỗi predicted Bounding box trên 1 grid cell. Đây là các giá trị được regression từ network nên có thể to nhỏ, âm, dương tuỳ ý.</p>
-<p>Gọi $p_{w}, p_{h}$ là kích thước chiều rộng, dài của 1 Anchor box. Đây là giá trị **kích thước theo pixel** của Anchor box.</p>
-<p>Gọi $C_{x}, C_{y}$ là offset từ góc top-left của input image. 2 giá trị này sẽ bằng gía trị **index** hàng và cột (i và j) của grid cell trên image.</p>
+<p>Gọi $t_{x}, t_{y}, t_{w}, t_{h}, t_{o}$ lần lượt là các giá trị toạ độ tâm, rộng, dài và confidence score <b>được predict ra từ network</b> ứng với mỗi predicted Bounding box trên 1 grid cell. Đây là các giá trị được regression từ network nên có thể to nhỏ, âm, dương tuỳ ý.</p>
+<p>Gọi $p_{w}, p_{h}$ là kích thước chiều rộng, dài của 1 Anchor box. Đây là giá trị <b>kích thước theo pixel</b> của Anchor box.</p>
+<p>Gọi $C_{x}, C_{y}$ là offset từ góc top-left của input image. 2 giá trị này sẽ bằng gía trị <b>index</b> hàng và cột (i và j) của grid cell trên image.</p>
 <p>Gọi $b_{x}, b_{y}, b_{w}, b_{h}, C$ lần lượt là toạ độ tâm, kích thước rộng, dài và confidence score của 1 predicted bounding box (trong số 5 Bounding box ở 1 grid cell). Các giá trị này sẽ được tính như sau:</p>
 <div>
 \begin{multline}
