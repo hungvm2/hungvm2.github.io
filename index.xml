@@ -14,6 +14,7 @@
       
       <guid>https://hungvm2.github.io/blog/grasping-yolov3-content/</guid>
       <description>Tiếp theo trong series YOLO, ở bài viết này, chúng ta hãy cùng đọc và phân tích nội dung của paper &amp;ldquo;YOLOv3: An Incremental Improment&amp;rdquo; published tháng 4 năm 2018 nhé!
+Đây cũng chính là version YOLO cuối cùng được phát triển bởi người tạo ra nó: Joseph Redmon. Các version sau này là do tác giả khác kế thừa và tiếp tục cải tiến.
 Vì mục đích của series này là muốn đi sâu hơn vào sự tiến hoá của YOLO qua từng version, nên mình sẽ chỉ tập trung vào kiến trúc của mô hình, cũng như các phương pháp tối ưu hiệu năng và độ chính xác (FPS/mAP) mới được sử dụng so với version trước.</description>
     </item>
     

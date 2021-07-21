@@ -108,7 +108,7 @@
                     </span>
 
                     <span class="reading-time middot">
-                        2 min read
+                        3 min read
                     </span>
 
                     <div class="d-none d-md-inline tags">
@@ -121,6 +121,7 @@
                 <div class="markdown blog-post-content">
                     
     <p>Tiếp theo trong series YOLO, ở bài viết này, chúng ta hãy cùng đọc và phân tích nội dung của paper &ldquo;<strong>YOLOv3: An Incremental Improment</strong>&rdquo; published tháng 4 năm 2018 nhé!</p>
+<p>Đây cũng chính là version YOLO cuối cùng được phát triển bởi người tạo ra nó: <strong>Joseph Redmon</strong>. Các version sau này là do tác giả khác kế thừa và tiếp tục cải tiến.</p>
 <p>Vì mục đích của series này là muốn đi sâu hơn vào sự tiến hoá của YOLO qua từng version, nên mình sẽ chỉ <strong>tập trung vào kiến trúc</strong> của mô hình, cũng như các <strong>phương pháp tối ưu hiệu năng và độ chính xác (FPS/mAP) mới</strong> được sử dụng so với version trước.</p>
 <hr>
 <h3 id="i-đọc-paper">I. Đọc Paper</h3>
@@ -132,6 +133,7 @@
 <p>Model YOLOv3 lơn hơn model trước nhưng cũng chính xác hơn.</p>
 <p>Với input size $320 \times 320$, YOLOv2 có độ chính xác tương đương SSD nhưng nhanh hơn 3 lần (22ms, 28.2mAP).</p>
 <p>Với metric .5 IOU mAP trên Titan X, YOLOv3 có độ chính xác tương đương RetinaNet nhưng nhanh hơn 3.8 lần ($57.9 AP_{50}/51ms$ so với $57.5 AP{50}/198ms$).</p>
+<hr>
 <h4 id="2-các-thay-đổicải-tiến-so-với-yolov2">2. Các thay đổi/cải tiến so với YOLOv2</h4>
 <h5 id="21-bounding-box-prediction">2.1. Bounding box Prediction</h5>
 <p>Các giá trị $b_{x}, b_{y}, b_{w}, b_{y}$ tính tương tự như ở YOLOv2, còn Confident score $C$ sử dụng Logistic Regression</p>
@@ -143,9 +145,28 @@
 <p>Sử dụng 9 Anchor boxes tương ứng với 3 scale</p>
 <h5 id="23-feature-extractor">2.3. Feature Extractor</h5>
 <p>Mạng classifer mới có tên là Darknet-53, kết hợp giữa Darknet-19 và ý tưởng của Residual Networks</p>
+<hr>
 <h4 id="3-training">3. Training</h4>
 <p>Dataset: COCO</p>
+<div class="text-center my-3">
+<img src="https://hungvm2.github.io/images/yolov3/darknet53.png" class="img-fluid" alt="Classifier model">
+</div>
+<hr>
 <h4 id="4-inference-testing">4. Inference (Testing)</h4>
+<hr>
+<h4 id="5-so-sánh-độ-chính-xác-và-hiệu-năng-với-các-mô-hình-khác">5. So sánh độ chính xác và hiệu năng với các mô hình khác:</h4>
+<p>YOLOv2 vẫn tiếp tục đạt độ chính xác tương đương các model khác, trong khi nhanh hơn nhiều lần</p>
+<div class="text-center my-3">
+<img src="https://hungvm2.github.io/images/yolov3/ap-comparision.png" class="img-fluid" alt="AP comparision">
+</div>
+<div class="text-center my-3">
+<img src="https://hungvm2.github.io/images/yolov3/ms-comparision.png" class="img-fluid" alt="AP/Time Comparision on COCO dataset">
+</div>
+<hr>
+<h3 id="ii-hiểu-paper">II. Hiểu Paper</h3>
+<blockquote>
+<p>Trong phần &ldquo;Hiểu Paper&rdquo; này, mình sẽ đi vào phân tích cũng như dẫn lại các giải thích của tác giả về các lý do tại sao tác giả chọn hướng tiếp cận đó, cũng như các thuật ngữ, công thức trong paper&hellip;</p>
+</blockquote>
 
 
 
