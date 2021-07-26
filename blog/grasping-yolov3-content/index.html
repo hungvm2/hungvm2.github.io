@@ -108,7 +108,7 @@
                     </span>
 
                     <span class="reading-time middot">
-                        3 min read
+                        4 min read
                     </span>
 
                     <div class="d-none d-md-inline tags">
@@ -136,28 +136,38 @@
 <hr>
 <h4 id="2-các-thay-đổicải-tiến-so-với-yolov2">2. Các thay đổi/cải tiến so với YOLOv2</h4>
 <h5 id="21-bounding-box-prediction">2.1. Bounding box Prediction</h5>
-<p>Các giá trị $b_{x}, b_{y}, b_{w}, b_{y}$ tính tương tự như ở YOLOv2, còn Confident score $C$ sử dụng Logistic Regression</p>
+<p>Các giá trị $b_{x}, b_{y}, b_{w}, b_{y}$ tính tương tự như ở YOLOv2</p>
+<p>Confident score $C$ sử dụng Logistic Regression thay vì thuần giá trị IOU như YOLO2. C = 1 khi bounding box đó có IOU lớn nhất so với ground truth box. Nếu bounding box không có IOU max, nhưng IOU vẫn lớn hơn 1 threshold (tác giả lấy = 0.5), thì không tính loss của prediction đó.</p>
+<p>Những bounding box mà không có IOU max thì sẽ không được tính coordinates loss và class loss.</p>
 <h5 id="22-class-prediction">2.2. Class Prediction</h5>
-<p>Không sử dụng Softmax khi predict giá trị xác suất của các classes trên mỗi Bounding box như ở YOLOv2. Thay vào đó, sử dụng Binary Cross-entropy cho class prediction</p>
+<p>Không sử dụng Softmax khi predict giá trị xác suất của các classes trên mỗi Bounding box như ở YOLOv2. Thay vào đó, sử dụng Binary Cross-entropy cho class prediction [<a href="#class_prediction" style="color:red;">?</a>]<a name="class_prediction_b"></a>. Điều này giúp một bounding box có thể thuộc về nhiều class, ví dụ như Open Image Dataset có 2 class Woman và Person ovẻlap nhau.</p>
 <h5 id="23-predictions-across-scales">2.3. Predictions across Scales</h5>
-<p>Sử dụng ý tưởng tương tự như Feature Pyramid Networks, YOLOv3 sẽ predict các boxes ở 3 tỉ lệ khác nhau.</p>
-<p>Output tensor trên tập COCO dataset: $N \times N \times [3 * (4 + 1 +80)]$</p>
-<p>Sử dụng 9 Anchor boxes tương ứng với 3 scale</p>
+<p>Sử dụng ý tưởng tương tự như Feature Pyramid Networks, YOLOv3 sẽ predict các boxes ở 3 tỉ lệ (scale) khác nhau.</p>
+<p>Output tensor trên tập COCO dataset cho mỗi scale: $N \times N \times [3 * (4 + 1 +80)]$</p>
+<p>Sử dụng 9 Anchor boxes thay vì 5 như YOLOv2. 9 Anchor boxes vẫn được chọn bằng K-means.</p>
 <h5 id="23-feature-extractor">2.3. Feature Extractor</h5>
-<p>Mạng classifer mới có tên là Darknet-53, kết hợp giữa Darknet-19 và ý tưởng của Residual Networks</p>
+<p>Mạng classifer mới có tên là Darknet-53 (có 53 lớp Conv Layers), kết hợp giữa Darknet-19 và ý tưởng của Residual Networks</p>
+<div class="text-center my-3">
+<figure class="figure">
+  <img src="https://hungvm2.github.io/images/yolov3/darknet53.png" alt="Classifier model" class="figure-img">
+  <figcaption class="figure-caption">Kiến trúc mạng Classifier Darknet-53</figcaption>
+</figure>
+</div>
 <hr>
 <h4 id="3-training">3. Training</h4>
+<h4 id="31-kiến-trúc-mạng">3.1. Kiến trúc mạng</h4>
 <p>Dataset: COCO</p>
-<div class="text-center my-3">
-<img src="https://hungvm2.github.io/images/yolov3/darknet53.png" class="img-fluid" alt="Classifier model">
-</div>
+<h4 id="32-hàm-loss">3.2. Hàm loss</h4>
 <hr>
 <h4 id="4-inference-testing">4. Inference (Testing)</h4>
 <hr>
 <h4 id="5-so-sánh-độ-chính-xác-và-hiệu-năng-với-các-mô-hình-khác">5. So sánh độ chính xác và hiệu năng với các mô hình khác:</h4>
 <p>YOLOv2 vẫn tiếp tục đạt độ chính xác tương đương các model khác, trong khi nhanh hơn nhiều lần</p>
 <div class="text-center my-3">
-<img src="https://hungvm2.github.io/images/yolov3/ap-comparision.png" class="img-fluid" alt="AP comparision">
+<figure class="figure">
+  <img src="https://hungvm2.github.io/images/yolov3/ap-comparision.png" alt="AP comparision" class="figure-img">
+  <figcaption class="figure-caption">So sánh YOLOv3 với các phương pháp detection one-stage và two-stage</figcaption>
+</figure>
 </div>
 <div class="text-center my-3">
 <img src="https://hungvm2.github.io/images/yolov3/ms-comparision.png" class="img-fluid" alt="AP/Time Comparision on COCO dataset">
@@ -167,6 +177,12 @@
 <blockquote>
 <p>Trong phần &ldquo;Hiểu Paper&rdquo; này, mình sẽ đi vào phân tích cũng như dẫn lại các giải thích của tác giả về các lý do tại sao tác giả chọn hướng tiếp cận đó, cũng như các thuật ngữ, công thức trong paper&hellip;</p>
 </blockquote>
+<p>[<a href="#class_prediction_b" style="color:red;">$ \triangleleft $</a>]<a name="class_prediction"></a>:<strong>Class prediction được tính lại như thế nào?</strong></p>
+<p>Ở trong bài viết về YOLOv2, loss của class prediction sử dụng sum square error, và các giá trị class prediction của bounding box trước khi đưa vào hàm loss thì phải được transform về dạng sau: $p(c) = Softmax(P_{c})$</p>
+<p>Ở YOLOv3, các giá trị class prediction sẽ được giữ nguyên từ output của network, và loss của class prediction sẽ được tính lại theo công thức cross-entropy như sau:</p>
+<div>
+$Loss_{class\_prob}) = - \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} \displaystyle \sum_{c \in classes}p_{ij}(c)log(\hat{p}_{ij}(c))$
+</div>
 
 
 
