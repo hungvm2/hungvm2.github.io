@@ -108,7 +108,7 @@
                     </span>
 
                     <span class="reading-time middot">
-                        4 min read
+                        7 min read
                     </span>
 
                     <div class="d-none d-md-inline tags">
@@ -137,27 +137,89 @@
 <h4 id="2-các-thay-đổicải-tiến-so-với-yolov2">2. Các thay đổi/cải tiến so với YOLOv2</h4>
 <h5 id="21-bounding-box-prediction">2.1. Bounding box Prediction</h5>
 <p>Các giá trị $b_{x}, b_{y}, b_{w}, b_{y}$ tính tương tự như ở YOLOv2</p>
-<p>Confident score $C$ sử dụng Logistic Regression thay vì thuần giá trị IOU như YOLO2. C = 1 khi bounding box đó có IOU lớn nhất so với ground truth box. Nếu bounding box không có IOU max, nhưng IOU vẫn lớn hơn 1 threshold (tác giả lấy = 0.5), thì không tính loss của prediction đó.</p>
+<p>Confident score $C$ sử dụng Logistic Regression thay vì thuần giá trị IOU như YOLOv2. C = 1 khi bounding box đó có IOU lớn nhất so với ground truth box. Nếu bounding box không có IOU max, nhưng IOU vẫn lớn hơn 1 threshold (tác giả lấy = 0.5), thì không tính loss của prediction đó.</p>
 <p>Những bounding box mà không có IOU max thì sẽ không được tính coordinates loss và class loss.</p>
 <h5 id="22-class-prediction">2.2. Class Prediction</h5>
-<p>Không sử dụng Softmax khi predict giá trị xác suất của các classes trên mỗi Bounding box như ở YOLOv2. Thay vào đó, sử dụng Binary Cross-entropy cho class prediction [<a href="#class_prediction" style="color:red;">?</a>]<a name="class_prediction_b"></a>. Điều này giúp một bounding box có thể thuộc về nhiều class, ví dụ như Open Image Dataset có 2 class Woman và Person ovẻlap nhau.</p>
+<p>Không sử dụng Softmax khi predict giá trị xác suất của các classes trên mỗi Bounding box như ở YOLOv2. Thay vào đó, sử dụng Binary Cross-entropy cho class prediction [<a href="#class_prediction" style="color:red;">?</a>]<a name="class_prediction_b"></a>. Điều này giúp một bounding box có thể thuộc về nhiều class, ví dụ như Open Image Dataset có 2 class Woman và Person overlap nhau.</p>
 <h5 id="23-predictions-across-scales">2.3. Predictions across Scales</h5>
 <p>Sử dụng ý tưởng tương tự như Feature Pyramid Networks, YOLOv3 sẽ predict các boxes ở 3 tỉ lệ (scale) khác nhau.</p>
-<p>Output tensor trên tập COCO dataset cho mỗi scale: $N \times N \times [3 * (4 + 1 +80)]$</p>
-<p>Sử dụng 9 Anchor boxes thay vì 5 như YOLOv2. 9 Anchor boxes vẫn được chọn bằng K-means.</p>
+<p>Sử dụng 9 Anchor boxes thay vì 5 như YOLOv2. 9 Anchor boxes vẫn được chọn bằng K-means. Các Anchor boxes chia thành 3 scale: [(10×13),(16×30),(33×23)] ; [(30×61),(62×45),(59×119)] ; [(116 × 90),(156 × 198),(373 × 326)].</p>
+<p>Output tensor cho mỗi scale (3 Anchor boxes cho mỗi scale): $N \times N \times [3 * (4 + 1 +80)]$</p>
 <h5 id="23-feature-extractor">2.3. Feature Extractor</h5>
 <p>Mạng classifer mới có tên là Darknet-53 (có 53 lớp Conv Layers), kết hợp giữa Darknet-19 và ý tưởng của Residual Networks</p>
 <div class="text-center my-3">
 <figure class="figure">
   <img src="https://hungvm2.github.io/images/yolov3/darknet53.png" alt="Classifier model" class="figure-img">
-  <figcaption class="figure-caption">Kiến trúc mạng Classifier Darknet-53</figcaption>
+  <figcaption class="figure-caption">Ảnh 1: Kiến trúc mạng Classifier Darknet-53</figcaption>
 </figure>
 </div>
 <hr>
 <h4 id="3-training">3. Training</h4>
 <h4 id="31-kiến-trúc-mạng">3.1. Kiến trúc mạng</h4>
 <p>Dataset: COCO</p>
+<div class="text-center my-3">
+<figure class="figure">
+  <img src="https://hungvm2.github.io/images/yolov3/yolov3-architecture.png" alt="YOLOv3 Architecture" class="figure-img">
+  <figcaption class="figure-caption">Ảnh 2: Kiến trúc mạng detection YOLOv3 với NxN = 416x416</figcaption>
+</figure>
+</div>
+<p>Do Paper YOLOv3 không có bản vẽ chi tiết về kiến trúc của mạng detection nên mình đã tham khảo kiến trúc từ <a href="https://www.researchgate.net/publication/334021766_Deep_learning_approach_to_peripheral_leukocyte_recognition">đây</a></p>
+<p>Để hiểu chi tiết hơn về kiến trúc, các bạn có thể xem file yolov3.cfg trong <a href="https://github.com/pjreddie/darknet/blob/master/cfg/yolov3.cfg">source code</a> của tác giả, trong đó:</p>
+<p>[shorcut] : là skip connection của mỗi residual block. Có 11 Res Block tương ứng với 11 [shortcut]</p>
+<p>[yolo]: là layer output của mỗi scale. Có 3 scale tương ứng với 3 layer [shorcut]</p>
+<p>[route]: là layer concat với các params là giá trị index của các input. Tham khảo thêm ở <a href="https://github.com/AlexeyAB/darknet/issues/279#issuecomment-397248821">đây</a></p>
+<p>Output của mỗi predicted bounding box sẽ là: 4 giá trị $x^{t}, y^{t}, w^{t}, h^{t}$; 1 giá trị $C^{t}$ và 80 giá trị $p^{t}(c)$</p>
+<p>Output của Network sẽ là tổng hợp của 3 output tương ứng với 3 scale, có kích thước: $N \times N \times [9 * (4 + 1 +80)]$</p>
 <h4 id="32-hàm-loss">3.2. Hàm loss</h4>
+<p>Vẫn sử dụng Sum Square Error</p>
+<div>
+\begin{multline*}
+Loss = (Loss_{coordinates} + Loss_{class\_prob}) + Loss_{IOU}\\
+= \Big[ \lambda_{coord} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} [(x_{ij} - \hat{x}_{ij})^{2} + (y_{ij} - \hat{y}_{ij})^{2}]\\ 
++ \lambda_{coord} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj}[(\sqrt{w_{ij}} - \sqrt{\hat{w}_{ij}})^{2} + (\sqrt{h_{ij}} - \sqrt{\hat{h}_{ij}})^{2}]\\
++ \lambda_{coord} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} \displaystyle \sum_{c \in classes}(p_{ij}(c) - \hat{p}_{ij}(c))^{2} \Big]\\
++ \Big[ \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} (C_{ij} - \hat{C}_{ij})^{2}\\
++ \lambda_{noobj} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{noobj} (C_{ij} - \hat{C}_{ij})^2 \Big]
+\end{multline*}
+</div>
+<p><strong><em>Gọi:</em></strong></p>
+<ul>
+<li>$W, H$ là kích thước của input (pixel)</li>
+<li>$S_{x}, S_{y}$ là số grid cell theo phương x, y</li>
+<li>$cell_{x}, cell_{y}$: kích thước của grid cell ($= W/S_{x} = H/S_{y} = 32$pixel)</li>
+<li>$w_{g},h_{g}$ là kích thước ground truth box (pixel)</li>
+<li>$w_{p}, h_{p}$ là kích thước predicted box (pixel)</li>
+<li>$x_{g}, y_{g}$ là vị trí tâm của ground truth box (pixel)</li>
+<li>$x_{p}, y_{p}$ là vị trí tâm của predicted box (pixel)</li>
+<li>i: là thứ tự của grid cell trong $S_{x} \times S_{y}$ cells</li>
+<li>j: là thứ tự của Anchor box trong B Anchors</li>
+<li>$\hat{p}_{c}$: giá trị xác suất nhận diện của N class cho ground truth box (20 classes). Có dạng $[0,0,..1,&hellip;0,0,0]$. Vị trí của số $1$ là index của class trong N class.</li>
+<li>$P_{c}$: vector N chiều, giá trị xác suất của predicted box (20 classes)</li>
+<li>C: confident score, là giá trị IOU max của ground truth box với các anchor box trên 1 grid cell. (trường hợp grid cell có 2 ground truth box trở nên thì sẽ có 2 IOU max trở lên)</li>
+<li>$\hat{C}$: confident score của ground truth box</li>
+<li>$\hat{x}, \hat{y}, \hat{w}, \hat{h}$: là các giá trị coordinates của ground truth đã được biến đổi.</li>
+<li>$x, y, w, h$: là các giá trị của predicted box đã được biến đổi. Tính lại từ công thức <a style="color:red;">(\ref{ref_b})</a></li>
+</ul>
+<p><strong><em>Các giá trị sẽ được biến đổi như bên dưới:</em></strong></p>
+<div>
+\begin{multline*}
+\\
+\hat{x} = (x_{g} \quad \% \quad S_{x}) / cell_{x}\\
+\hat{y} = (y_{g} \quad \% \quad S_{y}) / cell_{y}\\
+\hat{w} = w_{g} / W\\
+\hat{h} = h_{g} / H\\
+\hat{p}(c) \quad \text{có dạng} \quad [0,0,1,....,0]\\
+\hat{C} = 1\\
+\\
+x = \sigma{(t_{x})} / cell_x\\
+y = \sigma{(t_{y})} / cell_y\\
+w = (p_{w} \times e^{t_{w}}) / W\\
+h = (p_{h} \times e^{t_{h}}) / H\\
+p(c) = Softmax(P_{c})\\
+C = IOU_{max}\\
+\\
+\end{multline*}
+</div>
 <hr>
 <h4 id="4-inference-testing">4. Inference (Testing)</h4>
 <hr>
@@ -178,8 +240,8 @@
 <p>Trong phần &ldquo;Hiểu Paper&rdquo; này, mình sẽ đi vào phân tích cũng như dẫn lại các giải thích của tác giả về các lý do tại sao tác giả chọn hướng tiếp cận đó, cũng như các thuật ngữ, công thức trong paper&hellip;</p>
 </blockquote>
 <p>[<a href="#class_prediction_b" style="color:red;">$ \triangleleft $</a>]<a name="class_prediction"></a>:<strong>Class prediction được tính lại như thế nào?</strong></p>
-<p>Ở trong bài viết về YOLOv2, loss của class prediction sử dụng sum square error, và các giá trị class prediction của bounding box trước khi đưa vào hàm loss thì phải được transform về dạng sau: $p(c) = Softmax(P_{c})$</p>
-<p>Ở YOLOv3, các giá trị class prediction sẽ được giữ nguyên từ output của network, và loss của class prediction sẽ được tính lại theo công thức cross-entropy như sau:</p>
+<p>Ở trong bài viết về YOLOv2, loss của class prediction sử dụng <b>sum square error</b>, và các giá trị class prediction của bounding box trước khi đưa vào hàm loss thì phải được transform về dạng sau: $p(c) = Softmax(P_{c})$</p>
+<p>Ở YOLOv3, các giá trị class prediction sẽ được giữ nguyên từ output của network, và loss của class prediction sẽ được tính lại theo công thức <b>cross-entropy</b> như sau:</p>
 <div>
 $Loss_{class\_prob}) = - \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} \displaystyle \sum_{c \in classes}p_{ij}(c)log(\hat{p}_{ij}(c))$
 </div>
