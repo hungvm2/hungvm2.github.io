@@ -169,17 +169,15 @@
 <p>[yolo]: là layer output của mỗi scale. Có 3 scale tương ứng với 3 layer [shorcut]</p>
 <p>[route]: là layer concat với các params là giá trị index của các input. Tham khảo thêm ở <a href="https://github.com/AlexeyAB/darknet/issues/279#issuecomment-397248821">đây</a></p>
 <p>Output của mỗi predicted bounding box sẽ là: 4 giá trị $x^{t}, y^{t}, w^{t}, h^{t}$; 1 giá trị $C^{t}$ và 80 giá trị $p^{t}(c)$</p>
-<p>Output của Network sẽ là tổng hợp của 3 output tương ứng với 3 scale, có kích thước: $N \times N \times [9 * (4 + 1 +80)]$</p>
+<p>Output của Network sẽ là tổng hợp của 3 output tương ứng với 3 scale, có kích thước: $N \times N \times [9 * (4 + 1 + 80)]$</p>
 <h4 id="32-hàm-loss">3.2. Hàm loss</h4>
-<p>Vẫn sử dụng Sum Square Error</p>
 <div>
 \begin{multline*}
 Loss = (Loss_{coordinates} + Loss_{class\_prob}) + Loss_{IOU}\\
-= \Big[ \lambda_{coord} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} [(x_{ij} - \hat{x}_{ij})^{2} + (y_{ij} - \hat{y}_{ij})^{2}]\\ 
-+ \lambda_{coord} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj}[(\sqrt{w_{ij}} - \sqrt{\hat{w}_{ij}})^{2} + (\sqrt{h_{ij}} - \sqrt{\hat{h}_{ij}})^{2}]\\
-+ \lambda_{coord} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} \displaystyle \sum_{c \in classes}(p_{ij}(c) - \hat{p}_{ij}(c))^{2} \Big]\\
-+ \Big[ \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} (C_{ij} - \hat{C}_{ij})^{2}\\
-+ \lambda_{noobj} \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{noobj} (C_{ij} - \hat{C}_{ij})^2 \Big]
+= \Big[ \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} [(x_{ij} - \hat{x}_{ij})^{2} + (y_{ij} - \hat{y}_{ij})^{2}]\\ 
++ \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj}[(\sqrt{w_{ij}} - \sqrt{\hat{w}_{ij}})^{2} + (\sqrt{h_{ij}} - \sqrt{\hat{h}_{ij}})^{2} \Big]\\
++ \Big[ BCE(C_{i}, \hat{C}_{i}) \Big]\\
++ \Big[ BCE(p_{i}(c), \hat{p}_{i}(c)) \Big]\\
 \end{multline*}
 </div>
 <p><strong><em>Gọi:</em></strong></p>
@@ -245,6 +243,14 @@ C = IOU_{max}\\
 <div>
 $Loss_{class\_prob}) = - \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} \displaystyle \sum_{c \in classes}p_{ij}(c)log(\hat{p}_{ij}(c))$
 </div>
+<hr>
+<h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
+<ul>
+<li><a href="https://arxiv.org/abs/1804.02767">YOLOv3: An Incremental Improvement</a></li>
+<li><a href="https://github.com/pjreddie/darknet">Darknet</a></li>
+<li><a href="https://towardsdatascience.com/yolo-v3-object-detection-53fb7d3bfe6b">What’s new in YOLO v3?</a></li>
+<li><a href="https://github.com/eriklindernoren/PyTorch-YOLOv3">Pytorch-YOLOv3</a></li>
+</ul>
 
 
 
