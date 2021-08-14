@@ -179,8 +179,9 @@ N \times N \times [3 * (4 + 1 +80)]
 Loss = (Loss_{coordinates} + Loss_{class\_prob}) + Loss_{IOU}\\
 = \Big[ \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} [(x_{ij} - \hat{x}_{ij})^{2} + (y_{ij} - \hat{y}_{ij})^{2}]\\ 
 + \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj}[(\sqrt{w_{ij}} - \sqrt{\hat{w}_{ij}})^{2} + (\sqrt{h_{ij}} - \sqrt{\hat{h}_{ij}})^{2} \Big]\\
-+ \Big[ BCE(C_{i}, \hat{C}_{i}) \Big]\\
-+ \Big[ BCE(p_{i}(c), \hat{p}_{i}(c)) \Big]\\
++ BCE(C_{i}, \hat{C}_{i})\\
++ BCE(p_{i}(c), \hat{p}_{i}(c))\\
+\\
 \end{multline*}
 </div>
 <p><strong><em>Gọi:</em></strong></p>
