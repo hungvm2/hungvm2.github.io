@@ -256,7 +256,7 @@ C = IOU_{max}\\
 <p>Ở YOLOv3, các giá trị class prediction sẽ được giữ nguyên từ output của network, và loss của class prediction sẽ được tính lại theo công thức <b>cross-entropy</b> như sau:</p>
 <div>
 \begin{equation*}
-Loss_{class\_prob}) = - \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} \displaystyle \sum_{c \in classes}p_{ij}(c)log(\hat{p}_{ij}(c))
+Loss_{class\_prob} = - \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} \displaystyle \sum_{c \in classes}\hat{p}_{ij}(c)log(p_{ij}(c))
 \end{equation*}
 </div>
 <hr>
