@@ -185,7 +185,7 @@ S_{i} \times S_{i} \times [3 * (4 + 1 +80)] \quad ; i = 0,1,2
 <div>
 \begin{multline*}
 \quad \quad Loss = Loss_{coordinates} + Loss_{IOU} + Loss_{class\_prob}\\
-= \displaystyle \sum_{S in [W/8, W/16, W/32]} \Big[ \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} [(x_{ij} - \hat{x}_{ij})^{2} + (y_{ij} - \hat{y}_{ij})^{2}]\\ 
+= \displaystyle \sum_{S \in [W/8, W/16, W/32]} \Big[ \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} [(x_{ij} - \hat{x}_{ij})^{2} + (y_{ij} - \hat{y}_{ij})^{2}]\\ 
 + \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj}[(\sqrt{w_{ij}} - \sqrt{\hat{w}_{ij}})^{2} + (\sqrt{h_{ij}} - \sqrt{\hat{h}_{ij}})^{2} ]\\
 - \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B}[\hat{C}_{i} * \log(C_{i}) + (1 - \hat{C}_{i}) * \log(1 - C_{i})]\\
 - \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B}[\hat{p}_{i}(c) * \log(p_{i}(c)) + (1 - \hat{p}_{i}(c)) * \log(1 - p_{i}(c))] \Big]\\
