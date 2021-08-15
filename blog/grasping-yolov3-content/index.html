@@ -143,7 +143,7 @@
 <p>Không sử dụng Softmax khi predict giá trị xác suất của các classes trên mỗi Bounding box như ở YOLOv2. Thay vào đó, sử dụng Binary Cross-entropy cho class prediction [<a href="#class_prediction" style="color:red;">?</a>]<a name="class_prediction_b"></a>. Điều này giúp một bounding box có thể thuộc về nhiều class, ví dụ như Open Image Dataset có 2 class Woman và Person overlap nhau.</p>
 <h5 id="23-predictions-across-scales">2.3. Predictions across Scales</h5>
 <p>Sử dụng ý tưởng tương tự như Feature Pyramid Networks, YOLOv3 sẽ predict các boxes ở 3 tỉ lệ (scale) khác nhau.</p>
-<p>Sử dụng 9 Anchor boxes thay vì 5 như YOLOv2. 9 Anchor boxes vẫn được chọn bằng K-means. Các Anchor boxes chia thành 3 scale: [(10×13),(16×30),(33×23)] ; [(30×61),(62×45),(59×119)] ; [(116 × 90),(156 × 198),(373 × 326)].</p>
+<p>Sử dụng 9 Anchor boxes thay vì 5 như YOLOv2. 9 Anchor boxes vẫn được chọn bằng K-means. Các Anchor boxes sẽ được chia vào 3 scale, tương ứng với 3 boxes/ 1 scale.</p>
 <p>Output tensor cho mỗi scale (3 Anchor boxes cho mỗi scale):
 \begin{equation*}
 S_{i} \times S_{i} \times [3 * (4 + 1 +80)]
@@ -179,10 +179,13 @@ S_{i} \times S_{i} \times [3 * (4 + 1 +80)]
 S_{i} \times S_{i} \times [3 * (4 + 1 +80)] ; i = 0,1,2
 \end{equation*}</p>
 <h4 id="32-hàm-loss">3.2. Hàm loss</h4>
+<p>Vì có 3 scale nên Loss sẽ bằng tổng Loss của 3 scale, số grid cell $S * S$ lần lượt cho 3 scale (small, medium, large) tương ứng sẽ là $H/32 * W/32, H/16 * W/16, H/8 * W/8$.</p>
+<p>Anchor boxes tương ứng cho 3 scale (small, medium, large) lần lượt là: [(10×13),(16×30),(33×23)] ; [(30×61),(62×45),(59×119)] ; [(116 × 90),(156 × 198),(373 × 326)]</p>
+<p>Công thức bên dưới tính cho trường hợp input size có W = H.</p>
 <div>
 \begin{multline*}
 \quad \quad Loss = Loss_{coordinates} + Loss_{IOU} + Loss_{class\_prob}\\
-= \Big[ \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} [(x_{ij} - \hat{x}_{ij})^{2} + (y_{ij} - \hat{y}_{ij})^{2}]\\ 
+= \displaystyle \sum_{S in [W/8, W/16, W/32]}} \Big[ \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} [(x_{ij} - \hat{x}_{ij})^{2} + (y_{ij} - \hat{y}_{ij})^{2}]\\ 
 + \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj}[(\sqrt{w_{ij}} - \sqrt{\hat{w}_{ij}})^{2} + (\sqrt{h_{ij}} - \sqrt{\hat{h}_{ij}})^{2} ]\\
 - \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B}[\hat{C}_{i} * \log(C_{i}) + (1 - \hat{C}_{i}) * \log(1 - C_{i})]\\
 - \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B}[\hat{p}_{i}(c) * \log(p_{i}(c)) + (1 - \hat{p}_{i}(c)) * \log(1 - p_{i}(c))] \Big]\\
@@ -201,7 +204,7 @@ S_{i} \times S_{i} \times [3 * (4 + 1 +80)] ; i = 0,1,2
 <li>i: là thứ tự của grid cell trong $S_{x} \times S_{y}$ cells</li>
 <li>j: là thứ tự của Anchor box trong B Anchors</li>
 <li>$\hat{p}_{c}$: giá trị xác suất nhận diện của N class cho ground truth box (80 classes). Có dạng $[0,0,..1,&hellip;1,0,0]$. Vị trí của số $1$ là index của class trong N class.</li>
-<li>$P_{c}$: vector N chiều, giá trị xác suất của predicted box (80 classes)</li>
+<li>$p^{t}(c)$: vector N chiều, giá trị xác suất của predicted box (80 classes)</li>
 <li>C: confident score, là giá trị IOU max của ground truth box với các anchor box trên 1 grid cell. (trường hợp grid cell có 2 ground truth box trở nên thì sẽ có 2 IOU max trở lên)</li>
 <li>$\hat{C}$: confident score của ground truth box</li>
 <li>$\hat{x}, \hat{y}, \hat{w}, \hat{h}$: là các giá trị coordinates của ground truth đã được biến đổi.</li>
@@ -222,7 +225,7 @@ x = \sigma{(t_{x})} / cell_x\\
 y = \sigma{(t_{y})} / cell_y\\
 w = (p_{w} \times e^{t_{w}}) / W\\
 h = (p_{h} \times e^{t_{h}}) / H\\
-p(c) = \sigma{(P_{c})}\\
+p(c) = \sigma{p^{t}(c)}\\
 C = IOU_{max}\\
 \\
 \end{multline*}
