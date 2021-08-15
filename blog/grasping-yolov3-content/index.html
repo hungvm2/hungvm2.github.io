@@ -176,7 +176,7 @@ S_{i} \times S_{i} \times [3 * (4 + 1 +80)]
 <p>Output của mỗi predicted bounding box sẽ là: 4 giá trị $x^{t}, y^{t}, w^{t}, h^{t}$; 1 giá trị $C^{t}$ và 80 giá trị $p^{t}(c)$</p>
 <p>Output của Network sẽ là tổng hợp của 3 output tương ứng với 3 scale, có kích thước:</p>
 <p>\begin{equation*}
-S_{i} \times S_{i} \times [3 * (4 + 1 +80)] ; i = 0,1,2
+S_{i} \times S_{i} \times [3 * (4 + 1 +80)] \quad ; i = 0,1,2
 \end{equation*}</p>
 <h4 id="32-hàm-loss">3.2. Hàm loss</h4>
 <p>Vì có 3 scale nên Loss sẽ bằng tổng Loss của 3 scale, số grid cell $S * S$ lần lượt cho 3 scale (small, medium, large) tương ứng sẽ là $H/32 * W/32, H/16 * W/16, H/8 * W/8$.</p>
@@ -208,7 +208,7 @@ S_{i} \times S_{i} \times [3 * (4 + 1 +80)] ; i = 0,1,2
 <li>C: confident score, là giá trị IOU max của ground truth box với các anchor box trên 1 grid cell. (trường hợp grid cell có 2 ground truth box trở nên thì sẽ có 2 IOU max trở lên)</li>
 <li>$\hat{C}$: confident score của ground truth box</li>
 <li>$\hat{x}, \hat{y}, \hat{w}, \hat{h}$: là các giá trị coordinates của ground truth đã được biến đổi.</li>
-<li>$x, y, w, h$: là các giá trị của predicted box đã được biến đổi. Tính lại từ công thức <a style="color:red;">(\ref{ref_b})</a></li>
+<li>$x, y, w, h$: là các giá trị của predicted box đã được biến đổi.</li>
 </ul>
 <p><strong><em>Các giá trị sẽ được biến đổi như bên dưới:</em></strong></p>
 <div>
