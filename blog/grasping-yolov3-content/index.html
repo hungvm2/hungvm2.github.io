@@ -146,7 +146,7 @@
 <p>Sử dụng 9 Anchor boxes thay vì 5 như YOLOv2. 9 Anchor boxes vẫn được chọn bằng K-means. Các Anchor boxes chia thành 3 scale: [(10×13),(16×30),(33×23)] ; [(30×61),(62×45),(59×119)] ; [(116 × 90),(156 × 198),(373 × 326)].</p>
 <p>Output tensor cho mỗi scale (3 Anchor boxes cho mỗi scale):
 \begin{equation*}
-N \times N \times [3 * (4 + 1 +80)]
+S_{i} \times S_{i} \times [3 * (4 + 1 +80)]
 \end{equation*}</p>
 <h5 id="23-feature-extractor">2.3. Feature Extractor</h5>
 <p>Mạng classifer mới có tên là Darknet-53 (có 53 lớp Conv Layers), kết hợp giữa Darknet-19 và ý tưởng của Residual Networks</p>
@@ -176,16 +176,16 @@ N \times N \times [3 * (4 + 1 +80)]
 <p>Output của mỗi predicted bounding box sẽ là: 4 giá trị $x^{t}, y^{t}, w^{t}, h^{t}$; 1 giá trị $C^{t}$ và 80 giá trị $p^{t}(c)$</p>
 <p>Output của Network sẽ là tổng hợp của 3 output tương ứng với 3 scale, có kích thước:</p>
 <p>\begin{equation*}
-N \times N \times [9 * (4 + 1 +80)]
+S_{i} \times S_{i} \times [3 * (4 + 1 +80)] ; i = 0,1,2
 \end{equation*}</p>
 <h4 id="32-hàm-loss">3.2. Hàm loss</h4>
 <div>
 \begin{multline*}
-\quad Loss = Loss_{coordinates} + Loss_{class\_prob} + Loss_{IOU}\\
+\quad \quad Loss = Loss_{coordinates} + Loss_{IOU} + Loss_{class\_prob}\\
 = \Big[ \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} [(x_{ij} - \hat{x}_{ij})^{2} + (y_{ij} - \hat{y}_{ij})^{2}]\\ 
-+ \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj}[(\sqrt{w_{ij}} - \sqrt{\hat{w}_{ij}})^{2} + (\sqrt{h_{ij}} - \sqrt{\hat{h}_{ij}})^{2} ] \Big]\\
-- \Big[\displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B}[C_{i} * \log(\hat{C}_{i}) + (1 - C_{i}) * \log(1 - \hat{C}_{i})] \Big] \\
-- CrossEntropy(p_{i}(c), \hat{p}_{i}(c))\\
++ \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj}[(\sqrt{w_{ij}} - \sqrt{\hat{w}_{ij}})^{2} + (\sqrt{h_{ij}} - \sqrt{\hat{h}_{ij}})^{2} ]\\
+- \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B}[\hat{C}_{i} * \log(C_{i}) + (1 - \hat{C}_{i}) * \log(1 - C_{i})]\\
+- \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B}[\hat{p}_{i}(c) * \log(p_{i}(c)) + (1 - \hat{p}_{i}(c)) * \log(1 - p_{i}(c))] \Big]\\
 \\
 \end{multline*}
 </div>
@@ -200,8 +200,8 @@ N \times N \times [9 * (4 + 1 +80)]
 <li>$x_{p}, y_{p}$ là vị trí tâm của predicted box (pixel)</li>
 <li>i: là thứ tự của grid cell trong $S_{x} \times S_{y}$ cells</li>
 <li>j: là thứ tự của Anchor box trong B Anchors</li>
-<li>$\hat{p}_{c}$: giá trị xác suất nhận diện của N class cho ground truth box (20 classes). Có dạng $[0,0,..1,&hellip;0,0,0]$. Vị trí của số $1$ là index của class trong N class.</li>
-<li>$P_{c}$: vector N chiều, giá trị xác suất của predicted box (20 classes)</li>
+<li>$\hat{p}_{c}$: giá trị xác suất nhận diện của N class cho ground truth box (80 classes). Có dạng $[0,0,..1,&hellip;1,0,0]$. Vị trí của số $1$ là index của class trong N class.</li>
+<li>$P_{c}$: vector N chiều, giá trị xác suất của predicted box (80 classes)</li>
 <li>C: confident score, là giá trị IOU max của ground truth box với các anchor box trên 1 grid cell. (trường hợp grid cell có 2 ground truth box trở nên thì sẽ có 2 IOU max trở lên)</li>
 <li>$\hat{C}$: confident score của ground truth box</li>
 <li>$\hat{x}, \hat{y}, \hat{w}, \hat{h}$: là các giá trị coordinates của ground truth đã được biến đổi.</li>
@@ -215,14 +215,14 @@ N \times N \times [9 * (4 + 1 +80)]
 \hat{y} = (y_{g} \quad \% \quad S_{y}) / cell_{y}\\
 \hat{w} = w_{g} / W\\
 \hat{h} = h_{g} / H\\
-\hat{p}(c) \quad \text{có dạng} \quad [0,0,1,....,0]\\
+\hat{p}(c) \quad \text{có dạng} \quad [0,0,1,0,1....,0]\\
 \hat{C} = 1\\
 \\
 x = \sigma{(t_{x})} / cell_x\\
 y = \sigma{(t_{y})} / cell_y\\
 w = (p_{w} \times e^{t_{w}}) / W\\
 h = (p_{h} \times e^{t_{h}}) / H\\
-p(c) = Softmax(P_{c})\\
+p(c) = \sigma{(P_{c})}\\
 C = IOU_{max}\\
 \\
 \end{multline*}
