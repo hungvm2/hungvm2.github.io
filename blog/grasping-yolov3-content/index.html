@@ -168,9 +168,11 @@ N \times N \times [3 * (4 + 1 +80)]
 </div>
 <p>Do Paper YOLOv3 không có bản vẽ chi tiết về kiến trúc của mạng detection nên mình đã tham khảo kiến trúc từ <a href="https://www.researchgate.net/publication/334021766_Deep_learning_approach_to_peripheral_leukocyte_recognition">đây</a></p>
 <p>Để hiểu chi tiết hơn về kiến trúc, các bạn có thể xem file yolov3.cfg trong <a href="https://github.com/pjreddie/darknet/blob/master/cfg/yolov3.cfg">source code</a> của tác giả, trong đó:</p>
-<p>[shorcut] : là skip connection của mỗi residual block. Có 11 Res Block tương ứng với 11 [shortcut]</p>
-<p>[yolo]: là layer output của mỗi scale. Có 3 scale tương ứng với 3 layer [shorcut]</p>
-<p>[route]: là layer concat với các params là giá trị index của các input. Tham khảo thêm ở <a href="https://github.com/AlexeyAB/darknet/issues/279#issuecomment-397248821">đây</a></p>
+<ul>
+<li><i>[shorcut]</i> : là skip connection của mỗi residual block. Có 11 Res Block tương ứng với 11 [shortcut]</li>
+<li><i>[yolo]</i>: là layer output của mỗi scale. Có 3 scale tương ứng với 3 layer [shorcut]</li>
+<li><i>[route]</i>: là layer concat với các params là giá trị index của các input. Tham khảo thêm ở <a href="https://github.com/AlexeyAB/darknet/issues/279#issuecomment-397248821">đây</a></li>
+</ul>
 <p>Output của mỗi predicted bounding box sẽ là: 4 giá trị $x^{t}, y^{t}, w^{t}, h^{t}$; 1 giá trị $C^{t}$ và 80 giá trị $p^{t}(c)$</p>
 <p>Output của Network sẽ là tổng hợp của 3 output tương ứng với 3 scale, có kích thước:</p>
 <p>\begin{equation*}
@@ -179,10 +181,10 @@ N \times N \times [9 * (4 + 1 +80)]
 <h4 id="32-hàm-loss">3.2. Hàm loss</h4>
 <div>
 \begin{multline*}
-Loss = Loss_{coordinates} + Loss_{class\_prob} + Loss_{IOU}\\
+\quad Loss = Loss_{coordinates} + Loss_{class\_prob} + Loss_{IOU}\\
 = \Big[ \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} [(x_{ij} - \hat{x}_{ij})^{2} + (y_{ij} - \hat{y}_{ij})^{2}]\\ 
 + \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj}[(\sqrt{w_{ij}} - \sqrt{\hat{w}_{ij}})^{2} + (\sqrt{h_{ij}} - \sqrt{\hat{h}_{ij}})^{2} ] \Big]\\
-+ CrossEntropy(C_{i}, \hat{C}_{i})\\
++ [- \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B}[C_{i} * \log(\hat{C}_{i}) + (1 - C_{i}) * \log(1 - \hat{C}_{i})] \Big] \\
 + CrossEntropy(p_{i}(c), \hat{p}_{i}(c))\\
 \\
 \end{multline*}
