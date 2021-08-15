@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title> Blogs - HungVM2&#39;s Notes </title>
+    <title> Đọc và phân tích Paper &#34;YOLOv4: Optimal Speed and Accuracy of Object Detection&#34; (YOLOv4) - HungVM2&#39;s Notes </title>
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
     <meta name="referrer" content="no-referrer">
@@ -12,18 +12,18 @@
     <meta property="og:site_name" content="HungVM2&#39;s Notes" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://hungvm2.github.io/blog/" />
-    <meta property="og:title" content="Blogs" />
+    <meta property="og:url" content="https://hungvm2.github.io/blog/grasping-yolov4-content/" />
+    <meta property="og:title" content="Đọc và phân tích Paper &#34;YOLOv4: Optimal Speed and Accuracy of Object Detection&#34; (YOLOv4)" />
     <meta property="og:image" content="https://hungvm2.github.io" />
     <meta property="og:description" content="" />
 
     <meta name="twitter:card" content="summary_large_image" />
     
-    <meta name="twitter:title" content="Blogs" />
+    <meta name="twitter:title" content="Đọc và phân tích Paper &#34;YOLOv4: Optimal Speed and Accuracy of Object Detection&#34; (YOLOv4)" />
     <meta name="twitter:description" content="" />
     <meta name="twitter:image" content="https://hungvm2.github.io" />
 
-    <link rel="canonical" href="https://hungvm2.github.io/blog/">
+    <link rel="canonical" href="https://hungvm2.github.io/blog/grasping-yolov4-content/">
 
     <link rel="stylesheet" href="https://hungvm2.github.io/css/bootstrap.min.css" />
 
@@ -56,7 +56,7 @@
 
 <body>
     
-    <div class="mt-xl header">
+<div class="mt-xl header">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-auto">
@@ -88,49 +88,60 @@
     </div>
 </div>
 
-    <div class="content">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-sm-12 col-lg-8">
-                    <div class="markdown">
-                        
-    
+<div class="content">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-sm-12 col-lg-8">
+                <h1 class="mx-0 mx-md-4 blog-post-title">Đọc và phân tích Paper &#34;YOLOv4: Optimal Speed and Accuracy of Object Detection&#34; (YOLOv4)</h1>
 
+                <div class="mb-md-4 meta">
+                    
+                    
+                    <span class="author" title="Vũ Minh Hưng">
+                        Vũ Minh Hưng
+                    </span>
+                    
+                    
 
-                    </div>
+                    <span class="date middot" title='Sun Aug 15 2021 13:00:49 &#43;07'>
+                        2021-08-15
+                    </span>
 
-                    <div class="mx-0 mx-md-4 posts">
-                        <h1>Blog</h1>
-                        <hr>
-                        <ul class="list-unstyled">
-                            
-                                <li class="groupby">2021</li>
-                                
-                                    <ul class="list-unstyled">
-    
-</ul>
-                                
-                                    <ul class="list-unstyled">
-    
-</ul>
-                                
-                                    <ul class="list-unstyled">
-    
-</ul>
-                                
-                                    <ul class="list-unstyled">
-    
-</ul>
-                                
+                    <span class="reading-time middot">
+                        1 min read
+                    </span>
+
+                    <div class="d-none d-md-inline tags">
+                        <ul class="list-unstyled d-inline">
                             
                         </ul>
                     </div>
                 </div>
+
+                <div class="markdown blog-post-content">
+                    
+    <p>Tiếp theo trong series YOLO, ở bài viết này, chúng ta hãy cùng đọc và phân tích nội dung của paper &ldquo;<strong>YOLOv4: Optimal Speed and Accuracy of Object Detection</strong>&rdquo; published tháng 4 năm 2020 nhé!</p>
+<p>Đây cũng chính là version YOLO đầu tiên mà không còn được phát triển bởi người tạo ra nó: <strong>Joseph Redmon</strong>. Các tác giả từ version này, nổi bật nhất là <strong>Alexey Bochkovskiy</strong>.</p>
+<p>Vì mục đích của series này là muốn đi sâu hơn vào sự tiến hoá của YOLO qua từng version, nên mình sẽ chỉ <strong>tập trung vào kiến trúc</strong> của mô hình, cũng như các <strong>phương pháp tối ưu hiệu năng và độ chính xác (FPS/mAP) mới</strong> được sử dụng so với version trước.</p>
+<hr>
+<h3 id="i-đọc-paper">I. Đọc Paper</h3>
+<blockquote>
+<p>Trong phần &ldquo;Đọc Paper&rdquo; này, mình sẽ tóm lược lại những ý chính của tác giả, có bỏ qua một số nội dung không quá quan trọng&hellip; Khi đọc sẽ có các reference (có dạng [<a style="color:red;">?</a>]). Bạn có thể click vào các dấu hỏi đó để dẫn xuống phần &ldquo;Hiểu Paper&rdquo; bên dưới để đọc sâu hơn về vấn đề được đề cập.</p>
+</blockquote>
+<h4 id="1-giới-thiệu-chung-về-model">1. Giới thiệu chung về model</h4>
+
+
+
+                </div>
+
+                
             </div>
         </div>
     </div>
+</div>
 
-    
+
+
 
 
     

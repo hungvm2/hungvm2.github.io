@@ -127,7 +127,7 @@
 <h3 id="i-đọc-paper">I. Đọc Paper</h3>
 <blockquote>
 <p>Trong phần &ldquo;Đọc Paper&rdquo; này, mình sẽ tóm lược lại những ý chính của tác giả, có bỏ qua một số nội dung không quá quan trọng&hellip; Khi đọc sẽ có các reference (có dạng [<a style="color:red;">?</a>]). Bạn có thể click vào các dấu hỏi đó để dẫn xuống phần &ldquo;Hiểu Paper&rdquo; bên dưới để đọc sâu hơn về vấn đề được đề cập.</p>
-<p>Trong paper có một số phần không được tác giả đề cập tới (ví dụ: hàm loss, số grid cell, Reorg layer&hellip;), chỉ có ở trong source code, mình tự đưa vào để dễ nắm bắt hơn nội dung của paper</p>
+<p>Trong paper có một số phần không được tác giả đề cập tới (ví dụ: hàm loss, số grid cell&hellip;), chỉ có ở trong source code, mình tự đưa vào để dễ nắm bắt hơn nội dung của paper</p>
 </blockquote>
 <h4 id="1-giới-thiệu-chung-về-model">1. Giới thiệu chung về model</h4>
 <p>Model YOLOv3 lơn hơn model trước nhưng cũng chính xác hơn.</p>
@@ -149,7 +149,7 @@
 S_{i} \times S_{i} \times [3 * (4 + 1 +80)]
 \end{equation*}</p>
 <h5 id="23-feature-extractor">2.3. Feature Extractor</h5>
-<p>Mạng classifer mới có tên là Darknet-53 (có 53 lớp Conv Layers), kết hợp giữa Darknet-19 và ý tưởng của Residual Networks</p>
+<p>Mạng classifer mới có tên là Darknet-53 (có 53 lớp Conv Layers), kết hợp giữa Darknet-19 và ý tưởng <b>Residual Block</b> của mạng Residual Networks (ResNet) [<a href="#resblock" style="color:red;">?</a>]<a name="resblock_b"></a></p>
 <div class="text-center my-3">
 <figure class="figure">
   <img src="https://hungvm2.github.io/images/yolov3/darknet53.png" alt="Classifier model" class="figure-img">
@@ -263,6 +263,8 @@ C = IOU_{max}\\
 \\
 \end{multline*}
 </div>
+<hr class="half-line">
+<p>[<a href="#resblock_b" style="color:red;">$ \triangleleft $</a>]<a name="resblock"></a>:<strong>Cấu tạo Residual Block?</strong></p>
 <hr>
 <h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
 <ul>
