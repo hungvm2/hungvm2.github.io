@@ -166,13 +166,7 @@ S_{i} \times S_{i} \times [3 * (4 + 1 +80)]
   <figcaption class="figure-caption">Ảnh 2: Kiến trúc mạng detection YOLOv3 với WxH = 416x416</figcaption>
 </figure>
 </div>
-<p>Do Paper YOLOv3 không có bản vẽ chi tiết về kiến trúc của mạng detection nên mình đã tham khảo kiến trúc từ <a href="https://www.researchgate.net/publication/334021766_Deep_learning_approach_to_peripheral_leukocyte_recognition">đây</a></p>
-<p>Để hiểu chi tiết hơn về kiến trúc, các bạn có thể xem file yolov3.cfg trong <a href="https://github.com/pjreddie/darknet/blob/master/cfg/yolov3.cfg">source code</a> của tác giả, trong đó:</p>
-<ul>
-<li><i>[shorcut]</i> : là skip connection của mỗi residual block. Có 11 Res Block tương ứng với 11 [shortcut]</li>
-<li><i>[yolo]</i>: là layer output của mỗi scale. Có 3 scale tương ứng với 3 layer [shorcut]</li>
-<li><i>[route]</i>: là layer concat với các params là giá trị index của các input. Tham khảo thêm ở <a href="https://github.com/AlexeyAB/darknet/issues/279#issuecomment-397248821">đây</a></li>
-</ul>
+<p>Do Paper YOLOv3 không có bản vẽ chi tiết về kiến trúc của mạng detection nên mình đã tham khảo kiến trúc từ <a href="https://www.researchgate.net/publication/334021766_Deep_learning_approach_to_peripheral_leukocyte_recognition">đây</a> [<a href="yolov3cfg#" style="color:red;">?</a>]<a name="yolov3cfg_b"></a></p>
 <p>Output của mỗi predicted bounding box sẽ là: 4 giá trị $x^{t}, y^{t}, w^{t}, h^{t}$; 1 giá trị $C^{t}$ và 80 giá trị $p^{t}(c)$</p>
 <p>Output của Network sẽ là tổng hợp của 3 output tương ứng với 3 scale, có kích thước:</p>
 <p>\begin{equation*}
@@ -208,28 +202,8 @@ S_{i} \times S_{i} \times [3 * (4 + 1 +80)] \quad ; i = 0,1,2
 <li>C: confident score, là giá trị IOU max của ground truth box với các anchor box trên 1 grid cell. (trường hợp grid cell có 2 ground truth box trở nên thì sẽ có 2 IOU max trở lên)</li>
 <li>$\hat{C}$: confident score của ground truth box</li>
 <li>$\hat{x}, \hat{y}, \hat{w}, \hat{h}$: là các giá trị coordinates của ground truth đã được biến đổi.</li>
-<li>$x, y, w, h$: là các giá trị của predicted box đã được biến đổi.</li>
+<li>$x, y, w, h$: là các giá trị của predicted box đã được biến đổi. [<a href="loss#" style="color:red;">?</a>]<a name="loss_b"></a></li>
 </ul>
-<p><strong><em>Các giá trị sẽ được biến đổi như bên dưới:</em></strong></p>
-<div>
-\begin{multline*}
-\\
-\hat{x} = (x_{g} \quad \% \quad S_{x}) / cell_{x}\\
-\hat{y} = (y_{g} \quad \% \quad S_{y}) / cell_{y}\\
-\hat{w} = w_{g} / W\\
-\hat{h} = h_{g} / H\\
-\hat{p}(c) \quad \text{có dạng} \quad [0,0,1,0,1....,0]\\
-\hat{C} = 1\\
-\\
-x = \sigma{(t_{x})} / cell_x\\
-y = \sigma{(t_{y})} / cell_y\\
-w = (p_{w} \times e^{t_{w}}) / W\\
-h = (p_{h} \times e^{t_{h}}) / H\\
-p(c) = \sigma{p^{t}(c)}\\
-C = IOU_{max}\\
-\\
-\end{multline*}
-</div>
 <hr>
 <h4 id="4-inference-testing">4. Inference (Testing)</h4>
 <p><strong><em>Pipe line của hệ thống object detection YOLOv3:</em></strong></p>
@@ -259,6 +233,35 @@ C = IOU_{max}\\
 \begin{equation*}
 Loss_{class\_prob} = - \displaystyle \sum_{i=0}^{S^{2}} \displaystyle \sum_{j=0}^{B} \mathbb{1}_{ij}^{obj} \displaystyle \sum_{c \in classes}\hat{p}_{ij}(c)log(p_{ij}(c))
 \end{equation*}
+</div>
+<hr class="half-line">
+<p>[<a href="#yolov3cfg_b" style="color:red;">$ \triangleleft $</a>]<a name="yolov3cfg"></a>:<strong>Chi tiết hơn về kiến trúc YOLOv3</strong></p>
+<p>Để hiểu chi tiết hơn về kiến trúc, các bạn có thể xem file yolov3.cfg trong <a href="https://github.com/pjreddie/darknet/blob/master/cfg/yolov3.cfg">source code</a> của tác giả, trong đó:</p>
+<ul>
+<li><i>[shorcut]</i> : là skip connection của mỗi residual block. Có 11 Res Block tương ứng với 11 [shortcut]</li>
+<li><i>[yolo]</i>: là layer output của mỗi scale. Có 3 scale tương ứng với 3 layer [shorcut]</li>
+<li><i>[route]</i>: là layer concat với các params là giá trị index của các input. Tham khảo thêm ở <a href="https://github.com/AlexeyAB/darknet/issues/279#issuecomment-397248821">đây</a></li>
+</ul>
+<hr class="half-line">
+<p>[<a href="#_b" style="color:red;">$ \triangleleft $</a>]<a name=""></a>:<strong>Các giá trị đưa vào hàm Loss sẽ được biến đổi như thế nào?</strong></p>
+<div>
+\begin{multline*}
+\\
+\hat{x} = (x_{g} \quad \% \quad S_{x}) / cell_{x}\\
+\hat{y} = (y_{g} \quad \% \quad S_{y}) / cell_{y}\\
+\hat{w} = w_{g} / W\\
+\hat{h} = h_{g} / H\\
+\hat{p}(c) \quad \text{có dạng} \quad [0,0,1,0,1....,0]\\
+\hat{C} = 1\\
+\\
+x = \sigma{(t_{x})} / cell_x\\
+y = \sigma{(t_{y})} / cell_y\\
+w = (p_{w} \times e^{t_{w}}) / W\\
+h = (p_{h} \times e^{t_{h}}) / H\\
+p(c) = \sigma{p^{t}(c)}\\
+C = IOU_{max}\\
+\\
+\end{multline*}
 </div>
 <hr>
 <h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
