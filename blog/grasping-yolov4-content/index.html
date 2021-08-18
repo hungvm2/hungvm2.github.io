@@ -108,7 +108,7 @@
                     </span>
 
                     <span class="reading-time middot">
-                        1 min read
+                        6 min read
                     </span>
 
                     <div class="d-none d-md-inline tags">
@@ -129,6 +129,149 @@
 <p>Trong phần &ldquo;Đọc Paper&rdquo; này, mình sẽ tóm lược lại những ý chính của tác giả, có bỏ qua một số nội dung không quá quan trọng&hellip; Khi đọc sẽ có các reference (có dạng [<a style="color:red;">?</a>]). Bạn có thể click vào các dấu hỏi đó để dẫn xuống phần &ldquo;Hiểu Paper&rdquo; bên dưới để đọc sâu hơn về vấn đề được đề cập.</p>
 </blockquote>
 <h4 id="1-giới-thiệu-chung-về-model">1. Giới thiệu chung về model</h4>
+<p>Trong version này, các tác giả đã sử dụng nhiều những kỹ thuật khác nhau để giúp cho mạng detection đạt được độ chính xác state-of-the-art: 43.5% AP (65.7%) trên tập MS COCO và tốc độ: ~65FPS sử dụng Tesla V100.</p>
+<p>YOLOV4 nhanh hơn 2 lần so với EfficientDet khi xét ở độ chính xác tương đương. So với YOLOv3, AP và FPS đều cải thiện tương ứng là 10% và 12%.</p>
+<hr>
+<h4 id="2-các-nghiên-cứu-được-tác-giả-sử-dụng-để-tạo-ra-yolov4">2. Các nghiên cứu được tác giả sử dụng để tạo ra YOLOv4:</h4>
+<h5 id="21-tổng-quát-hoá-các-mô-hình-object-detection">2.1. Tổng quát hoá các mô hình object detection:</h5>
+<p>Tác giả đã tổng hợp lại các mô hình object detection từ trước tới nay và tổng quát hoá lại thành một kiến trúc chung nhất cho các mô hình.</p>
+<p>Về cơ bản, một mô hình object detection sẽ gồm có 3 phần chính: Backbone, Neck và Head.</p>
+<p>Backbone chính là phần kiến trúc mạng được lấy ra từ một mạng classifier training trên tập ImageNet.</p>
+<p>Head chính là phần detector, giúp xác định ra bounding box, class probailities và objectness score của các object. Gồm 2 loại, one-stage detector và two-stage detector.</p>
+<p>Neck chính là các layer nằm giữa Backbone và Head, giúp thu thập các đặc trưng từ các vị trí khác nhau trên Backbone.</p>
+<div class="text-center my-3">
+<figure class="figure">
+  <img src="https://hungvm2.github.io/images/yolov4/architecture.png" alt="Architecture" class="figure-img">
+  <figcaption class="figure-caption">Ảnh 1: Kiến trúc tổng quát của các object detection model</figcaption>
+</figure>
+</div>
+<div class="text-center my-3">
+<figure class="figure">
+  <img src="https://hungvm2.github.io/images/yolov4/object-detection-models.png" alt="Object detection" class="figure-img">
+  <figcaption class="figure-caption">Ảnh 2: Các model tương ứng với mỗi thành phần của object detection</figcaption>
+</figure>
+</div>
+<p>Ví dụ trong YOLOv3:</p>
+<ul>
+<li>Backbone chính là mạng Darknet-53</li>
+<li>Neck chính là các layer Concatenate (các [route] layer trong file YOLOv3.cfg) để cho ra 3 output ở 3 scale khác nhau</li>
+<li>Head chính là 3 output ở 3 scale cùng với bước transform output</li>
+</ul>
+<p>Bài toán object detection có thể chia về 2 dạng chính: Anchor based và Anchor free</p>
+<p>Phần Head của detector chia ra 2 loại: one-stage detector và two-stage detector</p>
+<hr class="half-line">
+<h4 id="22-bag-of-freebies">2.2. Bag of freebies</h4>
+<p>Bag of freebies là cụm từ được tác giả sử dụng để đặt cho các kỹ thuật giúp tối ưu mạng detector ở <b>bước training</b>.</p>
+<p>Các kỹ thuật được chia về các nhóm chính sau:</p>
+<ul>
+<li>Data augmentation: photometric distortions, geometric distortions,  simulating object occlusion, using multiple images together, style transfer GAN</li>
+<li>Dealing with semantic distribution bias: focal loss</li>
+<li>Association between different class: label smoothing, knowledge distillation</li>
+<li>Objective function of Bounding Box (BBox) regression: IoU loss, GIoU loss, DIoU loss, CIoU loss</li>
+</ul>
+<hr class="half-line">
+<h4 id="23-bag-of-specials">2.3. Bag of specials</h4>
+<p>Bag of specials là các kỹ thuật trong network hoặc hậu xử lý (post-processing), có thể giúp cải thiện đáng kể độ chính xác của hệ thống.</p>
+<p>Các kỹ thuật này được chia về các nhóm chính sau:</p>
+<ul>
+<li>Enhance receptive field: SPP, ASPP, RFB</li>
+<li>Attention mechanism: channel-wise attention có Squeeze-and-Excitation (SE), point-wise attention có Spatial Attention Module (SAM)</li>
+<li>Feature integration: skip connection, hyper-column, FPN và các biến thể của nó như SFAM, ASFF, BiFPN</li>
+<li>Activation function: ReLU, LReLU, PReLU, ReLU6, Scaled Exponential Linear Unit (SELU), Swish, hard-Swish, Mish</li>
+<li>Post-processing: NMS, soft NMS, DIoU NMS. Bước post-processing này không cần thiết ở kiến trúc Anchor-free (ko sử dụng Anchor box)</li>
+</ul>
+<hr>
+<h3 id="3-phương-pháp-lựa-chọn-các-kỹ-thuật-cho-hệ-thống-detection-yolov4">3. Phương pháp lựa chọn các kỹ thuật cho hệ thống detection YOLOv4</h3>
+<h4 id="31-lựa-chọn-kiến-trúc-mạng">3.1. Lựa chọn kiến trúc mạng:</h4>
+<p>Sau nhiều thử nghiệm và nghiên cứu các tác giả đi đến kết luận lựa chọn kiến trúc như sau:</p>
+<ul>
+<li>Backbone: tác giả so sánh 2 mạng CSPResNeXt-50 và CSPDarknet53, và kết luận sử dụng mạng CSPDarknet53 [<a href="#cspdarknet53" style="color:red;">?</a>]<a name="cspdarknet53_b"></a></li>
+<li>Neck sử dụng SPP, PANet</li>
+<li>Head sử dụng YOLOv3 (anchor based)</li>
+</ul>
+ <hr class="half-line">
+<h4 id="32-lựa-chọn-bag-of-freebies">3.2. Lựa chọn Bag of Freebies:</h4>
+<ul>
+<li>Cho phần Backbone: CutMix, Mosaic data augmentation, DropBlock regularization, Class label smoothing</li>
+<li>Cho mạng detector: CIoU-loss, CmBN, DropBlock regularization, Mosaic data augmentation, Self-Adversarial Training, Eliminate grid sensitivity, Using multiple anchors for a single ground truth, Cosine annealing scheduler, Optimal hyper-parameters, Random training shapes</li>
+</ul>
+<hr class="half-line">
+<h4 id="33-lựa-chọn-bag-of-specials">3.3. Lựa chọn Bag of Specials:</h4>
+<ul>
+<li>Cho phần Backbone: Mish activation, Cross-stage partial connections (CSP), Multiinput weighted residual connections (MiWRC)</li>
+<li>Cho mạng detector:  Mish activation, SPP-block, SAM-block, PAN path-aggregation block, DIoU-NMS</li>
+</ul>
+<hr>
+<h3 id="4-kết-quả-thử-nghiệm">4. Kết quả thử nghiệm:</h3>
+<h4 id="41-ảnh-hưởng-của-các-kỹ-thuật-đến-độ-chính-xác-của-mạng-classifier">4.1. Ảnh hưởng của các kỹ thuật đến độ chính xác của mạng classifier</h4>
+<div class="text-center my-3">
+<figure class="figure">
+  <img src="https://hungvm2.github.io/images/yolov4/bof-mish-on-classifier.png" alt="BoF, Mish influences on the classifier" class="figure-img">
+  <figcaption class="figure-caption">Ảnh 1: Ảnh hưởng của các kỹ thuật Bag of Freebies và hàm Mish activation đến độ chính xác của mạng classifier</figcaption>
+</figure>
+</div>
+<hr class="half-line">
+<h4 id="42-ảnh-hưởng-của-các-kỹ-thuật-đến-độ-chính-xác-của-mạng-detector">4.2. Ảnh hưởng của các kỹ thuật đến độ chính xác của mạng detector</h4>
+<div class="text-center my-3">
+<figure class="figure">
+  <img src="https://hungvm2.github.io/images/yolov4/bof-loss-on-detector.png" alt="BoF, Loss influences on the detector" class="figure-img">
+  <figcaption class="figure-caption">Ảnh 2: Ảnh hưởng của các kỹ thuật Bag of Freebies, Loss... đến độ chính xác của mạng classifier CSPDarknet-53(Size: 512x512)</figcaption>
+</figure>
+</div>
+<p>Giải thích các ký hiệu:</p>
+<ul>
+<li>S: điều chỉnh phương pháp tính $b_{x}, b_{y}$ của YOLOv3</li>
+<li>M: Mosaic data augmentation</li>
+<li>IT: IoU threshold, sử dụng nhiều anchor cho 1 ground truth</li>
+<li>GA: Genetic algorithms</li>
+<li>LS: Class label smoothing</li>
+<li>CBN: CmBN - sử dụng Cross mini-Batch Normalization</li>
+<li>CA: Cosine annealing scheduler</li>
+<li>DM: Dynamic mini-batch size</li>
+<li>OA: Optimized Anchors</li>
+<li>GIoU, CIoU, DIoU, MSE: các thuật toán khác nhau khi predict giá trí bounding box</li>
+</ul>
+<div class="text-center my-3">
+<figure class="figure">
+  <img src="https://hungvm2.github.io/images/yolov4/bos-on-detector.png" alt="BoF, Loss influences on the detector" class="figure-img">
+  <figcaption class="figure-caption">Ảnh 3: Ảnh hưởng của các kỹ thuật Bag of Specials... đến độ chính xác của mạng detector CSPResNeXt50-PANet_SPP (tác giả không có kết quả đánh giá cho backbone CSPDarknet-53),(Size: 512x512)</figcaption>
+</figure>
+</div>
+<hr class="half-line">
+<h4 id="43-ảnh-hưởng-của-các-backbone-đến-kết-quả-mạng-detector">4.3. Ảnh hưởng của các backbone đến kết quả mạng detector:</h4>
+<ul>
+<li><b>Backbone có độ chính xác nhất với bài toán classification không nhất thiết đem lại độ chính xác cao nhất cho bài toán detector</b>: CSPResNeXt-50 có độ chính xác cao hơn CSPDarknet53 ở bài toán classification, nhưng lại thấp hơn trong bài toán detection.</li>
+<li>Các kỹ thuật BoF và Mish giúp tăng accuracy của CSPResNeXt50 ở bài toán classfication nhưng lại giảm accuracy ở bài toán detection, CSPDarknet53 thì ngược lại.</li>
+</ul>
+<div class="text-center my-3">
+<img src="https://hungvm2.github.io/images/yolov4/cspresnetxt50-cspdarknet53-comparision.png" class="img-fluid" alt="CSPResNeXt50 - CSPDarknet53 comparision">
+</div>
+<h4 id="43-ảnh-hưởng-của-mini-batch-size-đến-kết-quả-training-mạng-detector">4.3. Ảnh hưởng của mini-batch size đến kết quả training mạng detector:</h4>
+<p>Khi sử dụng BoF và BoS, size của mini-batch không còn ảnh hưởng đến kết quả training.</p>
+<div class="text-center my-3">
+<figure class="figure">
+  <img src="https://hungvm2.github.io/images/yolov4/batch-size-on-detector.png" alt="Batch size on the detector" class="figure-img">
+  <figcaption class="figure-caption">Ảnh 4: Ảnh hưởng của kích thước mini-batch đến độ chính xác của mạng detector (Size: 512x512)</figcaption>
+</figure>
+</div>
+<h4 id="44-so-sánh-độ-chính-xác-và-hiệu-năng-của-yolov4-với-các-mô-hình-object-detector-khác">4.4. So sánh độ chính xác và hiệu năng của YOLOv4 với các mô hình object detector khác:</h4>
+<div class="text-center my-3">
+<img src="https://hungvm2.github.io/images/yolov4/ap-fps-comparison.png" class="img-fluid" alt="AP, FPS comparison">
+</div>
+<p>Trong paper có bảng so sánh rất chi tiết giữa các object detector khác nhau, các bạn có thể tham khảo thêm ở paper.</p>
+<hr>
+<h3 id="ii-hiểu-paper">II. Hiểu Paper</h3>
+<blockquote>
+<p>Trong phần &ldquo;Hiểu Paper&rdquo; này, mình sẽ đi vào phân tích cũng như dẫn lại các giải thích của tác giả về các lý do tại sao tác giả chọn hướng tiếp cận đó, cũng như các thuật ngữ, công thức trong paper&hellip;</p>
+</blockquote>
+<p>[<a href="#cspdarknet53_b" style="color:red;">$ \triangleleft $</a>]<a name="cspdarknet53"></a>:<strong>Kiến trúc CSPDarknet53?</strong></p>
+<p>CSPDarknet53 chính là sự kết hợp của mạng Darknet-53 ở YOLOv3 và kỹ thuật của CSPNet.</p>
+<hr>
+<h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
+<ul>
+<li><a href="https://arxiv.org/abs/2004.10934">YOLOv4: Optimal Speed and Accuracy of Object Detection</a></li>
+<li><a href="https://github.com/Tianxiaomo/pytorch-YOLOv4">pytorch-YOLOv4</a></li>
+</ul>
 
 
 

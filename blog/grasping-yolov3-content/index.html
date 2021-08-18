@@ -130,7 +130,7 @@
 <p>Trong paper có một số phần không được tác giả đề cập tới (ví dụ: hàm loss, số grid cell&hellip;), chỉ có ở trong source code, mình tự đưa vào để dễ nắm bắt hơn nội dung của paper</p>
 </blockquote>
 <h4 id="1-giới-thiệu-chung-về-model">1. Giới thiệu chung về model</h4>
-<p>Model YOLOv3 lơn hơn model trước nhưng cũng chính xác hơn.</p>
+<p>Model YOLOv3 lớn hơn model trước nhưng cũng chính xác hơn.</p>
 <p>Với input size $320 \times 320$, YOLOv2 có độ chính xác tương đương SSD nhưng nhanh hơn 3 lần (22ms, 28.2mAP).</p>
 <p>Với metric .5 IOU mAP trên Titan X, YOLOv3 có độ chính xác tương đương RetinaNet nhưng nhanh hơn 3.8 lần ($57.9 AP_{50}/51ms$ so với $57.5 AP{50}/198ms$).</p>
 <hr>
@@ -142,7 +142,7 @@
 <h5 id="22-class-prediction">2.2. Class Prediction</h5>
 <p>Không sử dụng Softmax khi predict giá trị xác suất của các classes trên mỗi Bounding box như ở YOLOv2. Thay vào đó, sử dụng Binary Cross-entropy cho class prediction [<a href="#class_prediction" style="color:red;">?</a>]<a name="class_prediction_b"></a>. Điều này giúp một bounding box có thể thuộc về nhiều class, ví dụ như Open Image Dataset có 2 class Woman và Person overlap nhau.</p>
 <h5 id="23-predictions-across-scales">2.3. Predictions across Scales</h5>
-<p>Sử dụng ý tưởng tương tự như Feature Pyramid Networks, YOLOv3 sẽ predict các boxes ở 3 tỉ lệ (scale) khác nhau.</p>
+<p>Sử dụng ý tưởng tương tự như Feature Pyramid Networks, YOLOv3 sẽ predict các boxes ở 3 tỉ lệ (scale) khác nhau. [<a href="#fpn" style="color:red;">?</a>]<a name="fpn_b"></a></p>
 <p>Sử dụng 9 Anchor boxes thay vì 5 như YOLOv2. 9 Anchor boxes vẫn được chọn bằng K-means. Các Anchor boxes sẽ được chia vào 3 scale, tương ứng với 3 boxes/ 1 scale.</p>
 <p>Output tensor cho mỗi scale (3 Anchor boxes cho mỗi scale):
 \begin{equation*}
@@ -265,6 +265,8 @@ C = IOU_{max}\\
 </div>
 <hr class="half-line">
 <p>[<a href="#resblock_b" style="color:red;">$ \triangleleft $</a>]<a name="resblock"></a>:<strong>Cấu tạo Residual Block?</strong></p>
+<hr class="half-line">
+<p>[<a href="#fpn_b" style="color:red;">$ \triangleleft $</a>]<a name="fpn"></a>:<strong>Kiến trúc của Feature Pyramid Network?</strong></p>
 <hr>
 <h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
 <ul>
