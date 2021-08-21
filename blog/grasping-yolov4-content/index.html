@@ -108,7 +108,7 @@
                     </span>
 
                     <span class="reading-time middot">
-                        6 min read
+                        7 min read
                     </span>
 
                     <div class="d-none d-md-inline tags">
@@ -265,13 +265,46 @@
 <p>Trong phần &ldquo;Hiểu Paper&rdquo; này, mình sẽ đi vào phân tích cũng như dẫn lại các giải thích của tác giả về các lý do tại sao tác giả chọn hướng tiếp cận đó, cũng như các thuật ngữ, công thức trong paper&hellip;</p>
 </blockquote>
 <p>[<a href="#cspdarknet53_b" style="color:red;">$ \triangleleft $</a>]<a name="cspdarknet53"></a>:<strong>Kiến trúc CSPDarknet53?</strong></p>
-<p>CSPDarknet53 chính là sự kết hợp của mạng Darknet-53 ở YOLOv3 và kỹ thuật của CSPNet.</p>
+<p>CSPDarknet53 chính là sự kết hợp của mạng Darknet-53 ở YOLOv3 và kỹ thuật của CSPNet.
+Building block của Darknet53 là block Residual, còn của CSPDarknet53 là block Residual kết hợp với Cross Stage Partial.</p>
+<div class="text-center my-3">
+<img src="https://hungvm2.github.io/images/yolov4/building-block.png" class="img-fluid" alt="Building block">
+</div>
+<p>Mô tả công thức cho 1 building block:</p>
+<ul>
+<li>Darknet53:</li>
+</ul>
+<div>
+\begin{multline*}
+X_{i} = g(W_{i} * X_{i-1} + b_{i})\\
+X_{i+1} = g(W_{i+1} * X_{i} + b_{i+1}\\
+X_{i+2} = g(W_{i+2} * X_{i+1} + b_{i+2})\\
+X_{i+3} = g[(W_{i+3} * X_{i+2} + b_{i+3}) + X_{i}]\\
+X_{i+4} = g(W_{i+4} * X_{i+3} + b_{i+4})\\
+\\
+\end{multline*}
+</div>
+- CSPDarknet53:
+<div>
+\begin{multline*}
+X_{i} = g(W_{i} * X_{i-1} + b_{i})\\
+X_{i+1} = g(W_{i+1} * X_{i} + b_{i+1}\\
+X^{'}_{i+1} = g(W^{'}_{i+1} * X_{i} + b^{'}_{i+1}\\
+X_{i+2} = g(W_{i+2} * X_{i+1} + b_{i+2})\\
+X_{i+3} = g[(W_{i+3} * X_{i+2} + b_{i+3}) + X_{i}]\\
+X^{'}_{i+3} = g(W^{'}_{i+3} * X_{i+3} + b^{'}_{i+3})\\
+X^{"}_{i+3} = concat(X^{'}_{i+3}, X^{'}_{i+1})
+X_{i+4} = g(W_{i+4} * X^{"}_{i+3} + b_{i+4})\\
+\\
+\end{multline*}
+</div>
 <hr>
 <h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
 <ul>
 <li><a href="https://arxiv.org/abs/2004.10934">YOLOv4: Optimal Speed and Accuracy of Object Detection</a></li>
 <li><a href="https://github.com/Tianxiaomo/pytorch-YOLOv4">pytorch-YOLOv4</a></li>
 </ul>
+<p>test abc</p>
 
 
 

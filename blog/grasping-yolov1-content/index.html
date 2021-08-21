@@ -361,7 +361,7 @@ Loss = Loss_{coordinates} + Loss_{IOU} + Loss_{class\_prob}\\
 <img src="https://hungvm2.github.io/images/yolov1/IOU.png" class="img-fluid" alt="IOU">
 </div>
 <p><em>Hoặc bằng code Python minh hoạ đơn giản như bên dưới:</em></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">def</span> iou(box1, box2):
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">def</span> iou(box1, box2):
     <span style="color:#008000"># box1, box2 là mảng chứa ít nhất 4 phần tử: x,y,w,h</span>
     <span style="color:#008000"># x,y: toạ độ tâm; w,h: kích thước rộng, dài của box</span>
     x1, y1, w1, h1 = box1[:4]
@@ -388,7 +388,7 @@ Loss = Loss_{coordinates} + Loss_{IOU} + Loss_{class\_prob}\\
 <li>Output : Mảng F có chứa các Bounding box cuối cùng</li>
 </ul>
 <p><em>Hoặc minh hoạ bằng đoạn code bên dưới:</em></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">def</span> iou(box1, box2):
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#00f">def</span> iou(box1, box2):
     <span style="color:#008000"># cách tính iou xem bên trên</span>
     <span style="color:#00f">pass</span>
 
@@ -397,13 +397,13 @@ Loss = Loss_{coordinates} + Loss_{IOU} + Loss_{class\_prob}\\
     final_list = list()
     <span style="color:#00f">for</span> i <span style="color:#00f">in</span> range(len(boxes_list)): 
         box_i = boxes_list[i]
-        discard = False
+        discard = <span style="color:#00f">False</span>
         <span style="color:#00f">for</span> j <span style="color:#00f">in</span> range(len(boxes_list)): 
             <span style="color:#00f">if</span> i == j: <span style="color:#00f">continue</span>
             box_j = boxes_list[j]
             <span style="color:#00f">if</span> box_i[5] == box_j[5] <span style="color:#00f">and</span> iou(box_i, box_j) &gt; iou_threshold \
                     <span style="color:#00f">and</span> box_i[4] &lt; box_j[4]:
-                discard = True
+                discard = <span style="color:#00f">True</span>
                 <span style="color:#00f">break</span>
         <span style="color:#00f">if</span> <span style="color:#00f">not</span> discard: final_list.append(box_i)
     <span style="color:#00f">return</span> final_list 
