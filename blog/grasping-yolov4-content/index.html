@@ -192,7 +192,7 @@
  <hr class="half-line">
 <h4 id="32-lựa-chọn-bag-of-freebies">3.2. Lựa chọn Bag of Freebies:</h4>
 <ul>
-<li>Cho phần Backbone: CutMix, Mosaic data augmentation, DropBlock regularization, Class label smoothing</li>
+<li>Cho phần Backbone: CutMix [<a href="#cutmix" style="color:red;">?</a>]<a name="cutmix_b" style="color:red;"></a>, Mosaic data augmentation [<a href="#mda" style="color:red;">?</a>]<a name="mda_b" style="color:red;"></a>, DropBlock regularization [<a href="#dbr" style="color:red;">?</a>]<a name="dbr_b" style="color:red;"></a>, Class label smoothing [<a href="#cls" style="color:red;">?</a>]<a name="cls_b" style="color:red;"></a></li>
 <li>Cho mạng detector: CIoU-loss, CmBN, DropBlock regularization, Mosaic data augmentation, Self-Adversarial Training, Eliminate grid sensitivity, Using multiple anchors for a single ground truth, Cosine annealing scheduler, Optimal hyper-parameters, Random training shapes</li>
 </ul>
 <hr class="half-line">
@@ -324,12 +324,21 @@ m1 = maxpool1(x3)
 m2 = maxpool2(x3)
 m3 = maxpool3(x3)
 spp = concat([m3, m2, m1, x], dim=1)
-</code></pre></div><p>[<a href="#pan_b" style="color:red;">$ \triangleleft $</a>]<a name="pan"></a>:<strong>Kiến trúc của PANet?</strong>
-PANet là Path Agrregation Network. Một kiến trúc nâng cao từ Feature Pyramid Network. Kiến trúc mới này giúp mô hình nhận được chính xác hơn các tín hiệu vị trí (localization signals) của object ở các low-level layer.</p>
+</code></pre></div><hr class="half-line">
+<p>[<a href="#pan_b" style="color:red;">$ \triangleleft $</a>]<a name="pan"></a>:<strong>Kiến trúc của PANet?</strong>
+PANet là Path Agrregation Network. Một kiến trúc nâng cao từ Feature Pyramid Network. Kiến trúc mới này giúp mô hình nhận được chính xác hơn các tín hiệu vị trí (localization signals) của các object ở các low-level layers, giúp predict toạ độ object chính xác hơn.</p>
 <div class="text-center my-3">
 <img src="https://hungvm2.github.io/images/yolov4/panet.png" class="img-fluid" alt="PANet">
 </div>
 <p>YOLOv4 chỉ sử dụng 2 phần FPN backbone và Bottom-up path augmentation bên trên vào kiến trúc của mình, phần shortcut (đường đứt xanh và đỏ) cũng không được sử dụng. Điều này được thể hiện rõ trong file <a href="https://github.com/AlexeyAB/darknet/blob/master/cfg/yolov4-csp.cfg">config</a></p>
+<hr class="half-line">
+<p>[<a href="#cutmix_b" style="color:red;">$ \triangleleft $</a>]<a name="cutmix"></a>:<strong>CutMix là gì?</strong></p>
+<hr class="half-line">
+<p>[<a href="#mda_b" style="color:red;">$ \triangleleft $</a>]<a name="mda"></a>:<strong>Mosaic Data Augmentation là gì?</strong></p>
+<hr class="half-line">
+<p>[<a href="#dbr_b" style="color:red;">$ \triangleleft $</a>]<a name="dbr"></a>:<strong>DropBlock Regularization là gì?</strong></p>
+<hr class="half-line">
+<p>[<a href="#cls_b" style="color:red;">$ \triangleleft $</a>]<a name="cls"></a>:<strong>Class label smoothing là gì?</strong></p>
 <hr>
 <h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
 <ul>
