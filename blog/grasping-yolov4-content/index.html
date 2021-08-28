@@ -108,7 +108,7 @@
                     </span>
 
                     <span class="reading-time middot">
-                        8 min read
+                        9 min read
                     </span>
 
                     <div class="d-none d-md-inline tags">
@@ -325,7 +325,11 @@ m2 = maxpool2(x3)
 m3 = maxpool3(x3)
 spp = concat([m3, m2, m1, x], dim=1)
 </code></pre></div><p>[<a href="#pan_b" style="color:red;">$ \triangleleft $</a>]<a name="pan"></a>:<strong>Kiến trúc của PANet?</strong>
-PANet là Path Agrregation Network.</p>
+PANet là Path Agrregation Network. Một kiến trúc nâng cao từ Feature Pyramid Network. Kiến trúc mới này giúp mô hình nhận được chính xác hơn các tín hiệu vị trí (localization signals) của object ở các low-level layer.</p>
+<div class="text-center my-3">
+<img src="https://hungvm2.github.io/images/yolov4/panet.png" class="img-fluid" alt="PANet">
+</div>
+<p>YOLOv4 chỉ sử dụng 2 phần FPN backbone và Bottom-up path augmentation bên trên vào kiến trúc của mình, phần shortcut (đường đứt xanh và đỏ) cũng không được sử dụng. Điều này được thể hiện rõ trong file <a href="https://github.com/AlexeyAB/darknet/blob/master/cfg/yolov4-csp.cfg">config</a></p>
 <hr>
 <h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
 <ul>
