@@ -108,7 +108,7 @@
                     </span>
 
                     <span class="reading-time middot">
-                        7 min read
+                        8 min read
                     </span>
 
                     <div class="d-none d-md-inline tags">
@@ -181,12 +181,12 @@
 <li>Post-processing: NMS, soft NMS, DIoU NMS. Bước post-processing này không cần thiết ở kiến trúc Anchor-free (ko sử dụng Anchor box)</li>
 </ul>
 <hr>
-<h3 id="3-phương-pháp-lựa-chọn-các-kỹ-thuật-cho-hệ-thống-detection-yolov4">3. Phương pháp lựa chọn các kỹ thuật cho hệ thống detection YOLOv4</h3>
+<h3 id="3-lựa-chọn-các-kỹ-thuật-cho-hệ-thống-detection-yolov4">3. Lựa chọn các kỹ thuật cho hệ thống detection YOLOv4</h3>
 <h4 id="31-lựa-chọn-kiến-trúc-mạng">3.1. Lựa chọn kiến trúc mạng:</h4>
 <p>Sau nhiều thử nghiệm và nghiên cứu các tác giả đi đến kết luận lựa chọn kiến trúc như sau:</p>
 <ul>
 <li>Backbone: tác giả so sánh 2 mạng CSPResNeXt-50 và CSPDarknet53, và kết luận sử dụng mạng CSPDarknet53 [<a href="#cspdarknet53" style="color:red;">?</a>]<a name="cspdarknet53_b"></a></li>
-<li>Neck sử dụng SPP, PANet</li>
+<li>Neck sử dụng SPP [<a href="#spp" style="color:red;">?</a>]<a name="spp_b" style="color:red;"></a>, PANet [<a href="#pan" style="color:red;">?</a>]<a name="pan_b" style="color:red;"></a></li>
 <li>Head sử dụng YOLOv3 (anchor based)</li>
 </ul>
  <hr class="half-line">
@@ -268,7 +268,10 @@
 <p>CSPDarknet53 chính là sự kết hợp của mạng Darknet-53 ở YOLOv3 và kỹ thuật của CSPNet.
 Building block của Darknet53 là block Residual, còn của CSPDarknet53 là block Residual kết hợp với Cross Stage Partial.</p>
 <div class="text-center my-3">
-<img src="https://hungvm2.github.io/images/yolov4/building-block.png" class="img-fluid" alt="Building block">
+<figure class="figure">
+  <img src="https://hungvm2.github.io/images/yolov4/building-block.png" alt="Building block" class="figure-img">
+  <figcaption class="figure-caption">Building block của Darknet53</figcaption>
+</figure>
 </div>
 <p>Gọi $CBA_{i}$ là stack thứ $i$ của 3 layer: [Conv layer =&gt; BatchNorm layer =&gt; Activation layer]. $X_{i}$ là feature map ở stack thứ $i$.
 Công thức cho 1 building block sẽ được mô tả như bên dưới:</p>
@@ -293,8 +296,8 @@ X_{i+4} = CBA_{i+4}(X_{i+3})\\
 \begin{multline*}
 \\
 X_{i} = CBA_{i}(X_{i-1})\\
-X_{i+1} = CBA_{i+1}(X_{i})\\
 X^{'}_{i+1} = CBA^{'}_{i+1}(X_{i})\\
+X_{i+1} = CBA_{i+1}(X_{i})\\
 X_{i+2} = CBA_{i+2}(X_{i+1})\\
 X_{i+3} = CBA_{i+3}(X_{i+1} + X_{i})\\
 X^{'}_{i+3} = concat(X_{i+3}, X^{'}_{i+1})\\
@@ -302,11 +305,34 @@ X_{i+4} = CBA_{i+4}(X^{'}_{i+3})\\
 \\
 \end{multline*}
 </div>
+<hr class="half-line">
+<p>[<a href="#spp_b" style="color:red;">$ \triangleleft $</a>]<a name="spp"></a>:<strong>Kiến trúc của SPP?</strong>
+SPP là Spatial Pyramid Pooling. Bên dưới là kiến trúc của SPP trong một mạng classifier.</p>
+<div class="text-center my-3">
+<img src="https://hungvm2.github.io/images/yolov4/spp.png" class="img-fluid" alt="SPP">
+</div>
+<p>Do trong một mạng classifier, output layer luôn có shape cố định, vì vậy đòi hỏi các layer đều phải có kích thước cố định. Đó là lí do thường thấy các mạng classifier phải resize input layer về một kích thước cố định (VD mạng resnet phải có input luôn là 224x224).</p>
+<p>SPP sẽ giúp cho input layer có thể nhận kích thước tuỳ ý, những vẫn sẽ output ra được kích thước cố định bất kể input thay đổi thế nào. Bên cạnh đó, nó cũng giúp cho mô hình trở nên mạnh mẽ hơn.</p>
+<p>Tuy nhiên trong YOLOv4, vì không có các lớp Fully connected layer phía sau nên lớp SPP này chỉ giúp mô hình mạnh hơn khi trích xuất đặc trưng thôi.</p>
+<p>Ý tưởng khá đơn giản, trong YOLOv4, SPP sẽ gồm có 3 Max Pooling layer, sau đó concat lại với input của SPP để tạo thành output, như đoạn code bên dưới:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#008000"># Xem chi tiết hơn tại https://github.com/Tianxiaomo/pytorch-YOLOv4/blob/master/models.py , line 284</span>
+x3 = conv3(x2)
+maxpool1 = MaxPool2d(kernel_size=5, stride=1, padding=5 // 2)
+maxpool2 = MaxPool2d(kernel_size=9, stride=1, padding=9 // 2)
+maxpool3 = MaxPool2d(kernel_size=13, stride=1, padding=13 // 2)
+m1 = maxpool1(x3)
+m2 = maxpool2(x3)
+m3 = maxpool3(x3)
+spp = concat([m3, m2, m1, x], dim=1)
+</code></pre></div><p>[<a href="#pan_b" style="color:red;">$ \triangleleft $</a>]<a name="pan"></a>:<strong>Kiến trúc của PANet?</strong>
+PANet là Path Agrregation Network.</p>
 <hr>
 <h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
 <ul>
 <li><a href="https://arxiv.org/abs/2004.10934">YOLOv4: Optimal Speed and Accuracy of Object Detection</a></li>
 <li><a href="https://github.com/Tianxiaomo/pytorch-YOLOv4">pytorch-YOLOv4</a></li>
+<li><a href="https://arxiv.org/abs/1406.4729">Spatial Pyramid Pooling</a></li>
+<li><a href="https://arxiv.org/abs/1803.01534">Path Aggregation Network</a></li>
 </ul>
 
 
