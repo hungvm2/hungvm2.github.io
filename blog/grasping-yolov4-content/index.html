@@ -329,26 +329,26 @@ spp = concat([m3, m2, m1, x], dim=1)
 </code></pre></div><hr class="half-line">
 <p>[<a href="#pan_b" style="color:red;">$ \triangleleft $</a>]<a name="pan"></a>:<strong>Kiến trúc của PANet?</strong>
 PANet là Path Agrregation Network. Một kiến trúc nâng cao từ Feature Pyramid Network. Kiến trúc mới này giúp mô hình nhận được chính xác hơn các tín hiệu vị trí (localization signals) của các object ở các low-level layers, giúp predict toạ độ object chính xác hơn.</p>
-<div class="content text-center my-3">
+<div class="text-center my-3">
 <img src="https://hungvm2.github.io/images/yolov4/panet.png" class="img-fluid" alt="PANet">
 </div>
 <p>YOLOv4 chỉ sử dụng 2 phần FPN backbone và Bottom-up path augmentation bên trên vào kiến trúc của mình, phần shortcut (đường đứt xanh và đỏ) cũng không được sử dụng. Điều này được thể hiện rõ trong file <a href="https://github.com/AlexeyAB/darknet/blob/master/cfg/yolov4-csp.cfg">config</a></p>
 <hr class="half-line">
 <p>[<a href="#cutmix_b" style="color:red;">$ \triangleleft $</a>]<a name="cutmix"></a>:<strong>CutMix là gì?</strong></p>
-<div class="content text-center my-3">
+<div class="text-center my-3">
 <img src="https://hungvm2.github.io/images/yolov4/cutmix.png" class="img-fluid" alt="CutMix">
 </div>
 <p>CutMix là một kỹ thuật augment data, là sự kết hợp giữa 2 phương pháp Mixup và Cutout, một training data mới sẽ được tạo thành từ 2 image trong dataset.</p>
 <p>Data point mới được tạo thành sẽ có chứa thông tin của 2 lớp đối tượng từ 2 images với giá trị tương ứng theo tỷ lệ diện tích mà mỗi class chiếm chỗ trong data. [<a href="#cutmixp" style="color:red;">?</a>]<a name="cutmixp_b" style="color:red;"></a></p>
 <hr class="half-line">
 <p>[<a href="#mda_b" style="color:red;">$ \triangleleft $</a>]<a name="mda"></a>:<strong>Mosaic Data Augmentation là gì?</strong></p>
-<div class="content text-center my-3">
+<div class="text-center my-3">
 <img src="https://hungvm2.github.io/images/yolov4/mosaic.png" class="img-fluid" alt="Mosaic Augmentation">
 </div>
 Phương pháp augmentation này khá đơn giản, được tác giả Yolov4 đề xuất. Mỗi training image sẽ được ghép từ 4 image khác nhau, như vậy 4 ngữ cảnh (context) của 4 bức ảnh sẽ nằm cùng trên 1 data point, điều này giúp mô hình có thể phát hiện ra vật thể nằm ngoài những context thông thường của training data.
 <hr class="half-line">
 <p>[<a href="#dbr_b" style="color:red;">$ \triangleleft $</a>]<a name="dbr"></a>:<strong>DropBlock Regularization là gì?</strong></p>
-<div class="content text-center my-3">
+<div class="text-center my-3">
 <img src="https://hungvm2.github.io/images/yolov4/dropblock.png" class="img-fluid" alt="Dropblock">
 </div>
 <p>Ý tưởng của DropBlock tương tự như DropOut, cũng là một phương pháp regularization (chính quy hóa). Nhưng thay vì ngẫu nhiên tắt các unit ở các vị trí khác nhau trên feature map như DropOut, DropBlock tắt cụm các unit liền kề nhau.</p>

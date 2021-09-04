@@ -37,3 +37,7 @@ figure.figure {
 hr.half-line {
     width: 50%;
 }
+.content div.my-3 {
+   margin-left: 1.5rem;
+    margin-right: 1.5rem;
+}
