@@ -108,7 +108,7 @@
                     </span>
 
                     <span class="reading-time middot">
-                        10 min read
+                        11 min read
                     </span>
 
                     <div class="d-none d-md-inline tags">
@@ -351,7 +351,26 @@ PANet là Path Agrregation Network. Một kiến trúc nâng cao từ Feature Py
 <p>Phương pháp này giúp cho một vùng thông tin sẽ được gỡ bỏ khỏi feature map, thay vì các điểm thông tin rời rạc, giúp cho mạng tổng quát hóa tốt hơn, giảm overfit. [<a href="#dropblockp" style="color:red;">?</a>]<a name="dropblockp_b" style="color:red;"></a></p>
 <hr class="half-line">
 <p>[<a href="#cls_b" style="color:red;">$ \triangleleft $</a>]<a name="cls"></a>:<strong>Class label smoothing là gì?</strong></p>
-<p>Là một kỹ thuật làm mượt giá trị output class. [<a href="#clsp" style="color:red;">?</a>]<a name="clsp_b" style="color:red;"></a></p>
+<p>Là một kỹ thuật regularization sử dụng khi biển diễn giá trị nhãn (label) của data trong bài toàn Classification.</p>
+<p>Thông thường khi đánh nhãn dữ liệu, giá trị nhãn thường được biểu diễn ở dạng one-hot vector. Ví dụ như sau:</p>
+<div class="my-3">
+$[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0]$
+</div>
+<p>Tuy nhiên điều này đôi lúc sẽ khiến cho model bị overfit do dự đoán quá tự tin giá trị nhãn của dữ liệu.</p>
+<p>Để xử lý vấn đề này, label sẽ không được biển diễn ở dạng one-hot vector nữa mà sẽ ở dạng smooth như sau:</p>
+<div class="my-3">
+[0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.91 0.01 0.01]
+</div>
+<p>Gọi $q_{i}$ là giá trị của phần tử thứ i trong vector. $y$ là vị trí giá trị của nhãn. $\varepsilon$ là hyperparams độ smooth. Ta có công thức tổng quát cho giá trị các phần tử của vector như sau:</p>
+<div class="my-3">
+$q_{i} = 
+        \begin{cases}
+        1 - \varepsilon & \quad \text{nếu} i = y\\
+        \varepsilon/(K-1) & \quad \text{nếu ngược lại,}\\
+        \end{cases}$
+</div>
+<p>$\varepsilon = 0.09, y = 7$ thì nhãn sẽ có dạng như vector smooth phía trên.</p>
+<p>[<a href="#clsp" style="color:red;">?</a>]<a name="clsp_b" style="color:red;"></a></p>
 <hr>
 <h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
 <ul>
@@ -363,7 +382,7 @@ PANet là Path Agrregation Network. Một kiến trúc nâng cao từ Feature Py
 convolutional networks</a></li>
 <li>[<a href="#cutmixp_b" style="color:red;">$ \triangleleft $</a>]<a name="cutmixp"></a><a href="https://arxiv.org/pdf/1905.04899.pdf">CutMix: Regularization Strategy to Train Strong Classifiers
 with Localizable Features</a></li>
-<li>[<a href="#clsp_b" style="color:red;">$ \triangleleft $</a>]<a name="clsp"></a><a href="https://towardsdatascience.com/what-is-label-smoothing-108debd7ef06">What is label smoothing?</a></li>
+<li>[<a href="#clsp_b" style="color:red;">$ \triangleleft $</a>]<a name="clsp"></a><a href="https://arxiv.org/pdf/1812.01187.pdf">Bag of Tricks for Image Classification with Convolutional Neural Networks</a></li>
 </ul>
 
 
