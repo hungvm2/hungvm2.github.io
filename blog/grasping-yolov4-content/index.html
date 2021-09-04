@@ -353,16 +353,16 @@ PANet là Path Agrregation Network. Một kiến trúc nâng cao từ Feature Py
 <p>[<a href="#cls_b" style="color:red;">$ \triangleleft $</a>]<a name="cls"></a>:<strong>Class label smoothing là gì?</strong></p>
 <p>Là một kỹ thuật <strong>regularization</strong> sử dụng khi biển diễn giá trị nhãn (label) của data trong bài toàn Classification. [<a href="#clsp" style="color:red;">?</a>]<a name="clsp_b" style="color:red;"></a></p>
 <p>Thông thường khi đánh nhãn dữ liệu, giá trị nhãn thường được biểu diễn ở dạng one-hot vector. Ví dụ như sau:</p>
-<div class="my-3">
+<div class="my-3 text-center">
 <b>[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0]</b>
 </div>
 <p>Tuy nhiên điều này đôi lúc sẽ khiến cho model bị overfit do dự đoán quá tự tin giá trị nhãn của dữ liệu.</p>
 <p>Để xử lý vấn đề này, label sẽ không được biển diễn ở dạng one-hot vector nữa mà sẽ ở <i>dạng smooth</i> như sau:</p>
-<div class="my-3">
+<div class="my-3 text-center">
 <b>[0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.91, 0.01, 0.01]</b>
 </div>
 <p>Gọi $q_{i}$ là giá trị của phần tử thứ i trong vector. $y$ là vị trí giá trị của class. $\varepsilon$ là hyperparams độ smooth. Ta có công thức tổng quát cho giá trị các phần tử của vector như sau:</p>
-<div class="my-3">
+<div class="my-3 text-center">
 $q_{i} = 
         \begin{cases}
         1 - \varepsilon & \quad \text{nếu} \quad i = y\\
