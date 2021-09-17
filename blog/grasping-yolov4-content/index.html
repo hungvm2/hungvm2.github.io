@@ -193,16 +193,16 @@
 <h4 id="32-lựa-chọn-bag-of-freebies">3.2. Lựa chọn Bag of Freebies:</h4>
 <ul>
 <li>Cho phần Backbone: CutMix [<a href="#cutmix" style="color:red;">?</a>]<a name="cutmix_b" style="color:red;"></a>, Mosaic data augmentation [<a href="#mda" style="color:red;">?</a>]<a name="mda_b" style="color:red;"></a>, DropBlock regularization [<a href="#dbr" style="color:red;">?</a>]<a name="dbr_b" style="color:red;"></a>, Class label smoothing [<a href="#cls" style="color:red;">?</a>]<a name="cls_b" style="color:red;"></a></li>
-<li>Cho mạng detector: CIoU-loss, CmBN, DropBlock regularization, Mosaic data augmentation, Self-Adversarial Training, Eliminate grid sensitivity, Using multiple anchors for a single ground truth, Cosine annealing scheduler, Optimal hyper-parameters, Random training shapes</li>
+<li>Cho mạng detector: CIoU-loss [<a href="#ciou" style="color:red;">?</a>]<a name="ciou_b" style="color:red;"></a>, CmBN [<a href="#cmbn" style="color:red;">?</a>]<a name="cmbn_b" style="color:red;"></a>, DropBlock regularization, Mosaic data augmentation, Self-Adversarial Training, Eliminate grid sensitivity [<a href="#egs" style="color:red;">?</a>]<a name="egs_b" style="color:red;"></a>, Using multiple anchors for a single ground truth, Cosine annealing scheduler [<a href="#cas" style="color:red;">?</a>]<a name="cas_b" style="color:red;"></a>, Optimal hyper-parameters, Random training shapes</li>
 </ul>
 <hr class="half-line">
 <h4 id="33-lựa-chọn-bag-of-specials">3.3. Lựa chọn Bag of Specials:</h4>
 <ul>
-<li>Cho phần Backbone: Mish activation, Cross-stage partial connections (CSP), Multiinput weighted residual connections (MiWRC)</li>
-<li>Cho mạng detector:  Mish activation, SPP-block, SAM-block, PAN path-aggregation block, DIoU-NMS</li>
+<li>Cho phần Backbone: Mish activation [<a href="#mish" style="color:red;">?</a>]<a name="mish_b" style="color:red;"></a>, Cross-stage partial connections (CSP), Multiinput weighted residual connections (MiWRC) [<a href="#miwrc" style="color:red;">?</a>]<a name="miwrc_b" style="color:red;"></a></li>
+<li>Cho mạng detector:  Mish activation, SPP-block, SAM-block [<a href="#sam" style="color:red;">?</a>]<a name="sam_b" style="color:red;"></a>, PAN path-aggregation block, DIoU-NMS [<a href="#diounms" style="color:red;">?</a>]<a name="diounms_b" style="color:red;"></a></li>
 </ul>
 <h4 id="34-hàm-loss">3.4. Hàm Loss:</h4>
-<p>Vì Yolov4 vẫn sử dụng Head detector giống như YOLOv3 nên công thức hàm Loss vẫn giữ nguyên:</p>
+<p>Vì Yolov4 vẫn sử dụng Head detector giống như YOLOv3 nên công thức hàm Loss vẫn giữ nguyên như YOLOv3.</p>
 <hr>
 <h3 id="4-kết-quả-thử-nghiệm">4. Kết quả thử nghiệm:</h3>
 <h4 id="41-ảnh-hưởng-của-các-kỹ-thuật-đến-độ-chính-xác-của-mạng-classifier">4.1. Ảnh hưởng của các kỹ thuật đến độ chính xác của mạng classifier</h4>
@@ -248,7 +248,8 @@
 <div class="text-center my-3">
 <img src="https://hungvm2.github.io/images/yolov4/cspresnetxt50-cspdarknet53-comparision.png" class="img-fluid" alt="CSPResNeXt50 - CSPDarknet53 comparision">
 </div>
-<h4 id="43-ảnh-hưởng-của-mini-batch-size-đến-kết-quả-training-mạng-detector">4.3. Ảnh hưởng của mini-batch size đến kết quả training mạng detector:</h4>
+<hr class="half-line">
+<h4 id="44-ảnh-hưởng-của-mini-batch-size-đến-kết-quả-training-mạng-detector">4.4. Ảnh hưởng của mini-batch size đến kết quả training mạng detector:</h4>
 <p>Khi sử dụng BoF và BoS, size của mini-batch không còn ảnh hưởng đến kết quả training.</p>
 <div class="text-center my-3">
 <figure class="figure">
@@ -256,7 +257,7 @@
   <figcaption class="figure-caption">Ảnh 4: Ảnh hưởng của kích thước mini-batch đến độ chính xác của mạng detector (Size: 512x512)</figcaption>
 </figure>
 </div>
-<h4 id="44-so-sánh-độ-chính-xác-và-hiệu-năng-của-yolov4-với-các-mô-hình-object-detector-khác">4.4. So sánh độ chính xác và hiệu năng của YOLOv4 với các mô hình object detector khác:</h4>
+<h4 id="45-so-sánh-độ-chính-xác-và-hiệu-năng-của-yolov4-với-các-mô-hình-object-detector-khác">4.5. So sánh độ chính xác và hiệu năng của YOLOv4 với các mô hình object detector khác:</h4>
 <div class="text-center my-3">
 <img src="https://hungvm2.github.io/images/yolov4/ap-fps-comparison.png" class="img-fluid" alt="AP, FPS comparison">
 </div>
@@ -298,7 +299,7 @@ Công thức cho 1 building block sẽ được mô tả như bên dưới:</p>
 &X^{'}_{i+1} = CBA^{'}_{i+1}(X_{i})\\
 &X_{i+1} = CBA_{i+1}(X_{i})\\
 &X_{i+2} = CBA_{i+2}(X_{i+1})\\
-&X_{i+3} = CBA_{i+3}(X_{i+1} + X_{i})\\
+&X_{i+3} = CBA_{i+3}(X_{i+2} + X_{i+1})\\
 &X^{'}_{i+3} = concat(X_{i+3}, X^{'}_{i+1})\\
 &X_{i+4} = CBA_{i+4}(X^{'}_{i+3})\\
 \end{aligned}
@@ -370,6 +371,15 @@ $q_{i} =
         \end{cases}$
 </div>
 <p>$\varepsilon = 0.09, y = 7$ thì nhãn sẽ là vector có <i>dạng smooth</i> như phía trên.</p>
+<p>[<a href="#mish_b" style="color:red;">$ \triangleleft $</a>]<a name="mish"></a>:<strong>Mish activation function?</strong></p>
+<p>[<a href="#ciou_b" style="color:red;">$ \triangleleft $</a>]<a name="ciou"></a>:<strong>CIoU-loss được tính như thế nào?</strong></p>
+<p>[<a href="#cmbn_b" style="color:red;">$ \triangleleft $</a>]<a name="cmbn"></a>:<strong>CmBN là gì?</strong>
+CmBN là Cross mini-Batch Normalization:</p>
+<p>[<a href="#sam_b" style="color:red;">$ \triangleleft $</a>]<a name="sam"></a>:<strong>Kiến trúc của SAM-block?</strong></p>
+<p>[<a href="#diounms_b" style="color:red;">$ \triangleleft $</a>]<a name="diounms"></a>:<strong>Cách tính DIoU-NMS?</strong></p>
+<p>[<a href="#miwrc_b" style="color:red;">$ \triangleleft $</a>]<a name="miwrc"></a>:<strong>Kiến trúc của Multi input weighted residual connection?</strong></p>
+<p>[<a href="#egs_b" style="color:red;">$ \triangleleft $</a>]<a name="egs"></a>:<strong>Eliminate Grid sensitivity?</strong></p>
+<p>[<a href="#cas_b" style="color:red;">$ \triangleleft $</a>]<a name="cas"></a>:<strong>Cosine annealing scheduler?</strong></p>
 <hr>
 <h3 id="iii-nguồn-tham-khảo">III. Nguồn tham khảo:</h3>
 <ul>
